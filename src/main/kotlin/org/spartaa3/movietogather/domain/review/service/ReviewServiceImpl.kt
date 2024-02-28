@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository
-): ReviewService {
+) : ReviewService {
 
     override fun getReviewById(reviewId: Long): ReviewResponse {
-        val review = reviewRepository.findByIdOrNull(reviewId)?: throw ReviewNotFoundException("Review", reviewId)
+        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         return review.toResponse()
     }
 
@@ -37,7 +37,7 @@ class ReviewServiceImpl(
     }
 
     override fun updateReview(reviewId: Long, request: UpdateReviewRequest): ReviewResponse {
-        val review = reviewRepository.findByIdOrNull(reviewId)?: throw ReviewNotFoundException("Review", reviewId)
+        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val (postingTitle, star, movieTitle, movieImg, contents, genre) = request
 
         review.postingTitle = postingTitle
@@ -50,7 +50,7 @@ class ReviewServiceImpl(
     }
 
     override fun deleteReview(reviewId: Long) {
-        val review = reviewRepository.findByIdOrNull(reviewId)?: throw ReviewNotFoundException("Review", reviewId)
+        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         reviewRepository.delete(review)
     }
 }
