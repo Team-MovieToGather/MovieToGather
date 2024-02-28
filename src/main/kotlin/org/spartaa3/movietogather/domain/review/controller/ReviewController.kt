@@ -1,56 +1,56 @@
 package org.spartaa3.movietogather.domain.review.controller
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
-import org.spartaa3.movietogather.domain.review.entity.Review
-import org.spartaa3.movietogather.domain.review.entity.toResponse
-import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.domain.review.service.ReviewService
-import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
-import org.springframework.data.repository.findByIdOrNull
-import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 
-@Service
-class ReviewServiceImpl(
-    private val reviewRepository: ReviewRepository
-): ReviewService {
+@Tag(name = "review", description = "Review API")
+@RequestMapping("/api/reviews")
+@RestController
+class ReviewController(
+    private val reviewService: ReviewService
+) {
 
-    override fun getReviewById(reviewId: Long): ReviewResponse {
-        val review = reviewRepository.findByIdOrNull(reviewId)?: throw ReviewNotFoundException("Review", reviewId)
-        return review.toResponse()
+    @GetMapping("/{reviewId}")
+    fun getReviewById(
+        @PathVariable reviewId: Long
+    ): ResponseEntity<ReviewResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(reviewService.getReviewById(reviewId))
     }
 
-    @Transactional
-    override fun createReview(request: CreateReviewRequest): ReviewResponse {
-        return reviewRepository.save<Review?>(
-            Review(
-                postingTitle = request.postingTitle,
-                star = request.star,
-                movieTitle = request.movieTitle,
-                movieImg = request.movieImg,
-                contents = request.contents,
-                genre = request.genre
-            )
-        ).toResponse()
+    @PostMapping
+    fun createReview(
+        @RequestBody request: CreateReviewRequest
+    ): ResponseEntity<ReviewResponse> {
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(reviewService.createReview(request))
     }
 
-    override fun updateReview(reviewId: Long, request: UpdateReviewRequest): ReviewResponse {
-        val review = reviewRepository.findByIdOrNull(reviewId)?: throw ReviewNotFoundException("Review", reviewId)
-        val (postingTitle, star, movieTitle, movieImg, contents, genre) = request
-
-        review.postingTitle = postingTitle
-        review.star = star
-        review.movieTitle = movieTitle
-        review.movieImg = movieImg
-        review.contents = contents
-        review.genre = genre
-        return reviewRepository.save(review).toResponse()
+    @PutMapping("/{reviewId}")
+    fun updateReview(
+        @RequestBody request: UpdateReviewRequest,
+        @PathVariable reviewId: Long
+    ): ResponseEntity<ReviewResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(reviewService.updateReview(reviewId, request))
     }
 
-    override fun deleteReview(reviewId: Long) {
-        val review = reviewRepository.findByIdOrNull(reviewId)?: throw ReviewNotFoundException("Review", reviewId)
-        reviewRepository.delete(review)
+    @DeleteMapping("/{reviewId}")
+    fun deleteReview(
+        @PathVariable reviewId: Long
+    ): ResponseEntity<Unit> {
+        reviewService.deleteReview(reviewId)
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build()
     }
 }
