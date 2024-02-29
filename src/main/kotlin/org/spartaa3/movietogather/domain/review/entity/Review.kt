@@ -32,7 +32,9 @@ class Review(
     val modifiedAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "is_deleted")
-    val isDeleted: Boolean = false
+    val isDeleted: Boolean = false,
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var comments: MutableList<Comments> = mutableListOf()
 
 ) {
     @Id
