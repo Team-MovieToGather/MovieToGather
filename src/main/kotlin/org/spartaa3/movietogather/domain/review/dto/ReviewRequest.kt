@@ -1,6 +1,6 @@
 package org.spartaa3.movietogather.domain.review.dto
 
-data class CreateReviewRequest (
+data class CreateReviewRequest(
     val postingTitle: String,
     val star: Double,
     val movieTitle: String,
@@ -9,7 +9,7 @@ data class CreateReviewRequest (
     val genre: String
 )
 
-data class UpdateReviewRequest (
+data class UpdateReviewRequest(
     val postingTitle: String,
     val star: Double,
     val movieTitle: String,

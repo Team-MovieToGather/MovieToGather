@@ -42,6 +42,7 @@ class ReviewServiceImpl(
         ).toResponse()
     }
 
+    @Transactional
     override fun updateReview(reviewId: Long, request: UpdateReviewRequest): ReviewResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val (postingTitle, star, movieTitle, movieImg, contents, genre) = request

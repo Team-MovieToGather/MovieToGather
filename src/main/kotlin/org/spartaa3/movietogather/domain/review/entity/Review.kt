@@ -42,7 +42,7 @@ class Review(
 
 fun Review.toResponse(): ReviewResponse {
     return ReviewResponse(
-        id = id!!,
+        id = id ?: 0L,
         postingTitle = postingTitle,
         genre = genre,
         star = star,
