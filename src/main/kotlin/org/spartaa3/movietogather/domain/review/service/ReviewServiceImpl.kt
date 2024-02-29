@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository
 ) : ReviewService {
+
     override fun searchReview(condition: ReviewSearchCondition, keyword: String?, pageable: Pageable): Page<ReviewResponse> {
         return reviewRepository.searchReview(condition, keyword, pageable).map { it.toResponse() }
     }
