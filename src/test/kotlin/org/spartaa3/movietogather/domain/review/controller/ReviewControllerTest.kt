@@ -11,14 +11,13 @@ import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.service.ReviewService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import java.time.LocalDateTime
 
-@WebMvcTest
+@SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockKExtension::class)
 class ReviewControllerTest @Autowired constructor(
@@ -42,7 +41,7 @@ class ReviewControllerTest @Autowired constructor(
             createdAt = LocalDateTime.now()
         )
         context("존재하는 Id에 대한 요청을 보낼 때") {
-            val result= mockMvc.perform(
+            val result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/reviews/$reviewId")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
