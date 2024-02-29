@@ -34,24 +34,24 @@ class ReviewServiceImpl(
             Review(
                 postingTitle = request.postingTitle,
                 star = request.star,
-                movieTitle = request.movieTitle,
-                movieImg = request.movieImg,
+                movieTitle = "", // 선택된 영화 처리 작업 후 수정 예정
+                movieImg = "",
                 contents = request.contents,
-                genre = request.genre
+                genre = ""
             )
         ).toResponse()
     }
 
     override fun updateReview(reviewId: Long, request: UpdateReviewRequest): ReviewResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
-        val (postingTitle, star, movieTitle, movieImg, contents, genre) = request
+        val (postingTitle, star, contents) = request
 
         review.postingTitle = postingTitle
         review.star = star
-        review.movieTitle = movieTitle
-        review.movieImg = movieImg
+//        review.movieTitle = movieTitle
+//        review.movieImg = movieImg
         review.contents = contents
-        review.genre = genre
+//        review.genre = genre
         return reviewRepository.save(review).toResponse()
     }
 
