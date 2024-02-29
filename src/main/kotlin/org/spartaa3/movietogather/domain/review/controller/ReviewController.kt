@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
+import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.service.ReviewService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -15,6 +18,16 @@ import org.springframework.web.bind.annotation.*
 class ReviewController(
     private val reviewService: ReviewService
 ) {
+    @GetMapping("/search")
+    fun searchReview(
+        @RequestParam(name = "searchCondition") condition: ReviewSearchCondition,
+        @RequestParam(name = "keyword") keyword: String?,
+        pageable: Pageable
+    ): ResponseEntity<Page<ReviewResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(reviewService.searchReview(condition, keyword, pageable))
+    }
 
     @GetMapping("/{reviewId}")
     fun getReviewById(
