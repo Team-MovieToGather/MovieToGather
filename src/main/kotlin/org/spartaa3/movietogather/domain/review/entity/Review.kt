@@ -1,6 +1,8 @@
 package org.spartaa3.movietogather.domain.review.entity
 
 import jakarta.persistence.*
+import org.spartaa3.movietogather.domain.comments.entity.Comments
+import org.spartaa3.movietogather.domain.comments.entity.toResponse
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import java.time.LocalDateTime
 
@@ -51,6 +53,7 @@ fun Review.toResponse(): ReviewResponse {
         movieTitle = movieTitle,
         movieImg = movieImg,
         contents = contents,
-        createdAt = createdAt
+        createdAt = createdAt,
+        comments = comments.map { it.toResponse() }
     )
 }
