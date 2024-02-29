@@ -4,9 +4,12 @@ import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.Review
+import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.entity.toResponse
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,6 +20,10 @@ class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository
 ) : ReviewService {
 
+    override fun searchReview(condition: ReviewSearchCondition, keyword: String?, pageable: Pageable): Page<ReviewResponse> {
+        return reviewRepository.searchReview(condition, keyword, pageable).map { it.toResponse() }
+    }
+
     override fun getReviewById(reviewId: Long): ReviewResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         return review.toResponse()
@@ -24,7 +31,7 @@ class ReviewServiceImpl(
 
     @Transactional
     override fun createReview(request: CreateReviewRequest): ReviewResponse {
-        return reviewRepository.save<Review?>(
+        return reviewRepository.save<Review>(
             Review(
                 postingTitle = request.postingTitle,
                 star = request.star,
