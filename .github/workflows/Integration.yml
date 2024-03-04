@@ -26,14 +26,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: application.yml 디렉토리 생성
+      - name: application-test.yml 디렉토리 생성
         run: mkdir -p ./src/test/resources
 
-      - name: application.yml 파일 생성
-        run: touch ./src/test/resources/application.yml
+      - name: application-test.yml 파일 생성
+        run: touch ./src/test/resources/application-test.yml
 
-      - name: application.yml 설정 추가
-        run: echo -e "${{ secrets.APPLICATION_TEST_YML }}" > ./src/main/resources/application.yml
+      - name: application-test.yml 설정 추가
+        run: echo -e "${{ secrets.APPLICATION_TEST_YML }}" > ./src/test/resources/application-test.yml
 
       # java JDK 설치
       - name: JDK 17 설치
