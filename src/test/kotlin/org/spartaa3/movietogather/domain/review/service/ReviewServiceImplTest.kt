@@ -12,12 +12,10 @@ import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.Review
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDateTime
 
 @ExtendWith(MockKExtension::class)
-@DataJpaTest
 class ReviewServiceImplTest : BehaviorSpec({
     afterContainer {
         clearAllMocks()

@@ -14,6 +14,7 @@ import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.Page
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -194,5 +195,27 @@ class ReviewControllerTest @Autowired constructor(
                 }
             }
         }
+    }
+    describe("GET /api/reviews/search 는") {
+
+        context("검색한 조건의 데이터가 존재한다면") {
+            val condition = "postingTitle"
+            val keyword = "keyword"
+            every { reviewService.searchReview(any(), any(), any()) } returns Page.empty()
+            it("200 status code를 응답해야 한다.") {
+                mockMvc.get("/api/reviews/search") {
+                    contentType = MediaType.APPLICATION_JSON
+                    accept = MediaType.APPLICATION_JSON
+                    param("searchCondition", condition)
+                    param("keyword", keyword)
+                }.andExpect {
+                    status {
+                        MockMvcResultMatchers.status().isOk()
+                    }
+                }
+            }
+        }
+
+
     }
 })
