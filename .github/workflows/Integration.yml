@@ -15,7 +15,7 @@ permissions:
 
 # 실행할 작업들
 jobs:
-  build-and-test:
+  integration:
 
     # 가상환경 운영체제OS 선택
     runs-on: ubuntu-latest
@@ -26,14 +26,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: application-test.yml 디렉토리 생성
-        run: mkdir -p ./src/test/resources
-
-      - name: application-test.yml 파일 생성
-        run: touch ./src/test/resources/application-test.yml
-
-      - name: application-test.yml 설정 추가
-        run: echo -e "${{ secrets.APPLICATION_TEST_YML }}" > ./src/test/resources/application-test.yml
+#      - name: application-test.yml 디렉토리 생성
+#        run: mkdir -p ./src/test/resources
+#
+#      - name: application-test.yml 파일 생성
+#        run: touch ./src/test/resources/application-test.yml
+#
+#      - name: application-test.yml 설정 추가
+#        run: echo -e "${{ secrets.APPLICATION_TEST_YML }}" > ./src/test/resources/application-test.yml
 
       # java JDK 설치
       - name: JDK 17 설치
