@@ -50,6 +50,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
     implementation("org.springframework.boot:spring-boot-starter-cache")
+    //jwt
+    implementation("io.jsonwebtoken:jjwt-api:0.12.3")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     implementation("com.querydsl:querydsl-jpa:$queryDslVersion:jakarta")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
