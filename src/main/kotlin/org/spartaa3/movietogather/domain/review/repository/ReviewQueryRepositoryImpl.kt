@@ -8,7 +8,9 @@ import org.spartaa3.movietogather.infra.QueryDslSupport
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Repository
 
+@Repository
 class ReviewQueryRepositoryImpl : ReviewQueryRepository, QueryDslSupport() {
     private val review = QReview.review
     override fun searchReview(

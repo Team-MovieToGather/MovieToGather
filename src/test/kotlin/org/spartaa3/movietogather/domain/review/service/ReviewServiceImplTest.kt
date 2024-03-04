@@ -17,9 +17,11 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDateTime
 
 @ExtendWith(MockKExtension::class)
+@ActiveProfiles("test")
 class ReviewServiceImplTest : BehaviorSpec({
     afterContainer {
         clearAllMocks()
@@ -153,7 +155,8 @@ class ReviewServiceImplTest : BehaviorSpec({
             val result = reviewService.searchReview(tag, keyword, pageableMock)
             then("페이징 처리가 된다.") {
                 val isPaged = result.size
-                isPaged shouldBe 0         }
+                isPaged shouldBe 0
+            }
         }
     }
 
