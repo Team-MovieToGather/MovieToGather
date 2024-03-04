@@ -1,6 +1,8 @@
 package org.spartaa3.movietogather.domain.review.entity
 
 import jakarta.persistence.*
+import org.spartaa3.movietogather.domain.comments.entity.Comments
+import org.spartaa3.movietogather.domain.comments.entity.toResponse
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import java.time.LocalDateTime
 
@@ -32,7 +34,9 @@ class Review(
     val modifiedAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "is_deleted")
-    val isDeleted: Boolean = false
+    val isDeleted: Boolean = false,
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var comments: MutableList<Comments> = mutableListOf()
 
 ) {
     @Id
@@ -42,13 +46,14 @@ class Review(
 
 fun Review.toResponse(): ReviewResponse {
     return ReviewResponse(
-        id = id!!,
+        id = id ?: 0L,
         postingTitle = postingTitle,
         genre = genre,
         star = star,
         movieTitle = movieTitle,
         movieImg = movieImg,
         contents = contents,
-        createdAt = createdAt
+        createdAt = createdAt,
+        comments = comments.map { it.toResponse() }
     )
 }
