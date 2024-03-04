@@ -1,6 +1,8 @@
 package org.spartaa3.movietogather.domain.review.controller
 
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.spartaa3.movietogather.domain.api.service.ApiService
+import org.spartaa3.movietogather.domain.api.service.dto.response.MovieResponse
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
@@ -8,6 +10,7 @@ import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.service.ReviewService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.SliceImpl
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,7 +19,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/reviews")
 @RestController
 class ReviewController(
-    private val reviewService: ReviewService
+    private val reviewService: ReviewService,
+    private val apiService: ApiService
 ) {
     @GetMapping("/search")
     fun searchReview(
@@ -66,5 +70,10 @@ class ReviewController(
             .status(HttpStatus.NO_CONTENT)
             .build()
     }
+
+    // 영화 데이터 호출
+    @GetMapping("/movies")
+    fun getPopularMoviesList(): SliceImpl<MovieResponse> {
+        return apiService.getPopularMoviesList(1)
+    }
 }
-//

@@ -57,12 +57,11 @@ dependencies {
     annotationProcessor ("org.projectlombok:lombok:1.18.20")
     implementation ("org.springframework.boot:spring-boot-starter-data-redis")
 
-
+//    runtimeOnly("com.h2database:h2")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
     runtimeOnly("org.postgresql:postgresql")
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
-
 
     // 테스트 코드
     testRuntimeOnly("com.h2database:h2")
