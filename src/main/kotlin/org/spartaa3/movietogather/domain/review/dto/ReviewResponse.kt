@@ -12,5 +12,6 @@ data class ReviewResponse(
     val movieImg: String,
     val contents: String,
     val createdAt: LocalDateTime,
-    val comments: List<CommentsResponse>   //리뷰 추가
+    val heart: Int,
+    val comments: List<CommentsResponse>  //리뷰 추가
 )
