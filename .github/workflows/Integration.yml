@@ -33,29 +33,7 @@ jobs:
         run: touch ./src/test/resources/application-test.yml
 
       - name: application.yml 설정 추가
-        run: |
-          cat << EOF > ./src/test/resources/application-test.yml
-          api:
-            key: "${{ secrets.API_TMDB_KEY }}"
-            popularUrl: "${{ secrets.API_TMDB_POPULAR_URL }}"
-            genreUrl: "${{ secrets.API_TMDB_GENRE_URL }}"
-          auth:
-            jwt:
-              issuer: "${{ secrets.AUTH_JWT_ISSUER }}"
-              secret: "${{ secrets.AUTH_JWT_SECRET }}"
-              accessTokenExpirationHour: "${{ secrets.AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR }}"
-          spring:
-            security:
-             oauth2:
-                client:
-                  registration:
-                    google:
-                      client-id: "${{ secrets.AUTH_GOOGLE_ID }}"
-                      client-secret: "${{ secrets.AUTH_GOOGLE_SECRET }}"
-                      scope:
-                         - email
-                         - profile          
-          EOF
+        run: echo "${{ secrets.APPLICATION_TEST_YML }}" > ./src/test/resources/application-test.yml
 
       # java JDK 설치
       - name: JDK 17 설치
