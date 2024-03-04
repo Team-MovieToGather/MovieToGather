@@ -69,8 +69,8 @@ jobs:
         run: chmod +x gradlew
 
       # 빌드, 테스트
-      - name: Gradle 빌드
-        run: ./gradlew build
-
       - name: 테스트
         run: ./gradlew test
+
+      - name: Gradle 빌드
+        run: ./gradlew build
