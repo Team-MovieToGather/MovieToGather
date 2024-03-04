@@ -10,8 +10,12 @@ import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.Review
+import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDateTime
 
@@ -22,6 +26,7 @@ class ReviewServiceImplTest : BehaviorSpec({
     }
 
     val reviewRepository = mockk<ReviewRepository>()
+    val pageableMock = mockk<Pageable>()
     val reviewService = spyk(ReviewServiceImpl(reviewRepository))
 
     //getReviewById 테스트 : 값이 있을 때
@@ -133,7 +138,24 @@ class ReviewServiceImplTest : BehaviorSpec({
         }
     }
 
-    //deleteReview 테스트 :: 로그인되지 않았을 때
+    //deleteReview 테스트 :로그인되지 않았을 때
+
+    //searchReview 테스트 : 로그인되었을 때
+    given("유저가 로그인되었을 때, 아래와 같은 조건으로 페이징을 진행하고 ") {
+        every { pageableMock.pageNumber } returns 0
+        every { pageableMock.pageSize } returns 10
+        every { pageableMock.sort } returns Sort.unsorted()
+        `when`("Tag가 MOVIE_TITLE이고, 검색어가 Title인 리뷰를 조회했을 때") {
+            val keyword = "Title"
+            val tag: ReviewSearchCondition = ReviewSearchCondition.MOVIE_TITLE
+            val mockPage = PageImpl<Review>(listOf())
+            every { reviewRepository.searchReview(any(), any(), any()) } returns mockPage
+            val result = reviewService.searchReview(tag, keyword, pageableMock)
+            then("페이징 처리가 된다.") {
+                val isPaged = result.size
+                isPaged shouldBe 0         }
+        }
+    }
 
 })
 
