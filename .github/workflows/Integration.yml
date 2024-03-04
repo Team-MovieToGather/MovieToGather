@@ -73,4 +73,4 @@ jobs:
         run: ./gradlew test
 
       - name: Gradle 빌드
-        run: ./gradlew build
+        run: ./gradlew build -x test 
