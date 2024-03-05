@@ -5,6 +5,7 @@ import org.spartaa3.movietogather.domain.comments.dto.commentsRequest.Updatecomm
 import org.spartaa3.movietogather.domain.comments.dto.commentsResponse.GetCommentsResponse
 import org.spartaa3.movietogather.domain.comments.entity.Comments
 import org.spartaa3.movietogather.domain.comments.repository.CommentsRepository
+import org.spartaa3.movietogather.domain.review.repository.HeartRepository
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.data.repository.findByIdOrNull
@@ -16,12 +17,14 @@ import java.time.LocalDateTime
 @Service
 class CommentsServiceImpl(
     private val commentsRepository: CommentsRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val heartRepository: HeartRepository
 ) : CommentsService {
     override fun getCommentsById(reviewId: Long, commentsId: Long): GetCommentsResponse {
-        reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
+        val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val comments =
             commentsRepository.findByIdOrNull(commentsId) ?: throw ReviewNotFoundException("Comments", commentsId)
+        comments.likeCount = heartRepository.countHeartByReviewAndComments(review, comments)
         return comments.let { GetCommentsResponse.from(it) }
     }
 
@@ -31,7 +34,7 @@ class CommentsServiceImpl(
         val comments = commentsRepository.save(
             Comments(
                 contents = request.contents,
-                likeCount = 0L,
+                likeCount = 0,
                 createdAt = LocalDateTime.now(),
                 createdBy = "작성자",
                 modifiedAt = LocalDateTime.now(),
