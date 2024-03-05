@@ -22,15 +22,19 @@ class ReviewServiceImpl(
     private val heartRepository: HeartRepository
 ) : ReviewService {
 
-    override fun searchReview(condition: ReviewSearchCondition, keyword: String?, pageable: Pageable): Page<ReviewResponse> {
+    override fun searchReview(
+        condition: ReviewSearchCondition,
+        keyword: String?,
+        pageable: Pageable
+    ): Page<ReviewResponse> {
         val reviews = reviewRepository.searchReview(condition, keyword, pageable)
-        reviews.forEach { it.heart = heartRepository.countHeartByReview(it) }
+        reviews.forEach { it.heart = heartRepository.countHeartByReviewAndCommentsIsNull(it) }
         return reviews.map { it.toResponse() }
     }
 
     override fun getReviewById(reviewId: Long): ReviewResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
-        review.heart = heartRepository.countHeartByReview(review)
+        review.heart = heartRepository.countHeartByReviewAndCommentsIsNull(review)
         return review.toResponse()
     }
 

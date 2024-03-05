@@ -19,10 +19,21 @@ class HeartController(
     @PostMapping("/heart")
     fun reviewHeart(
         @PathVariable reviewId: Long,
-        @AuthenticationPrincipal userPrincipal : UserPrincipal
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<HeartResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(heartService.reviewHeart(reviewId, userPrincipal.id))
+    }
+
+    @PostMapping("/comments/{commentsId}")
+    fun commentHeart(
+        @PathVariable reviewId: Long,
+        @PathVariable commentsId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<HeartResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(heartService.commentHeart(reviewId, userPrincipal.id, commentsId))
     }
 }
