@@ -22,8 +22,8 @@ class SwaggerConfig {
                 .version("1.0.0")
         )
 
-    @Bean
-    fun forwardedHeaderFilter(): ForwardedHeaderFilter {
-        return ForwardedHeaderFilter()
-    }
+//    @Bean
+//    fun forwardedHeaderFilter(): ForwardedHeaderFilter {
+//        return ForwardedHeaderFilter()
+//    }
 }

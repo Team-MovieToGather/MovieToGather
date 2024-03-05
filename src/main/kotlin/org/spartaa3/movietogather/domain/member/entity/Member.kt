@@ -1,6 +1,7 @@
 package org.spartaa3.movietogather.domain.member.entity
 
 import jakarta.persistence.*
+import org.spartaa3.movietogather.domain.member.dto.OAuthAttributes
 
 @Entity
 @Table(name = "member")
@@ -17,6 +18,14 @@ class Member(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
     enum class MemberRole {
-        Member, Admin
+        MEMBER, ADMIN
     }
+}
+
+fun OAuthAttributes.toEntity(): Member {
+    return Member(
+        nickname = nickname,
+        email = email,
+        role = Member.MemberRole.MEMBER
+    )
 }

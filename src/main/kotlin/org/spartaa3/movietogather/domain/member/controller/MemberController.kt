@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@RestController
-@RequestMapping("/members")
-class MemberController(
-    private val memberService: MemberService
-){
-
-    @PostMapping("/sociallogin")
-    fun socialLogin(@AuthenticationPrincipal oAuth2User: OAuth2User): ResponseEntity<LoginResponse> {
-        return status(HttpStatus.OK)
-            .body(memberService.socialLogin(oAuth2User))
-    }
-
-
-}
+//@RestController
+//@RequestMapping("/members")
+//class MemberController(
+//    private val memberService: MemberService
+//){
+//
+//    @PostMapping("/sociallogin")
+//    fun socialLogin(@AuthenticationPrincipal oAuth2User: OAuth2User): ResponseEntity<LoginResponse> {
+//        return status(HttpStatus.OK)
+//            .body(memberService.socialLogin(oAuth2User))
+//    }
+//
+//
+//}
