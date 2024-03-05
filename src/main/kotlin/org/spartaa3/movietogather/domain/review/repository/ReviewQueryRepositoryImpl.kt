@@ -8,7 +8,9 @@ import org.spartaa3.movietogather.infra.QueryDslSupport
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Repository
 
+@Repository
 class ReviewQueryRepositoryImpl : ReviewQueryRepository, QueryDslSupport() {
     private val review = QReview.review
     override fun searchReview(
@@ -34,18 +36,9 @@ class ReviewQueryRepositoryImpl : ReviewQueryRepository, QueryDslSupport() {
     }
 
     private fun allCond(condition: ReviewSearchCondition, keyword: String?): BooleanExpression? {
-        return postingTitleLike(condition, keyword)
-            ?.and(movieTitleLike(condition, keyword))
+        return when (condition) {
+            ReviewSearchCondition.MOVIE_TITLE -> review.postingTitle.like("%$keyword%")
+            ReviewSearchCondition.POSTING_TITLE -> review.movieTitle.like("%$keyword%")
+        }
     }
-
-    private fun postingTitleLike(condition: ReviewSearchCondition, keyword: String?): BooleanExpression? {
-        if (condition != ReviewSearchCondition.POSTING_TITLE) return null
-        return review.postingTitle.like("%$keyword%")
-    }
-
-    private fun movieTitleLike(condition: ReviewSearchCondition, keyword: String?): BooleanExpression? {
-        if (condition != ReviewSearchCondition.MOVIE_TITLE) return null
-        return review.movieTitle.like("%$keyword%")
-    }
-
 }
