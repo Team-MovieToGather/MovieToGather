@@ -12,7 +12,7 @@ class Comments(
     @Column(name = "contents")
     var contents: String,
     @Column(name = "like_count")
-    var likeCount: Long,
+    var likeCount: Int,
 
     @Column(name = "created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
