@@ -1,4 +1,4 @@
-package org.spartaa3.movietogather.infra.Security.jwt
+package org.spartaa3.movietogather.infra.security.jwt
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest

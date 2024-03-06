@@ -2,7 +2,7 @@ package org.spartaa3.movietogather.domain.member.service
 
 import org.spartaa3.movietogather.domain.member.dto.LoginResponse
 import org.spartaa3.movietogather.domain.member.entity.Member
-import org.spartaa3.movietogather.infra.Security.jwt.JwtPlugin
+import org.spartaa3.movietogather.infra.security.jwt.JwtPlugin
 import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service

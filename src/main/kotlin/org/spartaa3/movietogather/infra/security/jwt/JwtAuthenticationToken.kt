@@ -1,4 +1,4 @@
-package org.spartaa3.movietogather.infra.Security.jwt
+package org.spartaa3.movietogather.infra.security.jwt
 
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.web.authentication.WebAuthenticationDetails
