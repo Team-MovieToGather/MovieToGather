@@ -2,7 +2,9 @@ package org.spartaa3.movietogather.domain.meetings.controller
 
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.CreateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeetingsRequest
+import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.service.MeetingsService
+import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -12,9 +14,16 @@ import org.springframework.web.bind.annotation.*
 class MeetingsController(
     private val meetingsService: MeetingsService
 ) {
-    @PostMapping("/{meetingId}")
+    @GetMapping("/{meetingId}")
+    fun getMeetingsById(
+        @PathVariable meetingsId: String
+    ): ResponseEntity<MeetingsResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(meetingsService.getMeetingsById(meetingsId))
+    }
+    @PostMapping
     fun createMeetings(
-        @PathVariable meetingId: String,
         @RequestBody request: CreateMeetingsRequest,
     ): ResponseEntity<String> {
         meetingsService.createMeetings(request)

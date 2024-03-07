@@ -8,6 +8,9 @@ import org.spartaa3.movietogather.domain.meetings.entity.meetings
 import org.spartaa3.movietogather.domain.meetings.entity.toResponse
 import org.spartaa3.movietogather.domain.meetings.globl.exception.MeetingsNotFoundException
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
+import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
+import org.spartaa3.movietogather.domain.review.entity.toResponse
+import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -20,6 +23,11 @@ enum class Type {
 class MeetingsServiceImpl(
     private val meetingsRepository: MeetingsRepository
 ) : MeetingsService {
+
+    override fun getMeetingsById(meetingsId: String): MeetingsResponse {
+        val meetings = meetingsRepository.findByIdOrNull(meetingsId) ?: throw MeetingsNotFoundException("meetings", meetingsId)
+        return meetings.toResponse()
+    }
     override fun createMeetings(request: CreateMeetingsRequest): MeetingsResponse {
         return meetingsRepository.save(
             meetings(
