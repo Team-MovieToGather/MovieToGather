@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 data class GetCommentsResponse(
     val id: Long?,
     val contents: String,
-    val likeCount: Long,
+    val likeCount: Int,
     val createdAt: LocalDateTime,
     val createdBy: String,
 ) {

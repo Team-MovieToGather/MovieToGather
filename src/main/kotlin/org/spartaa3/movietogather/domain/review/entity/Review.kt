@@ -35,13 +35,20 @@ class Review(
 
     @Column(name = "is_deleted")
     val isDeleted: Boolean = false,
-    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "review",
+        fetch = FetchType.EAGER,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )  //추후 Fetch Join 을 이용하여 구현?
     var comments: MutableList<Comments> = mutableListOf()
 
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    var heart = 0
 }
 
 fun Review.toResponse(): ReviewResponse {
@@ -54,6 +61,7 @@ fun Review.toResponse(): ReviewResponse {
         movieImg = movieImg,
         contents = contents,
         createdAt = createdAt,
+        heart = heart,
         comments = comments.map { it.toResponse() }
     )
 }
