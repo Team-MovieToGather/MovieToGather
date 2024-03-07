@@ -39,6 +39,5 @@ out/
 ### Kotlin ###
 .kotlin
 
-
-# yml
-src/main/resources/*.yml
+### Env ###
+.env

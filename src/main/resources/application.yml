@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: ${H2_DRIVER_CLASS_NAME}
+    url: ${H2_URL}
+    username: ${H2_USER_NAME}
+    password: ${H2_PASSWORD}
