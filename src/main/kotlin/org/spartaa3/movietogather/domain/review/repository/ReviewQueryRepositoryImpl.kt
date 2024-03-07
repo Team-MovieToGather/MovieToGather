@@ -36,9 +36,12 @@ class ReviewQueryRepositoryImpl : ReviewQueryRepository, QueryDslSupport() {
     }
 
     private fun allCond(condition: ReviewSearchCondition, keyword: String?): BooleanExpression? {
+        if(keyword == null){
+            return review.id.isNotNull
+        }
         return when (condition) {
-            ReviewSearchCondition.MOVIE_TITLE -> review.postingTitle.like("%$keyword%")
-            ReviewSearchCondition.POSTING_TITLE -> review.movieTitle.like("%$keyword%")
+            ReviewSearchCondition.MOVIE_TITLE -> review.movieTitle.like("%$keyword%")
+            ReviewSearchCondition.POSTING_TITLE -> review.postingTitle.like("%$keyword%")
         }
     }
 }
