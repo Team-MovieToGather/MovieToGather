@@ -1,0 +1,47 @@
+api:
+  key: ${ API_KEY }
+  popularUrl: ${ API_POPULAR_URL }
+  genreUrl: ${ API_GENRE_URL }
+
+auth:
+  jwt:
+    issuer: ${ AUTH_JWT_ISSUER }
+    secret: ${ AUTH_JWT_SECRET }
+    accessTokenExpirationHour: ${ AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR }
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${ AUTH_GOOGLE_ID }
+            client-secret: ${ AUTH_GOOGLE_SECRET }
+            scope:
+              - email
+              - profile
+  jpa:
+    generate-ddl: 'true'
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        #  show_sql: true
+        format_sql: true
+        use_sql_comments: true # sql 과 함께 jpql 주석처리되어  콘솔창에 출력
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+    datasource:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://localhost:5432/mydb
+      username: thisuser
+      password: 880818
+
+      #    h2:
+      #      console:
+      #        enabled: true
+      #    datasource:
+      #      driver-class-name: org.h2.Driver
+      #      url: jdbc:h2:~/test
+      #      username: sa
+      #      password:
