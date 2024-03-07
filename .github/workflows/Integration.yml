@@ -17,7 +17,7 @@ permissions:
 jobs:
   integration:
 
-    # 가상환경 운영체제OS 선택
+    # 가상환경 운영체제 OS 선택
     runs-on: ubuntu-latest
 
     steps:
