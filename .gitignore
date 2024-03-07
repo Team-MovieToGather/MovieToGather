@@ -40,5 +40,5 @@ out/
 .kotlin
 
 
-# yml
-src/main/resources/*.yml
+# 설정정보
+.env
