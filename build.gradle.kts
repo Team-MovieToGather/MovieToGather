@@ -69,7 +69,7 @@ dependencies {
     annotationProcessor ("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("com.h2database:h2")
 
 
     // 테스트 코드

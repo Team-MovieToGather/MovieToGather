@@ -1,13 +1,13 @@
 api:
-  key: ${ API_KEY }
-  popularUrl: ${ API_POPULAR_URL }
-  genreUrl: ${ API_GENRE_URL }
+  key: ${API_KEY}
+  popularUrl: ${API_POPULAR_URL}
+  genreUrl: ${API_GENRE_URL}
 
 auth:
   jwt:
-    issuer: ${ AUTH_JWT_ISSUER }
-    secret: ${ AUTH_JWT_SECRET }
-    accessTokenExpirationHour: ${ AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR }
+    issuer: ${AUTH_JWT_ISSUER}
+    secret: ${AUTH_JWT_SECRET}
+    accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 
 spring:
   security:
@@ -15,8 +15,8 @@ spring:
       client:
         registration:
           google:
-            client-id: ${ AUTH_GOOGLE_ID }
-            client-secret: ${ AUTH_GOOGLE_SECRET }
+            client-id: ${AUTH_GOOGLE_ID}
+            client-secret: ${AUTH_GOOGLE_SECRET}
             scope:
               - email
               - profile
