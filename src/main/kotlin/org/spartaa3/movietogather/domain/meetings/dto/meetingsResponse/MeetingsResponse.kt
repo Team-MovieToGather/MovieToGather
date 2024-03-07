@@ -1,10 +1,9 @@
-package org.spartaa3.movietogather.domain.meetings.dto.mettingsRequest
+package org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse
 
 import org.spartaa3.movietogather.domain.meetings.service.Type
 import java.time.LocalDateTime
 
-class CreateMeetingsRequest(
-
+    class MeetingsResponse(
     var meetingName: String,
 
     var movieName: String,

@@ -1,4 +1,4 @@
-package org.spartaa3.movietogather.domain.meetings.dto.mettingsRequest
+package org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest
 
 import jakarta.persistence.EnumType
 import java.time.LocalDateTime

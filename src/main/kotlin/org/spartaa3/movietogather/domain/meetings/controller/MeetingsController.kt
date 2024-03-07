@@ -1,7 +1,7 @@
 package org.spartaa3.movietogather.domain.meetings.controller
 
-import org.spartaa3.movietogather.domain.meetings.dto.mettingsRequest.CreateMeetingsRequest
-import org.spartaa3.movietogather.domain.meetings.dto.mettingsRequest.UpdateMeetingsRequest
+import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.CreateMeetingsRequest
+import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.service.MeetingsService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.*
 class MeetingsController(
     private val meetingsService: MeetingsService
 ) {
-    @PostMapping("/meetings/{meetingId}")
+    @PostMapping("/{meetingId}")
     fun createMeetings(
         @PathVariable meetingId: String,
         @RequestBody request: CreateMeetingsRequest,
     ): ResponseEntity<String> {
-        meetingsService.createMeetings(meetingId, request)
+        meetingsService.createMeetings(request)
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body("댓글이 등록되었습니다..")
     }
 
-    @PutMapping("/meetings/{meetingId}")
+    @PutMapping("/{meetingId}")
     fun updateMeetings(
         @PathVariable meetingId: String,
         @RequestBody request: UpdateMeetingsRequest,
@@ -34,7 +34,7 @@ class MeetingsController(
             .body("수정이 완료되었습니다.")
     }
 
-    @DeleteMapping("/meetings/{meetingId}")
+    @DeleteMapping("/{meetingId}")
     fun deleteMeetings(
         @PathVariable meetingId: String,
     ): ResponseEntity<String> {

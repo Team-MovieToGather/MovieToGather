@@ -1,6 +1,7 @@
 package org.spartaa3.movietogather.domain.meetings.entity
 
 import jakarta.persistence.*
+import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.service.Type
 import java.time.LocalDateTime
 
@@ -44,4 +45,19 @@ class meetings(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+}
+
+fun meetings.toResponse(): MeetingsResponse {
+    return MeetingsResponse(
+        meetingName = meetingName,
+        movieName = movieName,
+        startTime = startTime,
+        endTime = endTime,
+        type = type,
+        locationUrl = locationUrl,
+        isClosed = isClosed,
+        numApplicants = numApplicants,
+        maxApplicants = maxApplicants,
+
+    )
 }

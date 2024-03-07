@@ -1,9 +1,11 @@
 package org.spartaa3.movietogather.domain.meetings.service
 
 
-import org.spartaa3.movietogather.domain.meetings.dto.mettingsRequest.CreateMeetingsRequest
-import org.spartaa3.movietogather.domain.meetings.dto.mettingsRequest.UpdateMeetingsRequest
+import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.CreateMeetingsRequest
+import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeetingsRequest
+import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.entity.meetings
+import org.spartaa3.movietogather.domain.meetings.entity.toResponse
 import org.spartaa3.movietogather.domain.meetings.globl.exception.MeetingsNotFoundException
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -18,8 +20,8 @@ enum class Type {
 class MeetingsServiceImpl(
     private val meetingsRepository: MeetingsRepository
 ) : MeetingsService {
-    override fun createMeetings(meetingsId: String, request: CreateMeetingsRequest) {
-        meetingsRepository.save(
+    override fun createMeetings(request: CreateMeetingsRequest): MeetingsResponse {
+        return meetingsRepository.save(
             meetings(
                 meetingName = request.meetingName,
                 movieName = request.movieName,
@@ -31,14 +33,14 @@ class MeetingsServiceImpl(
                 numApplicants = request.numApplicants,
                 maxApplicants = request.maxApplicants,
             )
-        )
+        ).toResponse()
     }
 
-    override fun updateMeetings(meetingsId: String, request: UpdateMeetingsRequest) {
+    override fun updateMeetings(meetingsId: String, request: UpdateMeetingsRequest): MeetingsResponse {
         val meetings = meetingsRepository.findByIdOrNull(meetingsId) ?: throw MeetingsNotFoundException(
             "Meetings",
             meetingsId
-        ) //리뷰가아님
+        )
         val (meetingName, movieName, startTime, endTime) = request
 
         meetings.meetingName = meetingName
@@ -46,7 +48,7 @@ class MeetingsServiceImpl(
         meetings.startTime = startTime
         meetings.endTime = endTime
 
-        meetingsRepository.save(meetings)
+        return meetingsRepository.save(meetings).toResponse()
 
     }
 
