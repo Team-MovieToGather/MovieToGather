@@ -45,7 +45,8 @@ class ReviewControllerTest @Autowired constructor(
                 movieImg = "movieImg",
                 contents = "contents",
                 genre = "genre",
-                createdAt = LocalDateTime.now()
+                createdAt = LocalDateTime.now(),
+                comments = listOf()
             )
             it("200 status code를 응답해야 한다.") {
                 mockMvc.get("/api/reviews/$reviewId") {
@@ -78,21 +79,22 @@ class ReviewControllerTest @Autowired constructor(
         val request = CreateReviewRequest(
             postingTitle = "postingTitle",
             star = 5.0,
-            movieTitle = "movieTitle",
-            movieImg = "movieImg",
+            //movieTitle = "movieTitle",
+            //movieImg = "movieImg",
             contents = "contents",
-            genre = "genre"
+            //genre = "genre"
         )
         context("존재하는 Id에 대한 요청을 보낼 때") {
             every { reviewService.createReview(request) } returns ReviewResponse(
                 id = reviewId,
                 postingTitle = request.postingTitle,
                 star = request.star,
-                movieTitle = request.movieTitle,
-                movieImg = request.movieImg,
+                movieTitle = "movieTitle",
+                movieImg = "movieImg",
                 contents = request.contents,
-                genre = request.genre,
-                createdAt = LocalDateTime.now()
+                genre = "contents",
+                createdAt = LocalDateTime.now(),
+                comments = listOf()
             )
             it("200 status code를 응답해야 한다.") {
                 mockMvc.post("/api/reviews") {
@@ -125,21 +127,22 @@ class ReviewControllerTest @Autowired constructor(
         val request = UpdateReviewRequest(
             postingTitle = "newTitle",
             star = 5.0,
-            movieTitle = "newTitle",
-            movieImg = "newImg",
+            //movieTitle = "newTitle",
+            //movieImg = "newImg",
             contents = "newContents",
-            genre = "newGenre"
+            //genre = "newGenre"
         )
         context("존재하는 Id에 대한 요청을 보낼 때") {
             every { reviewService.updateReview(reviewId, request) } returns ReviewResponse(
                 id = reviewId,
                 postingTitle = request.postingTitle,
                 star = request.star,
-                movieTitle = request.movieTitle,
-                movieImg = request.movieImg,
+                movieTitle = "movieTitle",
+                movieImg = "movieImg",
                 contents = request.contents,
-                genre = request.genre,
-                createdAt = LocalDateTime.now()
+                genre = "contents",
+                createdAt = LocalDateTime.now(),
+                comments = listOf()
             )
         }
         it("200 status code를 응답해야 한다.") {

@@ -102,7 +102,8 @@ class ReviewServiceImplTest : BehaviorSpec({
                 movieTitle = "Example Movie Title",
                 movieImg = "Example Movie Img",
                 contents = "Example Contents",
-                createdAt = LocalDateTime.now()
+                createdAt = LocalDateTime.now(),
+                comments = listOf()
             )
             val result = reviewService.updateReview(1L, updateMockRequest())
             then("등록된 리뷰의 postingTitle의 값은 Request에 입력된 값으로 변경된다.") {
@@ -179,10 +180,10 @@ fun createMockRequest(): CreateReviewRequest {
     return CreateReviewRequest(
         postingTitle = "Example Posting Title",
         star = 5.0,
-        movieTitle = "Example Movie Title",
-        movieImg = "Example Movie Img",
+        //movieTitle = "Example Movie Title",
+        //movieImg = "Example Movie Img",
         contents = "Example Contents",
-        genre = "Action"
+        //genre = "Action"
     )
 }
 
@@ -190,9 +191,9 @@ fun updateMockRequest(): UpdateReviewRequest {
     return UpdateReviewRequest(
         postingTitle = "New Posting Title",
         star = 5.0,
-        movieTitle = "Example Movie Title",
-        movieImg = "Example Movie Img",
+        //movieTitle = "Example Movie Title",
+        //movieImg = "Example Movie Img",
         contents = "Example Contents",
-        genre = "Action"
+        //genre = "Action"
     )
 }

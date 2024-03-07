@@ -73,7 +73,7 @@ class TmdbApiService (
                 genreResponse.genres.find { genre -> genre.id == id }?.name
             }.joinToString(", ") // 여러 장르명을 쉼표로 구분하여 하나의 문자열로 결합
         }
-        return SlicePaging(movieListResponse)
+        return slicePaging(movieListResponse)
     }
 
 
@@ -89,7 +89,8 @@ class TmdbApiService (
 
 
     // Slice 페이징
-    private fun SlicePaging(movieListResponse: MovieListResponse): SliceImpl<MovieResponse> {
+    // 기존 함수명 SlicePaging -> slicePaging 으로 변경
+    private fun slicePaging(movieListResponse: MovieListResponse): SliceImpl<MovieResponse> {
         val hasNext: Boolean = movieListResponse.page != movieListResponse.total_pages
         return SliceImpl(movieListResponse.results, PageRequest.of(movieListResponse.page, movieListResponse.total_pages), hasNext)
     }

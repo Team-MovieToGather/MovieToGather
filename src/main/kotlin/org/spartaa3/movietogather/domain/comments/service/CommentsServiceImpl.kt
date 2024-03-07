@@ -1,7 +1,7 @@
 package org.spartaa3.movietogather.domain.comments.service
 
 import org.spartaa3.movietogather.domain.comments.dto.commentsRequest.CreateCommentsRequest
-import org.spartaa3.movietogather.domain.comments.dto.commentsRequest.UpdatecommentsRequest
+import org.spartaa3.movietogather.domain.comments.dto.commentsRequest.UpdateCommentsRequest
 import org.spartaa3.movietogather.domain.comments.dto.commentsResponse.GetCommentsResponse
 import org.spartaa3.movietogather.domain.comments.entity.Comments
 import org.spartaa3.movietogather.domain.comments.repository.CommentsRepository
@@ -43,7 +43,7 @@ class CommentsServiceImpl(
     }
 
     @Transactional
-    override fun updateComments(reviewId: Long, commentsId: Long, request: UpdatecommentsRequest): GetCommentsResponse {
+    override fun updateComments(reviewId: Long, commentsId: Long, request: UpdateCommentsRequest): GetCommentsResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val comments =
             commentsRepository.findByIdOrNull(commentsId) ?: throw ReviewNotFoundException("Comments", commentsId)
