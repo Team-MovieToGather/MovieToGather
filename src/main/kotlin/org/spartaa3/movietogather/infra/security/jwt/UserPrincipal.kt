@@ -8,7 +8,7 @@ data class UserPrincipal(
     val id: Long,
     val email: String,
     val role: Member.MemberRole
-){
+) {
     fun getAuthorities(): Collection<GrantedAuthority> {
         return listOf(SimpleGrantedAuthority("ROLE_${role.name}"))
     }

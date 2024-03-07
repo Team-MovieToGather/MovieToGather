@@ -7,8 +7,8 @@ import java.io.Serializable
 class JwtAuthenticationToken(
     private val principal: UserPrincipal,
     details: WebAuthenticationDetails
-): AbstractAuthenticationToken(principal.getAuthorities()),
-    Serializable{
+) : AbstractAuthenticationToken(principal.getAuthorities()),
+    Serializable {
 
     init {
         super.setAuthenticated(true)

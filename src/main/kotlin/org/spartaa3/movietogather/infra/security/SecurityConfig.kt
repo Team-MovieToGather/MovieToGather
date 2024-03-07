@@ -24,6 +24,7 @@ class SecurityConfig(
     private val anonymousUrls = arrayOf(
         "/members/socialLogin"
     )
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
