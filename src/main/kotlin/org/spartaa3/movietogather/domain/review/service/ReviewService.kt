@@ -4,11 +4,11 @@ import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 
 interface ReviewService {
-    fun searchReview(condition: ReviewSearchCondition, keyword: String?, pageable: Pageable): Page<ReviewResponse>
+    fun searchReview(condition: ReviewSearchCondition, keyword: String?, pageable: Pageable): Slice<ReviewResponse>
 
     fun getReviewById(reviewId: Long): ReviewResponse
 
