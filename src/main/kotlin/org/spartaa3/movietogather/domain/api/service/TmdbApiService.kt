@@ -14,12 +14,13 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 
 @Service
-class TmdbApiService (
+class TmdbApiService(
     private val apiProperties: ApiProperties,
     private val reviewRepository: ReviewRepository
-): ApiService {
+) : ApiService {
     val restClient: RestClient = RestClient.create()
-    val objectMapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) // 정의되지 않은 필드 무시
+    val objectMapper =
+        jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) // 정의되지 않은 필드 무시
 
 
     // 인기 영화 데이터 목록 호출
@@ -33,7 +34,7 @@ class TmdbApiService (
             ?: throw ModelNotFoundException("movie", 1) // 예외처리항목 -> 다른 이슈로 정리
 
 
-        val response: MovieListResponse = result.let { objectMapper.readValue(it, MovieListResponse::class.java)}
+        val response: MovieListResponse = result.let { objectMapper.readValue(it, MovieListResponse::class.java) }
 
         return matchGenreNames(response)
     }
@@ -73,24 +74,31 @@ class TmdbApiService (
                 genreResponse.genres.find { genre -> genre.id == id }?.name
             }.joinToString(", ") // 여러 장르명을 쉼표로 구분하여 하나의 문자열로 결합
         }
-        return SlicePaging(movieListResponse)
+        return slicePaging(movieListResponse)
     }
 
 
     // 장르 목록 호출
     private fun getGenres() = restClient.get()
-            .uri("${apiProperties.genreUrl}" +
+        .uri(
+            "${apiProperties.genreUrl}" +
                     "?language=ko" +
-                    "&api_key=${apiProperties.key}")
-            .retrieve()
-            .body(String::class.java)
-            ?.let { objectMapper.readValue(it, GenreResponse::class.java)}
-            ?: throw ModelNotFoundException("movie", 1) // 예외처리항목 -> 다른 이슈로 정리
+                    "&api_key=${apiProperties.key}"
+        )
+        .retrieve()
+        .body(String::class.java)
+        ?.let { objectMapper.readValue(it, GenreResponse::class.java) }
+        ?: throw ModelNotFoundException("movie", 1) // 예외처리항목 -> 다른 이슈로 정리
 
 
     // Slice 페이징
-    private fun SlicePaging(movieListResponse: MovieListResponse): SliceImpl<MovieResponse> {
+    // 기존 함수명 SlicePaging -> slicePaging 으로 변경
+    private fun slicePaging(movieListResponse: MovieListResponse): SliceImpl<MovieResponse> {
         val hasNext: Boolean = movieListResponse.page != movieListResponse.total_pages
-        return SliceImpl(movieListResponse.results, PageRequest.of(movieListResponse.page, movieListResponse.total_pages), hasNext)
+        return SliceImpl(
+            movieListResponse.results,
+            PageRequest.of(movieListResponse.page, movieListResponse.total_pages),
+            hasNext
+        )
     }
 }

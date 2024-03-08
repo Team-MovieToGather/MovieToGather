@@ -16,6 +16,7 @@ class Member(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
     enum class MemberRole {
         Member, Admin
     }

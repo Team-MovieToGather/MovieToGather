@@ -10,20 +10,25 @@ import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.Review
+import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDateTime
 
 @ExtendWith(MockKExtension::class)
-@DataJpaTest
+@ActiveProfiles("test")
 class ReviewServiceImplTest : BehaviorSpec({
     afterContainer {
         clearAllMocks()
     }
 
     val reviewRepository = mockk<ReviewRepository>()
+    val pageableMock = mockk<Pageable>()
     val reviewService = spyk(ReviewServiceImpl(reviewRepository))
 
     //getReviewById 테스트 : 값이 있을 때
@@ -97,7 +102,8 @@ class ReviewServiceImplTest : BehaviorSpec({
                 movieTitle = "Example Movie Title",
                 movieImg = "Example Movie Img",
                 contents = "Example Contents",
-                createdAt = LocalDateTime.now()
+                createdAt = LocalDateTime.now(),
+                comments = listOf()
             )
             val result = reviewService.updateReview(1L, updateMockRequest())
             then("등록된 리뷰의 postingTitle의 값은 Request에 입력된 값으로 변경된다.") {
@@ -135,7 +141,25 @@ class ReviewServiceImplTest : BehaviorSpec({
         }
     }
 
-    //deleteReview 테스트 :: 로그인되지 않았을 때
+    //deleteReview 테스트 :로그인되지 않았을 때
+
+    //searchReview 테스트 : 로그인되었을 때
+    given("유저가 로그인되었을 때, 아래와 같은 조건으로 페이징을 진행하고 ") {
+        every { pageableMock.pageNumber } returns 0
+        every { pageableMock.pageSize } returns 10
+        every { pageableMock.sort } returns Sort.unsorted()
+        `when`("Tag가 MOVIE_TITLE이고, 검색어가 Title인 리뷰를 조회했을 때") {
+            val keyword = "Title"
+            val tag: ReviewSearchCondition = ReviewSearchCondition.MOVIE_TITLE
+            val mockPage = PageImpl<Review>(listOf())
+            every { reviewRepository.searchReview(any(), any(), any()) } returns mockPage
+            val result = reviewService.searchReview(tag, keyword, pageableMock)
+            then("페이징 처리가 된다.") {
+                val isPaged = result.size
+                isPaged shouldBe 0
+            }
+        }
+    }
 
 })
 
@@ -156,10 +180,10 @@ fun createMockRequest(): CreateReviewRequest {
     return CreateReviewRequest(
         postingTitle = "Example Posting Title",
         star = 5.0,
-        movieTitle = "Example Movie Title",
-        movieImg = "Example Movie Img",
+        //movieTitle = "Example Movie Title",
+        //movieImg = "Example Movie Img",
         contents = "Example Contents",
-        genre = "Action"
+        //genre = "Action"
     )
 }
 
@@ -167,9 +191,9 @@ fun updateMockRequest(): UpdateReviewRequest {
     return UpdateReviewRequest(
         postingTitle = "New Posting Title",
         star = 5.0,
-        movieTitle = "Example Movie Title",
-        movieImg = "Example Movie Img",
+        //movieTitle = "Example Movie Title",
+        //movieImg = "Example Movie Img",
         contents = "Example Contents",
-        genre = "Action"
+        //genre = "Action"
     )
 }

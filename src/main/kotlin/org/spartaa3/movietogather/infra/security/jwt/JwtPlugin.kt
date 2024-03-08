@@ -1,4 +1,4 @@
-package org.spartaa3.movietogather.infra.Security.jwt
+package org.spartaa3.movietogather.infra.security.jwt
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
@@ -12,11 +12,11 @@ import java.time.Instant
 import java.util.*
 
 @Component
-class JwtPlugin (
+class JwtPlugin(
     @Value("\${auth.jwt.issuer}") private val issuer: String,
     @Value("\${auth.jwt.secret}") private val secret: String,
     @Value("\${auth.jwt.accessTokenExpirationHour}") private val accessTokenExpirationHour: Long,
-    ) {
+) {
 
     fun validateToken(jwt: String): Jws<Claims> {
 
@@ -32,7 +32,7 @@ class JwtPlugin (
             .add("role", role)
             .build()
 
-        val now  = Instant.now()
+        val now = Instant.now()
         val key = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
 
         return Jwts.builder()

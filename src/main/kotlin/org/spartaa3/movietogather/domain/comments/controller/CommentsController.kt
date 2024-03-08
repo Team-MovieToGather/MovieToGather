@@ -1,7 +1,7 @@
 package org.spartaa3.movietogather.domain.comments.controller
 
 import org.spartaa3.movietogather.domain.comments.dto.commentsRequest.CreateCommentsRequest
-import org.spartaa3.movietogather.domain.comments.dto.commentsRequest.UpdatecommentsRequest
+import org.spartaa3.movietogather.domain.comments.dto.commentsRequest.UpdateCommentsRequest
 import org.spartaa3.movietogather.domain.comments.dto.commentsResponse.GetCommentsResponse
 import org.spartaa3.movietogather.domain.comments.service.CommentsService
 import org.springframework.http.HttpStatus
@@ -37,7 +37,7 @@ class CommentsController(
 
     @PutMapping("/review/{reviewId}/comments/{commentsId}")
     fun updateComments(
-        @RequestBody request: UpdatecommentsRequest,
+        @RequestBody request: UpdateCommentsRequest,
         @PathVariable commentsId: Long,
         @PathVariable reviewId: Long,
     ): ResponseEntity<String> {

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/members")
 class MemberController(
     private val memberService: MemberService
-){
+) {
 
     @PostMapping("/sociallogin")
     fun socialLogin(@AuthenticationPrincipal oAuth2User: OAuth2User): ResponseEntity<LoginResponse> {

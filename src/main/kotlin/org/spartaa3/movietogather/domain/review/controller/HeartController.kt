@@ -2,7 +2,7 @@ package org.spartaa3.movietogather.domain.review.controller
 
 import org.spartaa3.movietogather.domain.review.dto.HeartResponse
 import org.spartaa3.movietogather.domain.review.service.HeartService
-import org.spartaa3.movietogather.infra.Security.jwt.UserPrincipal
+import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal

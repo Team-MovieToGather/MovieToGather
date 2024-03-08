@@ -14,7 +14,9 @@ import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.Page
 import org.springframework.http.MediaType
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.LocalDateTime
@@ -22,6 +24,7 @@ import java.time.LocalDateTime
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockKExtension::class)
+@ActiveProfiles("test")
 class ReviewControllerTest @Autowired constructor(
     private val mockMvc: MockMvc,
 ) : DescribeSpec({
@@ -42,7 +45,8 @@ class ReviewControllerTest @Autowired constructor(
                 movieImg = "movieImg",
                 contents = "contents",
                 genre = "genre",
-                createdAt = LocalDateTime.now()
+                createdAt = LocalDateTime.now(),
+                comments = listOf()
             )
             it("200 status code를 응답해야 한다.") {
                 mockMvc.get("/api/reviews/$reviewId") {
@@ -75,21 +79,22 @@ class ReviewControllerTest @Autowired constructor(
         val request = CreateReviewRequest(
             postingTitle = "postingTitle",
             star = 5.0,
-            movieTitle = "movieTitle",
-            movieImg = "movieImg",
+            //movieTitle = "movieTitle",
+            //movieImg = "movieImg",
             contents = "contents",
-            genre = "genre"
+            //genre = "genre"
         )
         context("존재하는 Id에 대한 요청을 보낼 때") {
             every { reviewService.createReview(request) } returns ReviewResponse(
                 id = reviewId,
                 postingTitle = request.postingTitle,
                 star = request.star,
-                movieTitle = request.movieTitle,
-                movieImg = request.movieImg,
+                movieTitle = "movieTitle",
+                movieImg = "movieImg",
                 contents = request.contents,
-                genre = request.genre,
-                createdAt = LocalDateTime.now()
+                genre = "contents",
+                createdAt = LocalDateTime.now(),
+                comments = listOf()
             )
             it("200 status code를 응답해야 한다.") {
                 mockMvc.post("/api/reviews") {
@@ -122,21 +127,22 @@ class ReviewControllerTest @Autowired constructor(
         val request = UpdateReviewRequest(
             postingTitle = "newTitle",
             star = 5.0,
-            movieTitle = "newTitle",
-            movieImg = "newImg",
+            //movieTitle = "newTitle",
+            //movieImg = "newImg",
             contents = "newContents",
-            genre = "newGenre"
+            //genre = "newGenre"
         )
         context("존재하는 Id에 대한 요청을 보낼 때") {
             every { reviewService.updateReview(reviewId, request) } returns ReviewResponse(
                 id = reviewId,
                 postingTitle = request.postingTitle,
                 star = request.star,
-                movieTitle = request.movieTitle,
-                movieImg = request.movieImg,
+                movieTitle = "movieTitle",
+                movieImg = "movieImg",
                 contents = request.contents,
-                genre = request.genre,
-                createdAt = LocalDateTime.now()
+                genre = "contents",
+                createdAt = LocalDateTime.now(),
+                comments = listOf()
             )
         }
         it("200 status code를 응답해야 한다.") {
@@ -194,5 +200,27 @@ class ReviewControllerTest @Autowired constructor(
                 }
             }
         }
+    }
+    describe("GET /api/reviews/search 는") {
+
+        context("검색한 조건의 데이터가 존재한다면") {
+            val condition = "postingTitle"
+            val keyword = "keyword"
+            every { reviewService.searchReview(any(), any(), any()) } returns Page.empty()
+            it("200 status code를 응답해야 한다.") {
+                mockMvc.get("/api/reviews/search") {
+                    contentType = MediaType.APPLICATION_JSON
+                    accept = MediaType.APPLICATION_JSON
+                    param("searchCondition", condition)
+                    param("keyword", keyword)
+                }.andExpect {
+                    status {
+                        MockMvcResultMatchers.status().isOk()
+                    }
+                }
+            }
+        }
+
+
     }
 })
