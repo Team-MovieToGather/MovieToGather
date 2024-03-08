@@ -67,14 +67,13 @@ dependencies {
     kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
     kapt("jakarta.annotation:jakarta.annotation-api")
     kapt("jakarta.persistence:jakarta.persistence-api")
-
     compileOnly ("org.projectlombok:lombok:1.18.20")
-
     annotationProcessor ("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     runtimeOnly("com.h2database:h2")
     implementation ("org.springframework.boot:spring-boot-starter-data-redis")
+
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
     runtimeOnly("org.postgresql:postgresql")
@@ -83,6 +82,7 @@ dependencies {
 
 
     // 테스트 코드
+    testRuntimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.1")
     testImplementation("io.mockk:mockk:1.13.9")
