@@ -4,6 +4,8 @@ import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.CreateMeet
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.service.MeetingsService
+import org.spartaa3.movietogather.domain.meetings.service.Type
+import org.springframework.data.domain.Slice
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -13,13 +15,14 @@ import org.springframework.web.bind.annotation.*
 class MeetingsController(
     private val meetingsService: MeetingsService
 ) {
+
     @GetMapping("/{meetingId}")
     fun getMeetingsById(
-        @PathVariable meetingsId: String
+        @PathVariable meetingId: Long
     ): ResponseEntity<MeetingsResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(meetingsService.getMeetingsById(meetingsId))
+            .body(meetingsService.getMeetingsById(meetingId))
     }
 
     @PostMapping
@@ -34,7 +37,7 @@ class MeetingsController(
 
     @PutMapping("/{meetingId}")
     fun updateMeetings(
-        @PathVariable meetingId: String,
+        @PathVariable meetingId: Long,
         @RequestBody request: UpdateMeetingsRequest,
     ): ResponseEntity<String> {
         meetingsService.updateMeetings(meetingId, request)
@@ -45,7 +48,7 @@ class MeetingsController(
 
     @DeleteMapping("/{meetingId}")
     fun deleteMeetings(
-        @PathVariable meetingId: String,
+        @PathVariable meetingId: Long,
     ): ResponseEntity<String> {
         meetingsService.deleteMeetings(meetingId)
         return ResponseEntity

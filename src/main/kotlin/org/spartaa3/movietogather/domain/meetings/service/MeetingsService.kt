@@ -6,11 +6,11 @@ import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsR
 
 interface MeetingsService {
 
-    fun getMeetingsById(meetingsId: String): MeetingsResponse
+    fun getMeetingsById(meetingId: Long): MeetingsResponse
 
     fun createMeetings(request: CreateMeetingsRequest): MeetingsResponse
 
-    fun updateMeetings(meetingsId: String, request: UpdateMeetingsRequest): MeetingsResponse
+    fun updateMeetings(meetingId: Long, request: UpdateMeetingsRequest): MeetingsResponse
 
-    fun deleteMeetings(meetingsId: String)
+    fun deleteMeetings(meetingId: Long)
 }
