@@ -1,7 +1,7 @@
-package org.spartaa3.movietogather.infra.Security
+package org.spartaa3.movietogather.infra.security
 
 import org.spartaa3.movietogather.domain.member.service.CustomMemberDetailService
-import org.spartaa3.movietogather.infra.Security.jwt.JwtAuthenticationFilter
+import org.spartaa3.movietogather.infra.security.jwt.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -24,6 +24,7 @@ class SecurityConfig(
     private val anonymousUrls = arrayOf(
         "/members/socialLogin"
     )
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http

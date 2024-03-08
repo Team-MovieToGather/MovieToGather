@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Service
 
 @Service
-class CustomMemberDetailService: DefaultOAuth2UserService() {
+class CustomMemberDetailService : DefaultOAuth2UserService() {
 
     override fun loadUser(userRequest: OAuth2UserRequest?): OAuth2User {
         val loadUser = super.loadUser(userRequest)

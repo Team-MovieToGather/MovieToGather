@@ -39,6 +39,5 @@ out/
 ### Kotlin ###
 .kotlin
 
-
-# 설정정보
+# ENV
 .env

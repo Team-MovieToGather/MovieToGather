@@ -1,19 +1,19 @@
-package org.spartaa3.movietogather.infra.Security.jwt
+package org.spartaa3.movietogather.infra.security.jwt
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.spartaa3.movietogather.domain.member.entity.Member
-import org.springframework.stereotype.Component
-import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
+import org.springframework.stereotype.Component
+import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
     private val jwtPlugin: JwtPlugin
-): OncePerRequestFilter() {
+) : OncePerRequestFilter() {
 
     companion object {
         private val BEARER_PATTERN = Regex("^Bearer (.+?)$")
