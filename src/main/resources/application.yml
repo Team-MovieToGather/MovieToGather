@@ -11,6 +11,17 @@ auth:
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 
 spring:
+  datasource:
+    driver-class-name: ${H2_DRIVER_CLASS_NAME}
+    url: ${H2_URL}
+    username: ${H2_USERNAME}
+    password:
+  sql:
+    init:
+      mode: embedded
+  h2:
+    console:
+      enabled: true
   security:
     oauth2:
       client:
@@ -32,10 +43,14 @@ spring:
         use_sql_comments: true # sql 과 함께 jpql 주석처리되어  콘솔창에 출력
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
 
-    datasource:
-      datasource:
-        driver-class-name: org.h2.Driver
-        url: jdbc:h2:~/test
-        username: sa
-        password:
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        orm:
+          jdbc:
+            bind: trace
+    springframework:
+      security: debug
 
