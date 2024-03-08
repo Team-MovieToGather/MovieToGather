@@ -9,7 +9,9 @@ import org.spartaa3.movietogather.infra.QueryDslSupport
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.domain.SliceImpl
+import org.springframework.stereotype.Repository
 
+@Repository
 class MeetingQueryRepositoryImpl : MeetingQueryRepository, QueryDslSupport() {
     private val meetings = QMeetings.meetings
     override fun searchMeeting(
