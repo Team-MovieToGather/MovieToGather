@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "meetings")
-class meetings(
+class Meetings(
 
     @Column(name = "meeting_Name")
     var meetingName: String,
@@ -47,7 +47,7 @@ class meetings(
     var id: Long? = null
 }
 
-fun meetings.toResponse(): MeetingsResponse {
+fun Meetings.toResponse(): MeetingsResponse {
     return MeetingsResponse(
         meetingName = meetingName,
         movieName = movieName,
