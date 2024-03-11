@@ -1,6 +1,7 @@
 package org.spartaa3.movietogather.infra.security.jwt
 
 import jakarta.servlet.FilterChain
+import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.spartaa3.movietogather.domain.member.entity.Member
@@ -8,7 +9,9 @@ import org.springframework.http.HttpHeaders
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
+import org.springframework.util.StringUtils
 import org.springframework.web.filter.OncePerRequestFilter
+import java.io.IOException
 
 @Component
 class JwtAuthenticationFilter(
@@ -16,9 +19,11 @@ class JwtAuthenticationFilter(
 ) : OncePerRequestFilter() {
 
     companion object {
-        private val BEARER_PATTERN = Regex("^Bearer (.+?)$")
+        const val AUTHORIZATION_HEADER = "Authorization"
+        const val BEARER_PREFIX = "Bearer "
     }
 
+    @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

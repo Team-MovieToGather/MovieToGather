@@ -9,6 +9,9 @@ class Member(
     @Enumerated(EnumType.STRING)
     var role: MemberRole,
 
+    @Column(name = "oauthtype", columnDefinition = "VARCHAR(50)")
+    var oauthType: String? = null,
+
     @Column(unique = true)
     var email: String,
     var nickname: String
@@ -17,7 +20,4 @@ class Member(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    enum class MemberRole {
-        Member, Admin
-    }
 }

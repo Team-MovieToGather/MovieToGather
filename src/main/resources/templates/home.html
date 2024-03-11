@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+</head>
+<body>
+<div th:if="${memberInfo}">
+    <p th:text="'Logged in as ' + ${memberInfo.getEmail()}"></p>
+    <a href="/logout">Logout</a>
+</div>
+<div th:unless="${memberInfo}">
+    <p>You are not logged in</p>
+</div>
+</body>
+</html>

@@ -51,6 +51,8 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
     implementation("org.springframework.boot:spring-boot-starter-cache")
 
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
     //jwt
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -62,6 +64,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
     implementation("me.paulschwarz:spring-dotenv:4.0.0") // env
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
 
 
     kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
@@ -78,7 +81,6 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
     runtimeOnly("org.postgresql:postgresql")
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("me.paulschwarz:spring-dotenv:4.0.0")
 
 
     // 테스트 코드

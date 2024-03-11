@@ -1,10 +1,13 @@
 package org.spartaa3.movietogather.infra.security.jwt
 
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jws
-import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.time.Duration
@@ -13,35 +16,65 @@ import java.util.*
 
 @Component
 class JwtPlugin(
-    @Value("\${auth.jwt.issuer}") private val issuer: String,
-    @Value("\${auth.jwt.secret}") private val secret: String,
-    @Value("\${auth.jwt.accessTokenExpirationHour}") private val accessTokenExpirationHour: Long,
+    @Value("\${AUTH_JWT_ISSUER}") private val issuer: String,
+    @Value("\${AUTH_JWT_SECRET}") private val secret: String,
+    @Value("\${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}") private val accessTokenExpirationHour: Long,
 ) {
 
-    fun validateToken(jwt: String): Jws<Claims> {
+    private val log = LoggerFactory.getLogger(JwtPlugin::class.java)
+    private val key = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
 
-        val key = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
-        return Jwts.parser().verifyWith(key).build().parseSignedClaims(jwt)
+    fun validateToken(token: String): Boolean {
+        return try {
+            Jwts.parser()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+            true
+        } catch (ex: UnsupportedJwtException) {
+            log.error("JWT is not valid")
+            false
+        } catch (ex: MalformedJwtException) {
+            log.error("JWT is not valid")
+            false
+        } catch (ex: SignatureException) {
+            log.error("JWT signature validation fails")
+            false
+        } catch (ex: ExpiredJwtException) {
+            log.error("JWT is expired")
+            false
+        } catch (ex: IllegalArgumentException) {
+            log.error("JWT is null or empty or only whitespace")
+            false
+        } catch (ex: Exception) {
+            log.error("JWT validation fails", ex)
+            false
+        }
     }
 
-    fun generateToken(memberId: Long, email: String, role: String): String {
-        val duration = Duration.ofHours(accessTokenExpirationHour)
-
-        val claims: Claims = Jwts.claims()
-            .add("email", email)
-            .add("role", role)
-            .build()
-
-        val now = Instant.now()
-        val key = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
+    fun createToken(authentication: Authentication): String {
+        val currentDate = Date()
+        val expiryDate = Date(currentDate.time + accessTokenExpirationHour * 3600000) // Convert hours to milliseconds
 
         return Jwts.builder()
-            .subject(memberId.toString())
             .issuer(issuer)
-            .issuedAt(Date.from(now))
-            .expiration(Date.from(now.plus(duration)))
-            .claims(claims)
+            .subject(authentication.name)
+            .issuedAt(currentDate)
+            .expiration(expiryDate)
             .signWith(key)
             .compact()
     }
+
+    fun getAuthentication(token: String?): Authentication {
+        val claims: Claims = Jwts.parser()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+
+        val user: UserDetails = User(claims.subject, "", emptyList())
+
+        return UsernamePasswordAuthenticationToken(user, "", emptyList())
+    }
+
 }
