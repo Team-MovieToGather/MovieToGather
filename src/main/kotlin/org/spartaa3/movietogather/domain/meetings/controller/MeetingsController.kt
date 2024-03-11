@@ -15,11 +15,11 @@ class MeetingsController(
 ) {
     @GetMapping("/{meetingId}")
     fun getMeetingsById(
-        @PathVariable meetingsId: String
+        @PathVariable meetingId: Long
     ): ResponseEntity<MeetingsResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(meetingsService.getMeetingsById(meetingsId))
+            .body(meetingsService.getMeetingsById(meetingId))
     }
 
     @PostMapping
@@ -34,7 +34,7 @@ class MeetingsController(
 
     @PutMapping("/{meetingId}")
     fun updateMeetings(
-        @PathVariable meetingId: String,
+        @PathVariable meetingId: Long,
         @RequestBody request: UpdateMeetingsRequest,
     ): ResponseEntity<String> {
         meetingsService.updateMeetings(meetingId, request)
@@ -45,7 +45,7 @@ class MeetingsController(
 
     @DeleteMapping("/{meetingId}")
     fun deleteMeetings(
-        @PathVariable meetingId: String,
+        @PathVariable meetingId: Long,
     ): ResponseEntity<String> {
         meetingsService.deleteMeetings(meetingId)
         return ResponseEntity

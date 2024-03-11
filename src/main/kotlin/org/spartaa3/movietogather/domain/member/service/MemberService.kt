@@ -20,7 +20,7 @@ class MemberService(
             val member = Member(
                 email = oAuth2User.attributes["email"] as String,
                 nickname = "nickname",
-                role = Member.MemberRole.Member
+                role = Member.MemberRole.MEMBER
             )
             memberRepository.save(member)
         }

@@ -5,12 +5,12 @@ import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeet
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 
 interface MeetingsService {
-
-    fun getMeetingsById(meetingsId: String): MeetingsResponse
+    // meetingsId: Long으로 전부 수정
+    fun getMeetingsById(meetingsId: Long): MeetingsResponse
 
     fun createMeetings(request: CreateMeetingsRequest): MeetingsResponse
 
-    fun updateMeetings(meetingsId: String, request: UpdateMeetingsRequest): MeetingsResponse
+    fun updateMeetings(meetingsId: Long, request: UpdateMeetingsRequest): MeetingsResponse
 
-    fun deleteMeetings(meetingsId: String)
+    fun deleteMeetings(meetingsId: Long)
 }
