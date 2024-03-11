@@ -86,13 +86,13 @@ class TmdbApiServiceImpl(
 
     // Slice 페이징
     private fun slicePaging(movieListResponse: MovieListResponse): SliceImpl<MovieResponse> {
-        val currentPage = movieListResponse.page // 현재 페이지 번호
-        val pageSize = 20 // 페이지 당 항목 수
-        val hasNext = currentPage < movieListResponse.total_pages // 다음 페이지 존재 여부
+        val currentPage = movieListResponse.page
+        val pageSize = 20
+        val hasNext = currentPage < movieListResponse.total_pages
 
         return SliceImpl(
-            movieListResponse.results, // 현재 페이지의 데이터
-            PageRequest.of(currentPage , pageSize), // 페이지 요청 정보 (페이지 인덱스가 0부터 시작한다고 가정)
+            movieListResponse.results,
+            PageRequest.of(currentPage , pageSize), // 페이지 요청 정보
             hasNext
         )
     }
