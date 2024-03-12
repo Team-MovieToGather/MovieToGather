@@ -6,7 +6,7 @@ services:
     container_name: movietogather-postgres
     restart: always
     env_file:
-      - /home/ubuntu/.env
+      - .env
     environment:
       POSTGRES_DB: mymovie
       POSTGRES_USERNAME: postgres
@@ -19,7 +19,7 @@ services:
 
   movietogather-backend:
     env_file:
-      - /home/ubuntu/.env
+      - .env
     image: reeun/movietogather-backend:latest
     container_name: movietogather-backend
     environment:
