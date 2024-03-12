@@ -77,15 +77,6 @@ class JwtPlugin(
             .signWith(key)
             .compact()
     }
-    fun createCookie(authentication: Authentication): Cookie {
-        val cookieName = "refreshtoken"
-        val cookieValue = URLEncoder.encode(createRefreshToken(authentication), StandardCharsets.UTF_8)
-        val cookie = Cookie(cookieName, cookieValue)
-        cookie.isHttpOnly = true
-        cookie.path = "/"
-        cookie.maxAge = 24 * 60 * 60
-        return cookie
-    }
 
     fun getAuthentication(token: String?): Authentication {
         val claims: Claims = Jwts.parser()

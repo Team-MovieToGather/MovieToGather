@@ -4,7 +4,6 @@ import org.spartaa3.movietogather.domain.member.oauth2.info.GoogleMemberInfo
 import org.spartaa3.movietogather.domain.member.oauth2.info.KakaoMemberInfo
 import org.spartaa3.movietogather.domain.member.oauth2.info.MemberInfo
 import org.spartaa3.movietogather.domain.member.oauth2.info.NaverMemberInfo
-import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Component
 import java.util.*
 
