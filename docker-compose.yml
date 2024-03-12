@@ -20,7 +20,7 @@ services:
   movietogather-backend:
     env_file:
       - /home/ubuntu/.env
-    image: ${DOCKER_USERNAME}/${DOCKER_REPONAME}:latest
+    image: reeun/movietogather-backend:latest
     container_name: movietogather-backend
     environment:
       SPRING_PROFILES_ACTIVE: prod
