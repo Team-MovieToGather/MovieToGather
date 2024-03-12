@@ -5,8 +5,6 @@ services:
     image: postgres
     container_name: movietogather-postgres
     restart: always
-#    env_file:
-#      - .env
     environment:
       POSTGRES_DB: mymovie
       POSTGRES_USERNAME: postgres
@@ -18,8 +16,8 @@ services:
 
 
   movietogather-backend:
-#    env_file:
-#      - .env
+    env_file:
+      - .env
     image: reeun/movietogather-backend:latest
     container_name: movietogather-backend
     environment:

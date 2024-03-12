@@ -12,6 +12,10 @@ auth:
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 
 spring:
+  data:
+    jdbc:
+      repositories:
+        enabled: false
   datasource:
     driver-class-name: ${POSTGRES_DRIVER_CLASS_NAME}
     url: ${POSTGRES_URL}
@@ -20,9 +24,7 @@ spring:
   sql:
     init:
       mode: embedded
-  h2:
-    console:
-      enabled: true
+
   security:
     oauth2:
       client:
