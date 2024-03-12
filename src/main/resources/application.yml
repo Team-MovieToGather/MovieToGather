@@ -1,4 +1,3 @@
-
 api:
   key: ${API_KEY}
   popularUrl: ${API_POPULAR_URL}
@@ -53,4 +52,3 @@ logging:
             bind: trace
     springframework:
       security: debug
-

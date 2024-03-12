@@ -11,6 +11,7 @@ import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.Review
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
+import org.spartaa3.movietogather.domain.review.repository.HeartRepository
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.data.domain.PageImpl
@@ -29,7 +30,8 @@ class ReviewServiceImplTest : BehaviorSpec({
 
     val reviewRepository = mockk<ReviewRepository>()
     val pageableMock = mockk<Pageable>()
-    val reviewService = spyk(ReviewServiceImpl(reviewRepository))
+    val heartRepository = mockk<HeartRepository>()
+    val reviewService = spyk(ReviewServiceImpl(reviewRepository, heartRepository))
 
     //getReviewById 테스트 : 값이 있을 때
     given("id가 1인 리뷰가 존재한다면") {
@@ -103,7 +105,8 @@ class ReviewServiceImplTest : BehaviorSpec({
                 movieImg = "Example Movie Img",
                 contents = "Example Contents",
                 createdAt = LocalDateTime.now(),
-                comments = listOf()
+                comments = listOf(),
+                heart = 0
             )
             val result = reviewService.updateReview(1L, updateMockRequest())
             then("등록된 리뷰의 postingTitle의 값은 Request에 입력된 값으로 변경된다.") {
