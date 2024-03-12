@@ -1,4 +1,4 @@
-name: Deploy
+name: MovieToGather-Deploy
 
 on:
   # test 배포
