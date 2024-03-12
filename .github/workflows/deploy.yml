@@ -1,9 +1,12 @@
 name: Deploy
 
 on:
-  push:
-    branches:
-      - main
+  # test 배포
+  pull_request:
+    branches: [ main, dev ]
+#  push:
+#    branches:
+#      - main
 
 
 jobs:
