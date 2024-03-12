@@ -19,6 +19,7 @@ class JwtAuthenticationFilter(
 ) : OncePerRequestFilter() {
 
     companion object {
+        private val BEARER_PATTERN = Regex("^Bearer (.+?)$")
         const val AUTHORIZATION_HEADER = "Authorization"
         const val BEARER_PREFIX = "Bearer "
     }
@@ -29,30 +30,27 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val authorization = request.getHeader(HttpHeaders.AUTHORIZATION)
-        val jwt = try {
-            BEARER_PATTERN.matchEntire(authorization)?.groupValues?.get(1)
-        } catch (e: Exception) {
-            null
-        }
+//        쿠값키가을 고 지와겠야지?
+//        서버에서 get-cookie릃 할수도있어
+// 쿠키에는 토큰이 들어가있다!
 
-        if (jwt != null) {
+        val token = resolveToken(request)
 
-            val claims = jwtPlugin.validateToken(jwt)
-            val memberId = claims.payload.subject.toLong()
-            val email = claims.payload.get("email", String::class.java)
-            val role = claims.payload.get("role", String::class.java)
-
-            val userPrincipal = UserPrincipal(memberId, email, Member.MemberRole.valueOf(role))
-
-            val authentication = JwtAuthenticationToken(
-                principal = userPrincipal,
-                details = WebAuthenticationDetailsSource().buildDetails(request)
-            )
-
+        if (StringUtils.hasText(token) && token?.let { jwtPlugin.validateToken(it) } == true) {
+            val authentication = jwtPlugin.getAuthentication(token)
             SecurityContextHolder.getContext().authentication = authentication
+            response.setHeader(AUTHORIZATION_HEADER, "$BEARER_PREFIX$token")
         }
 
         filterChain.doFilter(request, response)
+    }
+    private fun resolveToken(request: HttpServletRequest): String? {
+        val token = request.getHeader(AUTHORIZATION_HEADER)
+
+        if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
+            return token.substring(BEARER_PREFIX.length)
+        }
+
+        return null
     }
 }

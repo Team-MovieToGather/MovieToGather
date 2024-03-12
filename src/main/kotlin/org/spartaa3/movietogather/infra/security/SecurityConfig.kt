@@ -1,5 +1,6 @@
 package org.spartaa3.movietogather.infra.security
 
+import org.spartaa3.movietogather.domain.member.oauth2.handler.OAuth2AuthenticationFailureHandler
 import org.spartaa3.movietogather.domain.member.oauth2.handler.OAuth2AuthenticationSuccessHandler
 import org.spartaa3.movietogather.domain.member.service.CustomOAuth2MemberService
 import org.spartaa3.movietogather.global.cookie.HttpCookieOAuth2AuthorizationRequestRepository
@@ -20,7 +21,7 @@ class SecurityConfig(
     private val customOAuth2MemberService: CustomOAuth2MemberService,
 //    private val oAuthLoginSuccessHandler: OAuthLoginSuccessHandler,
     private val oAuth2AuthenticationSuccessHandler: OAuth2AuthenticationSuccessHandler,
-//    private val oAuth2AuthenticationFailureHandler: OAuth2AuthenticationFailureHandler,
+    private val oAuth2AuthenticationFailureHandler: OAuth2AuthenticationFailureHandler,
     private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
 ) {
 
@@ -60,8 +61,8 @@ class SecurityConfig(
                 .userInfoEndpoint { it.userService(customOAuth2MemberService) }
                 .authorizationEndpoint { it.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository) }
                 .successHandler(oAuth2AuthenticationSuccessHandler)
-//                .failureHandler(oAuth2AuthenticationFailureHandler)
-                .defaultSuccessUrl("/home")
+                .failureHandler(oAuth2AuthenticationFailureHandler)
+//                .defaultSuccessUrl("/home")
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()

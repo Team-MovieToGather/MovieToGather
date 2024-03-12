@@ -9,6 +9,7 @@ auth:
     issuer: ${AUTH_JWT_ISSUER}
     secret: ${AUTH_JWT_SECRET}
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
+    refreshTokenExpirationHour: ${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}
 
 spring:
   thymeleaf:

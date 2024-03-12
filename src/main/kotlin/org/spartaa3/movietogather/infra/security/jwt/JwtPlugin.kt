@@ -2,6 +2,7 @@ package org.spartaa3.movietogather.infra.security.jwt
 
 import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.Cookie
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -9,9 +10,8 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
+import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import java.time.Duration
-import java.time.Instant
 import java.util.*
 
 @Component
@@ -19,6 +19,7 @@ class JwtPlugin(
     @Value("\${AUTH_JWT_ISSUER}") private val issuer: String,
     @Value("\${AUTH_JWT_SECRET}") private val secret: String,
     @Value("\${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}") private val accessTokenExpirationHour: Long,
+    @Value("\${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}") private val refreshTokenExperationHour: Long
 ) {
 
     private val log = LoggerFactory.getLogger(JwtPlugin::class.java)
@@ -53,16 +54,37 @@ class JwtPlugin(
     }
 
     fun createToken(authentication: Authentication): String {
-        val currentDate = Date()
-        val expiryDate = Date(currentDate.time + accessTokenExpirationHour * 3600000) // Convert hours to milliseconds
+        val now = Date()
+        val expirationTime  = Date(now.time + accessTokenExpirationHour * 3600000) // Convert hours to milliseconds
 
         return Jwts.builder()
             .issuer(issuer)
             .subject(authentication.name)
-            .issuedAt(currentDate)
-            .expiration(expiryDate)
+            .issuedAt(now)
+            .expiration(expirationTime)
             .signWith(key)
             .compact()
+    }
+
+    fun createRefreshToken(authentication: Authentication): String {
+        val now = Date()
+        val expirationTime = Date(now.time + refreshTokenExperationHour)
+
+        return Jwts.builder()
+            .issuer(issuer)
+            .issuedAt(now)
+            .expiration(expirationTime)
+            .signWith(key)
+            .compact()
+    }
+    fun createCookie(authentication: Authentication): Cookie {
+        val cookieName = "refreshtoken"
+        val cookieValue = URLEncoder.encode(createRefreshToken(authentication), StandardCharsets.UTF_8)
+        val cookie = Cookie(cookieName, cookieValue)
+        cookie.isHttpOnly = true
+        cookie.path = "/"
+        cookie.maxAge = 24 * 60 * 60
+        return cookie
     }
 
     fun getAuthentication(token: String?): Authentication {
