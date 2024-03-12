@@ -24,9 +24,6 @@ jobs:
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
 
-      - name: env 파일 확인
-        run: cat ./src/main/resources/.env
-
       - name: JDK 17 설치
         uses: actions/setup-java@v3
         with:
@@ -66,5 +63,5 @@ jobs:
           envs: COMPOSE
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            sudo docker stop $(docker ps -a -q) && sudo docker rm $(docker ps -a -q) && sudo docker rmi $(docker images -q)
-            sudo docker compose -d up
+#            sudo docker stop $(docker ps -a -q) && sudo docker rm $(docker ps -a -q) && sudo docker rmi $(docker images -q)
+            sudo docker-compose up -d
