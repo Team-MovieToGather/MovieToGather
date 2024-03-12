@@ -53,8 +53,3 @@ logging:
             bind: trace
     springframework:
       security: debug
-
-
-docker:
-  username:${DOCKER_USERNAME}
-  reponame:${DOCKER_REPONAME}
