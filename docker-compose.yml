@@ -9,7 +9,7 @@ services:
       - .env
     environment:
       POSTGRES_DB: mymovie
-      POSTGRES_USER: postgres
+      POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: movietogather
     volumes:
       - mymovie:/var/lib/postgresql/data

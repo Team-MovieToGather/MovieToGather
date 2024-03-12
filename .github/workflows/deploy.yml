@@ -52,13 +52,13 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPONAME }}:latest
 
      # EC2 베포
-      - name: Copy docker-compose.yml
+      - name: Copy docker-compose.yml & .env
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_SSH_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./docker-compose.yml"
+          source: "./docker-compose.yml, ./src/main/resources/.env"
           target: ./
 
       - name: Deploy to EC2
