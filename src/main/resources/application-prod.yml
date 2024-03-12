@@ -13,10 +13,10 @@ auth:
 
 spring:
   datasource:
-    driver-class-name: ${H2_DRIVER_CLASS_NAME}
-    url: ${H2_URL}
-    username: ${H2_USERNAME}
-    password:
+    driver-class-name: ${POSTGRES_DRIVER_CLASS_NAME}
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
   sql:
     init:
       mode: embedded
@@ -36,12 +36,12 @@ spring:
   jpa:
     generate-ddl: 'true'
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
         use_sql_comments: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+
 
 logging:
   level:
@@ -55,6 +55,3 @@ logging:
       security: debug
 
 
-docker:
-  username:${DOCKER_USERNAME}
-  reponame:${DOCKER_REPONAME}
