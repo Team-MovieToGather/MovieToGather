@@ -6,9 +6,11 @@ services:
     container_name: movietogather-postgres
     restart: always
     env_file:
-      - ./src/main/resources/.env
+      - .env
     environment:
       POSTGRES_DB: mymovie
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: movietogather
     volumes:
       - mymovie:/var/lib/postgresql/data
     ports:
@@ -17,29 +19,20 @@ services:
 
   movietogather-backend:
     env_file:
-      - ./src/main/resources/.env
+      - .env
     image: ${DOCKER_USERNAME}/${DOCKER_REPONAME}:latest
     container_name: movietogather-backend
-
     environment:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://movietogather-postgres:5432/mymovie
-      SPRING_DATASOURCE_USERNAME: myuser
-      SPRING_DATASOURCE_PASSWORD: mypassword
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: movietogather
     depends_on:
       - movietogather-postgres
     ports:
       - 8080:8080
+    restart: on-failure
 
-#  movietogather-frontend:
-#    build: ./movietogather-frontend
-#    image: reeun/movietogather-front:1.0.0-compose
-#    environment:
-#      - BACKEND_HOST=movietogather-backend
-#    ports:
-#      - 80:80
-#    depends_on:
-#      - movietogather-backend
 
 volumes:
   mymovie:
