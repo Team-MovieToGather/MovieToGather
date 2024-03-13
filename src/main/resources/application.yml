@@ -54,5 +54,18 @@ logging:
             bind: trace
     springframework:
       security: debug
-
-
+# Actuator
+management:
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true
