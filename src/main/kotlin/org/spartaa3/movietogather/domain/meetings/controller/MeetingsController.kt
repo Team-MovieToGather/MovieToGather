@@ -3,7 +3,11 @@ package org.spartaa3.movietogather.domain.meetings.controller
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.CreateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
+import org.spartaa3.movietogather.domain.meetings.entity.MeetingSearchCondition
 import org.spartaa3.movietogather.domain.meetings.service.MeetingsService
+import org.spartaa3.movietogather.domain.meetings.service.Type
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -13,6 +17,18 @@ import org.springframework.web.bind.annotation.*
 class MeetingsController(
     private val meetingsService: MeetingsService
 ) {
+    @GetMapping
+    fun searchMeeting(
+        @RequestParam(name = "type") type: Type,
+        @RequestParam(name = "searchCondition") condition: MeetingSearchCondition,
+        @RequestParam(name = "keyword") keyword: String?,
+        pageable: Pageable
+    ): ResponseEntity<Slice<MeetingsResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(meetingsService.searchMeeting(type, condition, keyword, pageable))
+    }
+
     @GetMapping("/{meetingId}")
     fun getMeetingsById(
         @PathVariable meetingId: Long
