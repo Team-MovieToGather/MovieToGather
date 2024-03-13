@@ -30,6 +30,16 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
+      - name: Gradle 캐싱
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Gradle 권한 부여
         run: chmod +x gradlew
 
