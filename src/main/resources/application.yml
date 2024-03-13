@@ -36,11 +36,12 @@ spring:
   jpa:
     generate-ddl: 'true'
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
+        #  show_sql: true
         format_sql: true
-        use_sql_comments: true
+        use_sql_comments: true # sql 과 함께 jpql 주석처리되어  콘솔창에 출력
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 logging:
@@ -53,3 +54,18 @@ logging:
             bind: trace
     springframework:
       security: debug
+# Actuator
+management:
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true
