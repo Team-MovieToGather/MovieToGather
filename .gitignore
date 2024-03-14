@@ -41,3 +41,5 @@ out/
 
 ### Env ###
 .env
+### yml ###
+/src/test/resources/*.yml

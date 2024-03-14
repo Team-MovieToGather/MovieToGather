@@ -3,6 +3,7 @@ api:
   key: ${API_KEY}
   popularUrl: ${API_POPULAR_URL}
   genreUrl: ${API_GENRE_URL}
+  searchUrl: ${API_SEARCH_URL}
 
 auth:
   jwt:
@@ -57,4 +58,18 @@ logging:
             bind: trace
     springframework:
       security: debug
-
+# Actuator
+management:
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true

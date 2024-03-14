@@ -1,4 +1,3 @@
-
 package org.spartaa3.movietogather.domain.review.controller
 
 import io.kotest.core.spec.style.DescribeSpec
@@ -47,7 +46,8 @@ class ReviewControllerTest @Autowired constructor(
                 contents = "contents",
                 genre = "genre",
                 createdAt = LocalDateTime.now(),
-                comments = listOf()
+                comments = listOf(),
+                heart = 0
             )
             it("200 status code를 응답해야 한다.") {
                 mockMvc.get("/api/reviews/$reviewId") {
@@ -95,7 +95,8 @@ class ReviewControllerTest @Autowired constructor(
                 contents = request.contents,
                 genre = "contents",
                 createdAt = LocalDateTime.now(),
-                comments = listOf()
+                comments = listOf(),
+                heart = 0
             )
             it("200 status code를 응답해야 한다.") {
                 mockMvc.post("/api/reviews") {
@@ -143,7 +144,8 @@ class ReviewControllerTest @Autowired constructor(
                 contents = request.contents,
                 genre = "contents",
                 createdAt = LocalDateTime.now(),
-                comments = listOf()
+                comments = listOf(),
+                heart = 0
             )
         }
         it("200 status code를 응답해야 한다.") {
