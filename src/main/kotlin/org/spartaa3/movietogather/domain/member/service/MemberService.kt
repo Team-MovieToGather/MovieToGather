@@ -16,7 +16,14 @@ class MemberService(
 
     @Transactional
     fun socialLogin(oAuth2User: OAuth2User): LoginResponse {
-        validateEmail(oAuth2User)
+        if (!memberRepository.existsByEmail(oAuth2User.attributes["email"] as String)) {
+            val member = Member(
+                email = oAuth2User.attributes["email"] as String,
+                nickname = "nickname",
+                role = Member.MemberRole.MEMBER
+            )
+            memberRepository.save(member)
+        }
         val member = memberRepository.findByEmail(oAuth2User.attributes["email"] as String)
         return LoginResponse(
             accessToken = jwtPlugin.generateToken(
@@ -27,17 +34,5 @@ class MemberService(
             )
         )
     }
-    fun validateEmail(oAuth2User: OAuth2User) {
-        if (!memberRepository.existsByEmail(oAuth2User.attributes["email"] as String)) {
-            val member = Member(
-                email = oAuth2User.attributes["email"] as String,
-                nickname = "nickname",
-                role = Member.MemberRole.MEMBER
-            )
-            memberRepository.save(member)
-        }
-    }
-
-
 }
 
