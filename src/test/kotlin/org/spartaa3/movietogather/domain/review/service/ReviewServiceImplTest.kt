@@ -31,7 +31,9 @@ class ReviewServiceImplTest : BehaviorSpec({
     val reviewRepository = mockk<ReviewRepository>()
     val pageableMock = mockk<Pageable>()
     val heartRepository = mockk<HeartRepository>()
+
     val reviewService = spyk(ReviewServiceImpl(reviewRepository, heartRepository))
+
 
     //getReviewById 테스트 : 값이 있을 때
     given("id가 1인 리뷰가 존재한다면") {
