@@ -12,10 +12,18 @@ auth:
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
     refreshTokenExpirationHour: ${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}
 
-spring:
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
+
+  datasource:
+    driver-class-name: ${H2_DRIVER_CLASS_NAME}
+    url: ${H2_URL}
+    username: ${H2_USERNAME}
+    password:
+  sql:
+    init:
+      mode: embedded
+  h2:
+    console:
+      enabled: true
   security:
     oauth2:
       client:
@@ -72,12 +80,30 @@ spring:
         use_sql_comments: true # sql 과 함께 jpql 주석처리되어  콘솔창에 출력
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
 
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:~/test
-#    username: sa
-#    password:
-  datasource:
-    password: koon2921
-    username: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        orm:
+          jdbc:
+            bind: trace
+    springframework:
+      security: debug
+# Actuator
+management:
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true
+

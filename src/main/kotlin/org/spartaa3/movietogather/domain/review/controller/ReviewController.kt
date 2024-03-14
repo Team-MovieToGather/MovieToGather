@@ -71,9 +71,13 @@ class ReviewController(
             .build()
     }
 
-    // 영화 데이터 호출
+
+    // 영화 호출
     @GetMapping("/movies")
-    fun getPopularMoviesList(): SliceImpl<MovieResponse> {
-        return apiService.getPopularMoviesList(1)
+    fun getMovies(
+        @RequestParam title: String? = null,
+        @RequestParam pageNumber: Int
+    ): SliceImpl<MovieResponse> {
+        return apiService.getMovies(title, pageNumber)
     }
 }

@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "meetings")
-class meetings(
+class Meetings(
 
     @Column(name = "meeting_Name")
     var meetingName: String,
@@ -37,17 +37,13 @@ class meetings(
     @Column(name = "max_applicants")
     val maxApplicants: Long,
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "meetings")
-//    val meetings: Meetings //왜이러는 걸까요?
-
-) {
+    ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }
 
-fun meetings.toResponse(): MeetingsResponse {
+fun Meetings.toResponse(): MeetingsResponse {
     return MeetingsResponse(
         meetingName = meetingName,
         movieName = movieName,
@@ -58,6 +54,5 @@ fun meetings.toResponse(): MeetingsResponse {
         isClosed = isClosed,
         numApplicants = numApplicants,
         maxApplicants = maxApplicants,
-
-        )
+    )
 }

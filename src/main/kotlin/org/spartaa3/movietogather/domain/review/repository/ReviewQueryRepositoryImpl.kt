@@ -38,7 +38,7 @@ class ReviewQueryRepositoryImpl : ReviewQueryRepository, QueryDslSupport() {
     }
 
     private fun allCond(condition: ReviewSearchCondition, keyword: String?): BooleanExpression? {
-        if(keyword == null){
+        if (keyword == null) {
             return review.id.isNotNull
         }
         return when (condition) {
