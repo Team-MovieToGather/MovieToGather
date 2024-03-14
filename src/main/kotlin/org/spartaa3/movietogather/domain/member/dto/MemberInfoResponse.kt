@@ -12,7 +12,7 @@ data class MemberInfoResponse(
             return MemberInfoResponse(
                 email = member.email,
                 nickname = member.nickname,
-                oauthType = member.oauthType.toString()
+                oauthType = member.OAuthType.toString()
             )
         }
     }

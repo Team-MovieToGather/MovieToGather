@@ -18,7 +18,7 @@ class HeartService(
     private val heartRepository: HeartRepository
 ) {
     @Transactional
-    fun reviewHeart(reviewId: Long, memberId: Long): HeartResponse {
+    fun reviewHeart(reviewId: Long, memberId: Int): HeartResponse {
         val member = memberRepository.findByIdOrNull(memberId) ?: throw IllegalArgumentException()
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalArgumentException()
 
@@ -36,7 +36,7 @@ class HeartService(
     }
 
     @Transactional
-    fun commentHeart(reviewId: Long, memberId: Long, commentsId: Long): HeartResponse {
+    fun commentHeart(reviewId: Long, memberId: Int, commentsId: Long): HeartResponse {
         val member = memberRepository.findByIdOrNull(memberId) ?: throw IllegalArgumentException()
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalArgumentException()
         val comments = commentRepository.findByIdOrNull(commentsId) ?: throw IllegalArgumentException()

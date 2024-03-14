@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
@@ -19,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
     private val customOAuth2MemberService: CustomOAuth2MemberService,
-//    private val oAuthLoginSuccessHandler: OAuthLoginSuccessHandler,
     private val oAuth2AuthenticationSuccessHandler: OAuth2AuthenticationSuccessHandler,
     private val oAuth2AuthenticationFailureHandler: OAuth2AuthenticationFailureHandler,
     private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
@@ -28,30 +26,11 @@ class SecurityConfig(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .csrf {
-                it.disable()
-            }
-            .httpBasic {
-                it.disable()
-            }
-            .authorizeHttpRequests {
-                it
-//                    .requestMatchers(*allowedUrls).permitAll()
-//                    .requestMatchers(*anonymousUrls).anonymous()
-                    .anyRequest()
-                    .permitAll()
-//                    .authenticated()
-            }
+            .httpBasic { it.disable() }
+            .formLogin { it.disable() }
+            .csrf { it.disable() }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.NEVER)
-            }
-
-            .logout { auth ->
-                auth
-                    .logoutUrl("/auth/logout")
-                    .logoutSuccessHandler { request, response, authentication ->
-                        response.status = 200
-                    }
             }
             .oauth2Login {  oauth2Login -> oauth2Login
 //                it.userInfoEndpoint { u -> u.userService(memberService) }
@@ -66,9 +45,5 @@ class SecurityConfig(
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
-    }
-    @Bean
-    fun passwordEncoder(): BCryptPasswordEncoder {
-        return BCryptPasswordEncoder()
     }
 }

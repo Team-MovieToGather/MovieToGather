@@ -1,9 +1,9 @@
 package org.spartaa3.movietogather.domain.member.service
 
 import mu.KotlinLogging
+import org.spartaa3.movietogather.global.exception.OAuth2AuthenticationProcessingException
 import org.spartaa3.movietogather.domain.member.entity.Member
 import org.spartaa3.movietogather.domain.member.entity.MemberRole
-import org.spartaa3.movietogather.global.exception.OAuth2AuthenticationProcessingException
 import org.spartaa3.movietogather.domain.member.oauth2.OAuth2MemberInfoFactory
 import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.infra.security.jwt.OAuth2UserPrincipal
@@ -49,7 +49,7 @@ class CustomOAuth2MemberService(
                 email = email.toString(),
                 role = MemberRole.MEMBER,
                 nickname = "nickname${random}",//중복 없이 랜덤부여 할 수 있도록 수정 필요
-                oauthType = oauthType
+                OAuthType = oauthType
             )
             save(member)
         }
@@ -85,7 +85,7 @@ class CustomOAuth2MemberService(
     }
 
     fun getMemberByEmailAndOAuthType(email: String?, oauthType: String): Member? {
-        return memberRepository.findByEmailAndOauthType(email.toString(), oauthType)
+        return memberRepository.findByEmailAndOAuthType(email.toString(), oauthType)
     }
 
 }

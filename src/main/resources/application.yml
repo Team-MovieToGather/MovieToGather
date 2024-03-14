@@ -3,6 +3,7 @@ api:
   key: ${API_KEY}
   popularUrl: ${API_POPULAR_URL}
   genreUrl: ${API_GENRE_URL}
+  searchUrl: ${API_SEARCH_URL}
 
 auth:
   jwt:
@@ -63,6 +64,7 @@ spring:
     generate-ddl: 'true'
     hibernate:
       ddl-auto: create
+      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         #  show_sql: true

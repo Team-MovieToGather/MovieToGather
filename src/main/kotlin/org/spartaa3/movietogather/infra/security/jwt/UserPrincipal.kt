@@ -1,16 +1,18 @@
 package org.spartaa3.movietogather.infra.security.jwt
 
-import org.spartaa3.movietogather.domain.member.entity.Member
-import org.spartaa3.movietogather.domain.member.entity.MemberRole
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 data class UserPrincipal(
-    val id: Long,
+    val id: Int,
     val email: String,
-    val role: MemberRole = MemberRole.MEMBER
+    val oauthType: String,
+    val authorities: Collection<GrantedAuthority>
 ) {
-    fun getAuthorities(): Collection<GrantedAuthority> {
-        return listOf(SimpleGrantedAuthority("ROLE_${role.name}"))
-    }
+    constructor(id: Int, email: String, roles: Set<String>, oauthType: String): this(
+        id,
+        email,
+        oauthType,
+        roles.map { SimpleGrantedAuthority("ROLE_$it") }
+    )
 }

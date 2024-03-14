@@ -13,7 +13,7 @@ class MemberToken(
     @Column(name = "email")
     var email: String? = null,
 
-    @Column(name = "refresh_token", nullable = false)
+    @Column(name = "refresh_token", columnDefinition = "TEXT", nullable = false)
     var refreshToken: String? = null,
 
     @OneToOne(fetch = FetchType.LAZY)

@@ -10,7 +10,7 @@ class Member(
     var role: MemberRole,
 
     @Column(name = "oauthtype", columnDefinition = "VARCHAR(50)")
-    var oauthType: String? = null,
+    var OAuthType: String? = null,
 
     @Column(unique = true)
     var email: String,

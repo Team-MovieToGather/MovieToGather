@@ -10,10 +10,12 @@ import org.spartaa3.movietogather.global.cookie.HttpCookieOAuth2AuthorizationReq
 import org.spartaa3.movietogather.infra.security.jwt.JwtPlugin
 import org.spartaa3.movietogather.infra.security.jwt.OAuth2UserPrincipal
 import org.springframework.security.core.Authentication
+import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriComponentsBuilder
 import java.io.IOException
+import java.net.URLEncoder
 import java.util.*
 
 @Component
@@ -22,7 +24,6 @@ class OAuth2AuthenticationSuccessHandler(
     private val jwtPlugin: JwtPlugin,
     private val tokenService: TokenServiceImpl
 ) : SimpleUrlAuthenticationSuccessHandler() {
-
 
     val log = KotlinLogging.logger {}
 
@@ -48,9 +49,10 @@ class OAuth2AuthenticationSuccessHandler(
         response: HttpServletResponse,
         authentication: Authentication
     ): String {
-        val redirectUri: Optional<String> = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map { it.value }
-        val targetUrl: String = redirectUri.orElse("/home")
+        val redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map { it.value }
+        val targetUrl = redirectUri.orElse("/home")
         val principal: OAuth2UserPrincipal? = getOAuth2UserPrincipal(authentication)
+
 
         if (principal == null) {
             return UriComponentsBuilder.fromUriString(targetUrl)
@@ -58,19 +60,20 @@ class OAuth2AuthenticationSuccessHandler(
                 .build().toUriString()
         }
 
-
         log.info(
-            "email={}, name={}, nickname={}, accessToken={}",
+            "email={}, nickname={}, accessToken={}",
             principal.memberInfo.getEmail(),
-            principal.memberInfo.getName(),
             principal.memberInfo.getNickname(),
             principal.memberInfo.getAccessToken()
         )
 
+        val oAuth2User: OAuth2User = authentication.principal as OAuth2User
+        val oAuthId = principal.memberInfo.getId()
+        val oAuthType = principal.memberInfo.getProvider()
+        val email = principal.memberInfo.getEmail()
 
-
-        val accessToken = jwtPlugin.createToken(authentication)
-        val refreshToken = jwtPlugin.createRefreshToken(authentication)
+        val token = jwtPlugin.createToken(oAuth2User, oAuthId.toString(), email.toString(), oAuthType)
+        val refreshToken = URLEncoder.encode(token.toString(), "UTF-8")
 
         val refreshTokenCookieName = generateUniqueCookieName()
 
@@ -79,11 +82,11 @@ class OAuth2AuthenticationSuccessHandler(
         refreshTokenCookie.path = "/"
         response.addCookie(refreshTokenCookie)
 
-        tokenService.saveRefreshToken(authentication.name, refreshToken)
+        tokenService.saveRefreshToken(email.toString(), refreshToken)
 
         return UriComponentsBuilder.fromUriString(targetUrl)
 //            .queryParam("access_token", accessToken)
-//            .queryParam("refresh_token", refreshTokenCookieName)//존나 멍청했다 왜 헤더만 살피고 uri를 안보니 //논리적으로 생각하자//천천히 뜯어보고//한가지 생각에 매몰되면 다른걸 보지 못한다
+//            .queryParam("refresh_token", refreshTokenCookieName)
             .build().toUriString()
 
     }

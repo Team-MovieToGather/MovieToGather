@@ -1,8 +1,8 @@
 package org.spartaa3.movietogather.domain.member.controller
 
+
 import org.spartaa3.movietogather.domain.member.dto.MemberInfoResponse
 import org.spartaa3.movietogather.domain.member.dto.UpdateMemberInfoRequest
-import org.spartaa3.movietogather.domain.member.service.CustomOAuth2MemberService
 import org.spartaa3.movietogather.domain.member.service.MemberService
 import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.http.HttpStatus
@@ -24,7 +24,7 @@ class MemberController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<MemberInfoResponse>{
         return status(HttpStatus.OK)
-            .body(memberService.getMemberInfo(userPrincipal.id))
+            .body(memberService.getMemberInfo(userPrincipal))
     }
 
     @PutMapping("/update")
@@ -33,7 +33,7 @@ class MemberController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<MemberInfoResponse>{
         return status(HttpStatus.OK)
-            .body(memberService.updateMemberInfo(userPrincipal.id, request))
+            .body(memberService.updateMemberInfo(userPrincipal, request))
     }
 
     @GetMapping("/info")

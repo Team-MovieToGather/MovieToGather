@@ -1,4 +1,4 @@
-package org.spartaa3.movietogather.domain.member.oauth2.info
+package org.spartaa3.movietogather.domain.trash.member.oauth2.info
 
 import org.spartaa3.movietogather.domain.member.oauth2.OAuth2Provider
 
@@ -7,7 +7,7 @@ class GoogleMemberInfo(
     private val attributes: Map<String, Any>
 ) : MemberInfo {
 
-    private val id: String? = attributes["sub"] as String?
+    private val oAuthId: String? = attributes["sub"] as String?
     private val email: String? = attributes["email"] as String?
     private val name: String? = attributes["name"] as String?
     private val firstName: String? = attributes["given_name"] as String?
@@ -27,30 +27,30 @@ class GoogleMemberInfo(
     }
 
     override fun getId(): String {
-        return id!!
+        return oAuthId!!
     }
 
     override fun getEmail(): String? {
         return email
     }
 
-    override fun getName(): String? {
-        return name
-    }
+//    override fun getName(): String? {
+//        return name
+//    }
 
-    override fun getFirstName(): String? {
-        return firstName
-    }
-
-    override fun getLastName(): String? {
-        return lastName
-    }
+//    override fun getFirstName(): String? {
+//        return firstName
+//    }
+//
+//    override fun getLastName(): String? {
+//        return lastName
+//    }
 
     override fun getNickname(): String? {
         return null
     }
 
-    override fun getProfileImageUrl(): String? {
-        return profileImageUrl
-    }
+//    override fun getProfileImageUrl(): String? {
+//        return profileImageUrl
+//    }
 }

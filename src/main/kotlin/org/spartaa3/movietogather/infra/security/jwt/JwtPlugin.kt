@@ -1,17 +1,16 @@
 package org.spartaa3.movietogather.infra.security.jwt
 
-import io.jsonwebtoken.*
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.Jws
+import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import jakarta.servlet.http.Cookie
-import org.slf4j.LoggerFactory
+import org.spartaa3.movietogather.domain.member.oauth2.OAuth2Provider
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.userdetails.User
-import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.stereotype.Component
-import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import java.time.Duration
+import java.time.Instant
 import java.util.*
 
 @Component
@@ -19,75 +18,59 @@ class JwtPlugin(
     @Value("\${AUTH_JWT_ISSUER}") private val issuer: String,
     @Value("\${AUTH_JWT_SECRET}") private val secret: String,
     @Value("\${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}") private val accessTokenExpirationHour: Long,
-    @Value("\${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}") private val refreshTokenExperationHour: Long
+    @Value("\${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}") private val refreshTokenExpirationHour: Long
 ) {
 
-    private val log = LoggerFactory.getLogger(JwtPlugin::class.java)
-    private val key = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
+    companion object {
+        const val BEARER_PREFIX = "Bearer"
+    }
 
-    fun validateToken(token: String): Boolean {
-        return try {
-            Jwts.parser()
-                .setSigningKey(key)
+    fun validateToken(jwt: String): Result<Jws<Claims>> {
+        return kotlin.runCatching {
+            val key = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
+            Jwts
+                .parser()
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(token)
-            true
-        } catch (ex: UnsupportedJwtException) {
-            log.error("JWT is not valid")
-            false
-        } catch (ex: MalformedJwtException) {
-            log.error("JWT is not valid")
-            false
-        } catch (ex: SignatureException) {
-            log.error("JWT signature validation fails")
-            false
-        } catch (ex: ExpiredJwtException) {
-            log.error("JWT is expired")
-            false
-        } catch (ex: IllegalArgumentException) {
-            log.error("JWT is null or empty or only whitespace")
-            false
-        } catch (ex: Exception) {
-            log.error("JWT validation fails", ex)
-            false
+                .parseSignedClaims(jwt)
         }
     }
 
-    fun createToken(authentication: Authentication): String {
-        val now = Date()
-        val expirationTime  = Date(now.time + accessTokenExpirationHour * 3600000) // Convert hours to milliseconds
+    fun createToken(oAuth2User: OAuth2User, id: String, email: String, oAuthType: OAuth2Provider): JwtDto {
+        val now = Instant.now()
+        val key = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
+        val expirationTime  = Date(Date().time + accessTokenExpirationHour)
+        val expirationPeriod = Duration.ofHours(1)
+        val email: String? = when (oAuthType.name) {
+            "GOOGLE" -> oAuth2User.getAttribute<String>("email")
+            "NAVER" -> oAuth2User.getAttribute<Map<*, *>>("response")?.get("email") as? String
+            "KAKAO" -> oAuth2User.getAttribute<Map<*, *>>("kakao_account")?.get("email") as? String
+            else -> null
+        }
 
-        return Jwts.builder()
-            .issuer(issuer)
-            .subject(authentication.name)
-            .issuedAt(now)
-            .expiration(expirationTime)
-            .signWith(key)
-            .compact()
-    }
-
-    fun createRefreshToken(authentication: Authentication): String {
-        val now = Date()
-        val expirationTime = Date(now.time + refreshTokenExperationHour)
-
-        return Jwts.builder()
-            .issuer(issuer)
-            .issuedAt(now)
-            .expiration(expirationTime)
-            .signWith(key)
-            .compact()
-    }
-
-    fun getAuthentication(token: String?): Authentication {
-        val claims: Claims = Jwts.parser()
-            .setSigningKey(key)
+        val claims: Claims = Jwts.claims()
+            .add(mapOf("email" to email, "oauthType" to oAuthType))
             .build()
-            .parseClaimsJws(token)
-            .getBody()
 
-        val user: UserDetails = User(claims.subject, "", emptyList())
+        val accessToken = Jwts.builder()
+            .subject(id)
+            .issuer(issuer)
+            .issuedAt(Date.from(now))
+            .expiration(Date.from(now.plus(expirationPeriod)))
+            .claims(claims)
+            .signWith(key)
+            .compact()
 
-        return UsernamePasswordAuthenticationToken(user, "", emptyList())
+        val refreshToken = Jwts.builder()
+            .expiration(Date(Date().time+refreshTokenExpirationHour))
+            .signWith(key)
+            .compact()
+
+        return JwtDto(
+            grantType = BEARER_PREFIX,
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+            accessTokenExpires = expirationTime.time
+        )
     }
-
 }
