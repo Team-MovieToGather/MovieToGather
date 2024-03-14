@@ -20,13 +20,19 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository,
-    private val heartRepository: HeartRepository
+    private val heartRepository: HeartRepository,
+    private val redisRepository: RedisRepository
 ) : ReviewService {
     override fun bestTopReview(): List<ReviewResponse> {
-        val reviews = reviewRepository.findAll()
-        reviews.forEach { it.heart = heartRepository.countHeartByReviewAndCommentsIsNull(it) }
-        val bestReviews = reviews.sortedByDescending { it.heart }.take(3)
-        return bestReviews.map { it.toResponse() }
+        val bestReviews = redisRepository.getBestReviews()
+        return if (bestReviews != null) bestReviews.map { it.toResponse() }
+        else{
+            val reviews = reviewRepository.findAll()
+            reviews.forEach { it.heart = heartRepository.countHeartByReviewAndCommentsIsNull(it) }
+            val bestReviewsFromDB = reviews.sortedByDescending { it.heart }.take(3)
+            redisRepository.saveBestReviews(bestReviewsFromDB)
+            bestReviewsFromDB.map { it.toResponse() }
+        }
     }
 
     override fun searchReview(

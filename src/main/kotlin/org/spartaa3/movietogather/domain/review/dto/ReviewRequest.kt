@@ -1,6 +1,8 @@
 package org.spartaa3.movietogather.domain.review.dto
 
-data class CreateReviewRequest(
+import com.fasterxml.jackson.annotation.JsonCreator
+
+data class CreateReviewRequest @JsonCreator(mode = JsonCreator.Mode.PROPERTIES) constructor(
     val postingTitle: String,
     val star: Double,
 //    val movieTitle: String, // 선택된 영화 처리 작업 후 수정 예정
@@ -9,7 +11,7 @@ data class CreateReviewRequest(
 //    val genre: String
 )
 
-data class UpdateReviewRequest(
+data class UpdateReviewRequest @JsonCreator(mode = JsonCreator.Mode.PROPERTIES) constructor(
     val postingTitle: String,
     val star: Double,
 //    val movieTitle: String,
