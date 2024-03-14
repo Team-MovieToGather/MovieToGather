@@ -13,9 +13,8 @@ class TokenServiceImpl(
     @Transactional
     fun saveRefreshToken(email: String, refreshTokenValue: String) {
         val refreshToken = MemberToken(
-
             email = email,
-            refreshToken = refreshTokenValue,
+            refreshToken = refreshTokenValue
         )
         tokenRepository.save(refreshToken)
     }

@@ -1,6 +1,6 @@
 package org.spartaa3.movietogather.infra.security.jwt
 
-import org.spartaa3.movietogather.domain.trash.member.oauth2.info.MemberInfo
+import org.spartaa3.movietogather.domain.member.oauth2.info.MemberInfo
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.oauth2.core.user.OAuth2User

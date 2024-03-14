@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import mu.KotlinLogging
+import org.spartaa3.movietogather.domain.member.repository.TokenRepository
 import org.spartaa3.movietogather.domain.member.service.TokenServiceImpl
 import org.spartaa3.movietogather.global.cookie.CookieUtils
 import org.spartaa3.movietogather.global.cookie.HttpCookieOAuth2AuthorizationRequestRepository
@@ -22,7 +23,8 @@ import java.util.*
 class OAuth2AuthenticationSuccessHandler(
     private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
     private val jwtPlugin: JwtPlugin,
-    private val tokenService: TokenServiceImpl
+    private val tokenService: TokenServiceImpl,
+    private val tokenRepository: TokenRepository
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     val log = KotlinLogging.logger {}
@@ -71,6 +73,7 @@ class OAuth2AuthenticationSuccessHandler(
         val oAuthId = principal.memberInfo.getId()
         val oAuthType = principal.memberInfo.getProvider()
         val email = principal.memberInfo.getEmail()
+
 
         val token = jwtPlugin.createToken(oAuth2User, oAuthId.toString(), email.toString(), oAuthType)
         val refreshToken = URLEncoder.encode(token.refreshToken, "UTF-8")

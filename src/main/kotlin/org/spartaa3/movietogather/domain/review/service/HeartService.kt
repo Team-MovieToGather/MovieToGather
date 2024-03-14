@@ -7,6 +7,7 @@ import org.spartaa3.movietogather.domain.review.dto.HeartResponse
 import org.spartaa3.movietogather.domain.review.entity.Heart
 import org.spartaa3.movietogather.domain.review.repository.HeartRepository
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
+import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -18,8 +19,8 @@ class HeartService(
     private val heartRepository: HeartRepository
 ) {
     @Transactional
-    fun reviewHeart(reviewId: Long, memberId: Int): HeartResponse {
-        val member = memberRepository.findByIdOrNull(memberId) ?: throw IllegalArgumentException()
+    fun reviewHeart(reviewId: Long, userPrincipal: UserPrincipal): HeartResponse {
+        val member = memberRepository.findByEmail(userPrincipal.email) ?: throw IllegalArgumentException()
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalArgumentException()
 
         val existingHeart = heartRepository.findByMemberAndReviewAndCommentsIsNull(member, review)
@@ -36,8 +37,8 @@ class HeartService(
     }
 
     @Transactional
-    fun commentHeart(reviewId: Long, memberId: Int, commentsId: Long): HeartResponse {
-        val member = memberRepository.findByIdOrNull(memberId) ?: throw IllegalArgumentException()
+    fun commentHeart(reviewId: Long, userPrincipal: UserPrincipal, commentsId: Long): HeartResponse {
+        val member = memberRepository.findByEmail(userPrincipal.email) ?: throw IllegalArgumentException()
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalArgumentException()
         val comments = commentRepository.findByIdOrNull(commentsId) ?: throw IllegalArgumentException()
 

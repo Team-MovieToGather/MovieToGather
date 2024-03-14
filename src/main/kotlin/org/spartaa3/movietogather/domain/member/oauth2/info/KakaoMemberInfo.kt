@@ -1,4 +1,4 @@
-package org.spartaa3.movietogather.domain.trash.member.oauth2.info
+package org.spartaa3.movietogather.domain.member.oauth2.info
 
 import org.spartaa3.movietogather.domain.member.oauth2.OAuth2Provider
 
