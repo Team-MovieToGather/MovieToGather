@@ -18,7 +18,7 @@ class SecurityConfig(
 ) {
     private val allowedUrls = arrayOf(
         "/", "/swagger-ui/**", "/v3/**",
-        "/api/**"
+        "/api/**", "/ws/**", "/h2-console/**"
     )
 
     private val anonymousUrls = arrayOf(
@@ -34,6 +34,7 @@ class SecurityConfig(
             .httpBasic {
                 it.disable()
             }
+            .headers { it.frameOptions { frameOptionsConfig -> frameOptionsConfig.sameOrigin() } } // H2 사용 위해서 필요
             .authorizeHttpRequests {
                 it.requestMatchers(*allowedUrls).permitAll()
                     .requestMatchers(*anonymousUrls).anonymous()
