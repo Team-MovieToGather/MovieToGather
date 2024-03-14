@@ -73,11 +73,8 @@ class OAuth2AuthenticationSuccessHandler(
         val email = principal.memberInfo.getEmail()
 
         val token = jwtPlugin.createToken(oAuth2User, oAuthId.toString(), email.toString(), oAuthType)
-        val refreshToken = URLEncoder.encode(token.toString(), "UTF-8")
-
-        val refreshTokenCookieName = generateUniqueCookieName()
-
-        val refreshTokenCookie = Cookie(refreshTokenCookieName, refreshToken)
+        val refreshToken = URLEncoder.encode(token.refreshToken, "UTF-8")
+        val refreshTokenCookie = Cookie("refresh-token", refreshToken)
         refreshTokenCookie.isHttpOnly = true
         refreshTokenCookie.path = "/"
         response.addCookie(refreshTokenCookie)
@@ -85,7 +82,7 @@ class OAuth2AuthenticationSuccessHandler(
         tokenService.saveRefreshToken(email.toString(), refreshToken)
 
         return UriComponentsBuilder.fromUriString(targetUrl)
-//            .queryParam("access_token", accessToken)
+            .queryParam("access_token", token.accessToken)
 //            .queryParam("refresh_token", refreshTokenCookieName)
             .build().toUriString()
 
