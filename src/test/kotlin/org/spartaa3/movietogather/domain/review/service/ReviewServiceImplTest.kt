@@ -1,3 +1,4 @@
+
 package org.spartaa3.movietogather.domain.review.service
 
 import io.kotest.assertions.throwables.shouldThrow
@@ -31,7 +32,8 @@ class ReviewServiceImplTest : BehaviorSpec({
     val reviewRepository = mockk<ReviewRepository>()
     val pageableMock = mockk<Pageable>()
     val heartRepository = mockk<HeartRepository>()
-    val reviewService = spyk(ReviewServiceImpl(reviewRepository,heartRepository))
+    val reviewService = spyk(ReviewServiceImpl(reviewRepository, heartRepository))
+
 
     //getReviewById 테스트 : 값이 있을 때
     given("id가 1인 리뷰가 존재한다면") {
@@ -58,13 +60,10 @@ class ReviewServiceImplTest : BehaviorSpec({
             }
         }
     }
-    //createReview 테스트 : 로그인되었을 때
-    given("리뷰 생성을 위해 로그인했을 때 ") {
-        // 로그인 구현 시 작성 가능
-        //
+    given("리뷰를 생성할 때") {
         val mockRequest = createMockRequest()
         every { reviewRepository.save(any<Review>()) } answers { firstArg() }
-        `when`("review를 생성하면") {
+        `when`("리뷰 생성을 요청하면") {
             val result = reviewService.createReview(mockRequest)
             then("리뷰가 생성된다.") {
                 verify { reviewRepository.save(any<Review>()) }
@@ -73,28 +72,7 @@ class ReviewServiceImplTest : BehaviorSpec({
         }
     }
 
-    /*
-    //createReview 테스트 : 로그인되지 않았을 때
-    given("리뷰를 생성하고 싶은데 로그인되지 않았을 때 ") {
-        // 로그인 구현 시 작성 가능
-        //
-        val id = 1L
-        val mockRequest = mockRequest()
-        `when`("review를 생성하면") {
-            reviewService.createReview(mockRequest)
-            then("로그인 시 이용 가능합니다. 예외가 발생한다.") {
-                // 리뷰 생성 확인
-                shouldThrow<IllegalStateException> {
-                    reviewRepository.save(any())
-                }
-            }
-        }
-    }
- */
-
-    //updateReview 테스트 :  로그인되었을 때
-    given("로그인되었을 때 ") {
-        // 로그인 구현 시 작성 가능
+    given("id가 1인 리뷰가 존재할 때 ") {
         `when`("등록된 리뷰의 postingTitle을 수정하면") {
             every { reviewService.updateReview(any(), any()) } returns ReviewResponse(
                 id = 1L,
@@ -121,12 +99,9 @@ class ReviewServiceImplTest : BehaviorSpec({
                 }
             }
         }
-    }
-    //updateReview 테스트 : 로그인되지 않았을 때
 
-    //deleteReview 테스트 : 로그인되었을 때
-    given("유저가 로그인되었을 때 ") {
-        // 로그인 구현 시 작성 가능
+    }
+    given("id가 1인 리뷰가 존재하고, 이를 삭제하려 할 때 ") {
         `when`("등록된 리뷰를 삭제하면") {
             every { reviewService.deleteReview(any()) } returns Unit
             val result = reviewService.deleteReview(1L)
@@ -144,10 +119,8 @@ class ReviewServiceImplTest : BehaviorSpec({
         }
     }
 
-    //deleteReview 테스트 :로그인되지 않았을 때
 
-    //searchReview 테스트 : 로그인되었을 때
-    given("유저가 로그인되었을 때, 아래와 같은 조건으로 페이징을 진행하고 ") {
+    given("아래와 같은 조건으로 페이징을 진행하고 ") {
         every { pageableMock.pageNumber } returns 0
         every { pageableMock.pageSize } returns 10
         every { pageableMock.sort } returns Sort.unsorted()
@@ -200,4 +173,3 @@ fun updateMockRequest(): UpdateReviewRequest {
         //genre = "Action"
     )
 }
-

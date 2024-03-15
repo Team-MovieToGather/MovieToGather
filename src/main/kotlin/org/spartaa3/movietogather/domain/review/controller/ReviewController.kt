@@ -22,6 +22,12 @@ class ReviewController(
     private val reviewService: ReviewService,
     private val apiService: ApiService
 ) {
+    @GetMapping("/bastTop3")
+    fun bestTopReview(): ResponseEntity<List<ReviewResponse>>{
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(reviewService.bestTopReview())
+    }
     @GetMapping("/search")
     fun searchReview(
         @RequestParam(name = "searchCondition") condition: ReviewSearchCondition,

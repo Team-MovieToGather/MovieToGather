@@ -7,6 +7,7 @@ import org.spartaa3.movietogather.domain.review.entity.Review
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.entity.toResponse
 import org.spartaa3.movietogather.domain.review.repository.HeartRepository
+import org.spartaa3.movietogather.domain.review.repository.RedisRepository
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.data.domain.Pageable
@@ -19,8 +20,20 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository,
-    private val heartRepository: HeartRepository
+    private val heartRepository: HeartRepository,
+    private val redisRepository: RedisRepository
 ) : ReviewService {
+    override fun bestTopReview(): List<ReviewResponse> {
+        val bestReviews = redisRepository.getBestReviews()
+        return if (bestReviews != null) bestReviews.map { it.toResponse() }
+        else{
+            val reviews = reviewRepository.findAll()
+            reviews.forEach { it.heart = heartRepository.countHeartByReviewAndCommentsIsNull(it) }
+            val bestReviewsFromDB = reviews.sortedByDescending { it.heart }.take(3)
+            redisRepository.saveBestReviews(bestReviewsFromDB)
+            bestReviewsFromDB.map { it.toResponse() }
+        }
+    }
 
     override fun searchReview(
         condition: ReviewSearchCondition,

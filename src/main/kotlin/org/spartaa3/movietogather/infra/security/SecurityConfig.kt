@@ -23,6 +23,15 @@ class SecurityConfig(
     private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
 ) {
 
+    private val allowedUrls = arrayOf(
+        "/", "/swagger-ui/**", "/v3/**",
+        "/api/**", "/ws/**", "/h2-console/**", "/actuator/**"
+    )
+
+    private val anonymousUrls = arrayOf(
+        "/members/socialLogin"
+    )
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
