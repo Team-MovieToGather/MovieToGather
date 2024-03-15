@@ -1,3 +1,4 @@
+
 api:
   key: ${API_KEY}
   popularUrl: ${API_POPULAR_URL}
@@ -12,9 +13,9 @@ auth:
 
 spring:
   datasource:
-    driver-class-name: ${H2_DRIVER_CLASS_NAME}
-    url: ${H2_URL}
-    username: ${H2_USERNAME}
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/test
+    username: sa
     password:
   sql:
     init:
@@ -38,10 +39,9 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        #  show_sql: true
         format_sql: true
-        use_sql_comments: true # sql 과 함께 jpql 주석처리되어  콘솔창에 출력
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
+        use_sql_comments: true
+
 
 logging:
   level:
@@ -53,18 +53,5 @@ logging:
             bind: trace
     springframework:
       security: debug
-# Actuator
-management:
-  info:
-    java:
-      enabled: true
-    os:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-server:
-  tomcat:
-    mbeanregistry:
-      enabled: true
+
+

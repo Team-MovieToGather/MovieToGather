@@ -17,6 +17,6 @@ data class ChatMessage(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
-    val creatAt : LocalDateTime = LocalDateTime.now()
+    val creatAt: LocalDateTime = LocalDateTime.now()
 
 }

@@ -1,3 +1,4 @@
+
 package org.spartaa3.movietogather.domain.review.service
 
 import io.kotest.assertions.throwables.shouldThrow
@@ -32,6 +33,7 @@ class ReviewServiceImplTest : BehaviorSpec({
     val pageableMock = mockk<Pageable>()
     val heartRepository = mockk<HeartRepository>()
     val reviewService = spyk(ReviewServiceImpl(reviewRepository, heartRepository))
+
 
     //getReviewById 테스트 : 값이 있을 때
     given("id가 1인 리뷰가 존재한다면") {
@@ -171,4 +173,3 @@ fun updateMockRequest(): UpdateReviewRequest {
         //genre = "Action"
     )
 }
-

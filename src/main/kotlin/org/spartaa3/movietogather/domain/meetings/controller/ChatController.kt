@@ -21,7 +21,7 @@ class ChatController(private val chatService: ChatService) {
     }
 
     @GetMapping("/chatRoom")
-    fun findRoom(@PathVariable meetingId: Long): ResponseEntity<ChatRoomResponse>{
+    fun findRoom(@PathVariable meetingId: Long): ResponseEntity<ChatRoomResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(chatService.findRoom(meetingId))
