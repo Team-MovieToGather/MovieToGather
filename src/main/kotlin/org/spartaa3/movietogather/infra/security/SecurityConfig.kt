@@ -22,6 +22,14 @@ class SecurityConfig(
     private val oAuth2AuthenticationFailureHandler: OAuth2AuthenticationFailureHandler,
     private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
 ) {
+    private val allowedUrls = arrayOf(
+        "/", "/swagger-ui/**", "/v3/**",
+        "/api/**"
+    )
+
+    private val anonymousUrls = arrayOf(
+        "/members/socialLogin"
+    )
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -45,5 +53,6 @@ class SecurityConfig(
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
+
     }
 }

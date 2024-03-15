@@ -5,6 +5,7 @@ import org.spartaa3.movietogather.domain.api.service.ApiService
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieResponse
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
+import org.spartaa3.movietogather.domain.review.dto.ReviewsResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.service.ReviewService
@@ -22,12 +23,19 @@ class ReviewController(
     private val reviewService: ReviewService,
     private val apiService: ApiService
 ) {
+    @GetMapping("/bastTop3")
+    fun bestTopReview(): ResponseEntity<List<ReviewsResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(reviewService.bestTopReview())
+    }
+
     @GetMapping("/search")
     fun searchReview(
         @RequestParam(name = "searchCondition") condition: ReviewSearchCondition,
         @RequestParam(name = "keyword") keyword: String?,
         pageable: Pageable
-    ): ResponseEntity<Slice<ReviewResponse>> {
+    ): ResponseEntity<Slice<ReviewsResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(reviewService.searchReview(condition, keyword, pageable))
@@ -71,9 +79,13 @@ class ReviewController(
             .build()
     }
 
-    // 영화 데이터 호출
+
+    // 영화 호출
     @GetMapping("/movies")
-    fun getPopularMoviesList(): SliceImpl<MovieResponse> {
-        return apiService.getPopularMoviesList(1)
+    fun getMovies(
+        @RequestParam title: String? = null,
+        @RequestParam pageNumber: Int
+    ): SliceImpl<MovieResponse> {
+        return apiService.getMovies(title, pageNumber)
     }
 }

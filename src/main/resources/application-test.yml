@@ -1,0 +1,56 @@
+api:
+  key: ${API_KEY}
+  popularUrl: ${API_POPULAR_URL}
+  genreUrl: ${API_GENRE_URL}
+  searchUrl: ${API_SEARCH_URL}
+
+auth:
+  jwt:
+    issuer: ${AUTH_JWT_ISSUER}
+    secret: ${AUTH_JWT_SECRET}
+    accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/test
+    username: sa
+    password:
+  sql:
+    init:
+      mode: embedded
+  h2:
+    console:
+      enabled: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${AUTH_GOOGLE_ID}
+            client-secret: ${AUTH_GOOGLE_SECRET}
+            scope:
+              - email
+              - profile
+  jpa:
+    generate-ddl: 'true'
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        orm:
+          jdbc:
+            bind: trace
+    springframework:
+      security: debug
+
+
