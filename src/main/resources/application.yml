@@ -1,4 +1,3 @@
-
 api:
   key: ${API_KEY}
   popularUrl: ${API_POPULAR_URL}
@@ -24,6 +23,10 @@ auth:
   h2:
     console:
       enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
   security:
     oauth2:
       client:

@@ -2,11 +2,13 @@ package org.spartaa3.movietogather.domain.review.service
 
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
+import org.spartaa3.movietogather.domain.review.dto.ReviewsResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.Review
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.entity.toResponse
 import org.spartaa3.movietogather.domain.review.repository.HeartRepository
+import org.spartaa3.movietogather.domain.review.repository.RedisRepository
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.data.domain.Pageable
@@ -19,17 +21,29 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository,
-    private val heartRepository: HeartRepository
+    private val heartRepository: HeartRepository,
+    private val redisRepository: RedisRepository
 ) : ReviewService {
+    override fun bestTopReview(): List<ReviewsResponse> {
+        val bestReviews = redisRepository.getBestReviews()
+        return if (bestReviews != null) bestReviews.map { ReviewsResponse.to(it) }
+        else {
+            val reviews = reviewRepository.findAll()
+            reviews.forEach { it.heart = heartRepository.countHeartByReviewAndCommentsIsNull(it) }
+            val bestReviewsFromDB = reviews.sortedByDescending { it.heart }.take(3)
+            redisRepository.saveBestReviews(bestReviewsFromDB)
+            bestReviewsFromDB.map { ReviewsResponse.to(it) }
+        }
+    }
 
     override fun searchReview(
         condition: ReviewSearchCondition,
         keyword: String?,
         pageable: Pageable
-    ): Slice<ReviewResponse> {
+    ): Slice<ReviewsResponse> {
         val reviews = reviewRepository.searchReview(condition, keyword, pageable)
         reviews.forEach { it.heart = heartRepository.countHeartByReviewAndCommentsIsNull(it) }
-        return reviews.map { it.toResponse() }
+        return reviews.map { ReviewsResponse.to(it) }
     }
 
     override fun getReviewById(reviewId: Long): ReviewResponse {
