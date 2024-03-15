@@ -62,10 +62,8 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")
     implementation("io.github.cdimascio:dotenv-java:3.0.0") // env
-    implementation("me.paulschwarz:spring-dotenv:4.0.0")
     implementation("org.springframework.boot:spring-boot-starter-websocket") // websocket
     implementation("io.github.microutils:kotlin-logging:3.0.5") // log
-    implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
     implementation("me.paulschwarz:spring-dotenv:4.0.0") // env
     implementation("io.github.microutils:kotlin-logging:3.0.5")
@@ -89,6 +87,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     // prometheus
     implementation("io.micrometer:micrometer-registry-prometheus")
+
 
 
     // 테스트 코드
