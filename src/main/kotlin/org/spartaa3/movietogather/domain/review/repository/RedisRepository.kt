@@ -14,7 +14,7 @@ class RedisRepository(
     private val objectMapper: MapperConfig
 ) {
     private val mapper = objectMapper.objectMapper()
-    fun saveBestReviews(bestReviews: List<Review>){
+    fun saveBestReviews(bestReviews: List<Review>) {
         val reviewJson = mapper.writeValueAsString(bestReviews)
         redisTemplate.opsForValue().set("bestReviews", reviewJson, 60L, TimeUnit.SECONDS)
     }

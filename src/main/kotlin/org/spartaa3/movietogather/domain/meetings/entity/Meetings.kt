@@ -3,6 +3,7 @@ package org.spartaa3.movietogather.domain.meetings.entity
 import jakarta.persistence.*
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.service.Type
+import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
 import java.time.LocalDateTime
 
 @Entity
@@ -37,7 +38,7 @@ class Meetings(
     @Column(name = "max_applicants")
     val maxApplicants: Long,
 
-    ) {
+    ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
