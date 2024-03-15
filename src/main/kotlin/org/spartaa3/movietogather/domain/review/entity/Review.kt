@@ -1,5 +1,6 @@
 package org.spartaa3.movietogather.domain.review.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.*
 import org.spartaa3.movietogather.domain.comments.entity.Comments
@@ -37,6 +38,7 @@ class Review(
         cascade = [CascadeType.ALL],
         orphanRemoval = true
     )  //추후 Fetch Join 을 이용하여 구현?
+    @JsonIgnore
     var comments: MutableList<Comments> = mutableListOf()
 
 ) : BaseTimeEntity() {
