@@ -78,7 +78,6 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
     runtimeOnly("org.postgresql:postgresql")
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("me.paulschwarz:spring-dotenv:4.0.0")
     // spring actuator
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     // prometheus
