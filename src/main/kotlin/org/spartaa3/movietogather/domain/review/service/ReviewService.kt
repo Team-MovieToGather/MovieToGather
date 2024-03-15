@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 
 interface ReviewService {
+    fun bestTopReview(): List<ReviewResponse>
+
     fun searchReview(condition: ReviewSearchCondition, keyword: String?, pageable: Pageable): Slice<ReviewResponse>
 
     fun getReviewById(reviewId: Long): ReviewResponse

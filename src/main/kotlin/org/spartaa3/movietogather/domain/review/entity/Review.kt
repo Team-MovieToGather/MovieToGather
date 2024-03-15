@@ -1,5 +1,6 @@
 package org.spartaa3.movietogather.domain.review.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.*
 import org.spartaa3.movietogather.domain.comments.entity.Comments
 import org.spartaa3.movietogather.domain.comments.entity.toResponse
@@ -8,6 +9,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "review")
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Review(
     @Column(name = "postingtitle")
     var postingTitle: String,
