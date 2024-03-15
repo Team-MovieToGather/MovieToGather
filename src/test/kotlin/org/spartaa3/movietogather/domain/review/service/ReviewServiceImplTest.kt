@@ -1,4 +1,3 @@
-
 package org.spartaa3.movietogather.domain.review.service
 
 import io.kotest.assertions.throwables.shouldThrow
@@ -13,6 +12,7 @@ import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.Review
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.repository.HeartRepository
+import org.spartaa3.movietogather.domain.review.repository.RedisRepository
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.data.domain.PageImpl
@@ -32,7 +32,8 @@ class ReviewServiceImplTest : BehaviorSpec({
     val reviewRepository = mockk<ReviewRepository>()
     val pageableMock = mockk<Pageable>()
     val heartRepository = mockk<HeartRepository>()
-    val reviewService = spyk(ReviewServiceImpl(reviewRepository, heartRepository))
+    val redisRepository = mockk<RedisRepository>()
+    val reviewService = spyk(ReviewServiceImpl(reviewRepository, heartRepository,redisRepository))
 
 
     //getReviewById 테스트 : 값이 있을 때

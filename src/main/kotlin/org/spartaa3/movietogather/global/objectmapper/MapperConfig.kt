@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class MapperConfig {
     @Bean
-    fun objectMapper(): ObjectMapper{
+    fun objectMapper(): ObjectMapper {
         val objectMapper = ObjectMapper()
         objectMapper.registerModule(JavaTimeModule())
         objectMapper.disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)

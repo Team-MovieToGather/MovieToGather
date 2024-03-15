@@ -26,7 +26,7 @@ class ReviewServiceImpl(
     override fun bestTopReview(): List<ReviewResponse> {
         val bestReviews = redisRepository.getBestReviews()
         return if (bestReviews != null) bestReviews.map { it.toResponse() }
-        else{
+        else {
             val reviews = reviewRepository.findAll()
             reviews.forEach { it.heart = heartRepository.countHeartByReviewAndCommentsIsNull(it) }
             val bestReviewsFromDB = reviews.sortedByDescending { it.heart }.take(3)

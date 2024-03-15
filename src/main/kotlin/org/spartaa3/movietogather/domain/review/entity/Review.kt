@@ -5,7 +5,7 @@ import jakarta.persistence.*
 import org.spartaa3.movietogather.domain.comments.entity.Comments
 import org.spartaa3.movietogather.domain.comments.entity.toResponse
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
-import java.time.LocalDateTime
+import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
 
 @Entity
 @Table(name = "review")
@@ -29,12 +29,6 @@ class Review(
     @Column(name = "star")
     var star: Double,
 
-    @Column(name = "created_at")
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "modified_at")
-    val modifiedAt: LocalDateTime = LocalDateTime.now(),
-
     @Column(name = "is_deleted")
     val isDeleted: Boolean = false,
     @OneToMany(
@@ -45,7 +39,7 @@ class Review(
     )  //추후 Fetch Join 을 이용하여 구현?
     var comments: MutableList<Comments> = mutableListOf()
 
-) {
+) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
