@@ -49,6 +49,7 @@ class ReviewServiceImpl(
     override fun getReviewById(reviewId: Long): ReviewResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         review.heart = heartRepository.countHeartByReviewAndCommentsIsNull(review)
+        review.comments.forEach { it.likeCount = heartRepository.countHeartByReviewAndComments(it.review, it) }
         return review.toResponse()
     }
 
