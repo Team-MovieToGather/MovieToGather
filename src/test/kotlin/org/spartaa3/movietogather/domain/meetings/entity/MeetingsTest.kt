@@ -2,7 +2,7 @@ package org.spartaa3.movietogather.domain.meetings.entity
 
 import io.kotest.core.spec.style.FunSpec
 
-class meetingsTest : FunSpec({
+class MeetingsTest : FunSpec({
 
     test("id") { }
 
