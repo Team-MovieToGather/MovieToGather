@@ -5,6 +5,7 @@ import org.spartaa3.movietogather.domain.api.service.TmdbApiService
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieResponse
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
+import org.spartaa3.movietogather.domain.review.dto.ReviewsResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.service.ReviewService
@@ -23,7 +24,7 @@ class ReviewController(
     private val tmdbApiService: TmdbApiService
 ) {
     @GetMapping("/bastTop3")
-    fun bestTopReview(): ResponseEntity<List<ReviewResponse>> {
+    fun bestTopReview(): ResponseEntity<List<ReviewsResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(reviewService.bestTopReview())
@@ -34,7 +35,7 @@ class ReviewController(
         @RequestParam(name = "searchCondition") condition: ReviewSearchCondition,
         @RequestParam(name = "keyword") keyword: String?,
         pageable: Pageable
-    ): ResponseEntity<Slice<ReviewResponse>> {
+    ): ResponseEntity<Slice<ReviewsResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(reviewService.searchReview(condition, keyword, pageable))
