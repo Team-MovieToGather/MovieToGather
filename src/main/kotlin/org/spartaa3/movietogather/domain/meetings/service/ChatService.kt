@@ -43,7 +43,7 @@ class ChatService(
         val meetings = meetingsRepository.findByIdOrNull(meetingId)
         val randomId = UUID.randomUUID().toString()
         val chat = chatRoomRepository.findByMeetingsId(meetingId)
-        if (chat == null){
+        if (chat == null) {
             val chatRoom = chatRoomRepository.save(
                 ChatRoom(
                     roomId = randomId,
