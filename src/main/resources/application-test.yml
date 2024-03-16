@@ -1,8 +1,8 @@
 api:
   key: ${API_KEY}
-  popularUrl: ${API_POPULAR_URL}
-  genreUrl: ${API_GENRE_URL}
-  searchUrl: ${API_SEARCH_URL}
+  popularUrl: https://api.themoviedb.org/3/movie/popular
+  genreUrl: https://api.themoviedb.org/3/genre/movie/list
+  searchUrl: https://api.themoviedb.org/3/search/movie
 
 auth:
   jwt:
@@ -15,9 +15,9 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
   datasource:
-    driver-class-name: ${H2_DRIVER_CLASS_NAME}
+    driver-class-name: org.h2.Driver
     url: jdbc:h2:~/test
-    username: ${H2_USERNAME}
+    username: sa
     password:
   sql:
     init:
@@ -28,7 +28,7 @@ spring:
   data:
     redis:
       host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      port: 6379
   security:
     oauth2:
       client:
