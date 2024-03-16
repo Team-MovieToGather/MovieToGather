@@ -3,8 +3,8 @@ package org.spartaa3.movietogather.domain.review.entity
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.*
+import org.spartaa3.movietogather.domain.comments.dto.commentsResponse.GetCommentsResponse
 import org.spartaa3.movietogather.domain.comments.entity.Comments
-import org.spartaa3.movietogather.domain.comments.entity.toResponse
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
 
@@ -60,6 +60,6 @@ fun Review.toResponse(): ReviewResponse {
         contents = contents,
         createdAt = createdAt,
         heart = heart,
-        comments = comments.map { it.toResponse() }
+        comments = comments.map { GetCommentsResponse.from(it) }
     )
 }

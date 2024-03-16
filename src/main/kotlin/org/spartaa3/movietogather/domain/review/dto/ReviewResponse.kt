@@ -1,6 +1,6 @@
 package org.spartaa3.movietogather.domain.review.dto
 
-import org.spartaa3.movietogather.domain.comments.dto.commentsResponse.CommentsResponse
+import org.spartaa3.movietogather.domain.comments.dto.commentsResponse.GetCommentsResponse
 import java.time.LocalDateTime
 
 data class ReviewResponse(
@@ -13,5 +13,5 @@ data class ReviewResponse(
     val contents: String,
     val createdAt: LocalDateTime,
     val heart: Int,
-    val comments: List<CommentsResponse>  //리뷰 추가
+    val comments: List<GetCommentsResponse>  //리뷰 추가
 )
