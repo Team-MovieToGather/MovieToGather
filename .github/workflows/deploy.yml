@@ -24,6 +24,12 @@ jobs:
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
 
+      - name: .env 파일 생성 확인
+        run: |
+          echo ".env file location: "
+          ls -l ./src/main/resources/.env
+          cat ./src/main/resources/.env
+
       - name: JDK 17 설치
         uses: actions/setup-java@v3
         with:
