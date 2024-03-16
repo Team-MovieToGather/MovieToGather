@@ -1,12 +1,12 @@
 api:
   key: ${API_KEY}
-  popularUrl: ${API_POPULAR_URL}
-  genreUrl: ${API_GENRE_URL}
-  searchUrl: ${API_SEARCH_URL}
+  popularUrl: https://api.themoviedb.org/3/movie/popular
+  genreUrl: https://api.themoviedb.org/3/genre/movie/list
+  searchUrl: https://api.themoviedb.org/3/search/movie
 
 auth:
   jwt:
-    issuer: ${AUTH_JWT_ISSUER}
+    issuer: team.sparta.com
     secret: ${AUTH_JWT_SECRET}
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 

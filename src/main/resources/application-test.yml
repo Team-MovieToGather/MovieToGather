@@ -6,7 +6,7 @@ api:
 
 auth:
   jwt:
-    issuer: ${AUTH_JWT_ISSUER}
+    issuer: team.sparta.com
     secret: ${AUTH_JWT_SECRET}
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 
