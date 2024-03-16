@@ -1,7 +1,7 @@
 name: MovieToGather-Deploy
 
 on:
-  # test 배포
+# test 배포
 #  pull_request:
 #    branches: [ main, dev ]
   push:
