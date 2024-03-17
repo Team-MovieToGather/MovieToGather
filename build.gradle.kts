@@ -63,7 +63,7 @@ dependencies {
     implementation("me.paulschwarz:spring-dotenv:4.0.0")
     implementation("org.springframework.boot:spring-boot-starter-websocket") // websocket
     implementation("io.github.microutils:kotlin-logging:3.0.5") // log
-//    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 
     kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
     kapt("jakarta.annotation:jakarta.annotation-api")
