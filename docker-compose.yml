@@ -9,7 +9,7 @@ services:
       - .env
     environment:
       POSTGRES_DB: mymovie
-      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       TZ: "Asia/Seoul"
     volumes:
@@ -26,7 +26,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: ${POSTGRES_URL}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USERNAME}
+      SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       TZ: "Asia/Seoul"
     depends_on:
