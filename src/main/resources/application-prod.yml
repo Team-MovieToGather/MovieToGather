@@ -1,12 +1,12 @@
 api:
   key: ${API_KEY}
-  popularUrl: ${API_POPULAR_URL}
-  genreUrl: ${API_GENRE_URL}
-  searchUrl: ${API_SEARCH_URL}
+  popularUrl: https://api.themoviedb.org/3/movie/popular
+  genreUrl: https://api.themoviedb.org/3/genre/movie/list
+  searchUrl: https://api.themoviedb.org/3/search/movie
 
 auth:
   jwt:
-    issuer: ${AUTH_JWT_ISSUER}
+    issuer: team.sparta.com
     secret: ${AUTH_JWT_SECRET}
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 
@@ -16,16 +16,16 @@ spring:
     suffix: .html
   data:
     data:
-      redis:
-        host: ${REDIS_HOST}
-        port: ${REDIS_PORT}
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
     jdbc:
       repositories:
         enabled: false
   datasource:
-    driver-class-name: ${POSTGRES_DRIVER_CLASS_NAME}
+    driver-class-name: org.postgresql.Driver
     url: ${POSTGRES_URL}
-    username: ${POSTGRES_USERNAME}
+    username: postgres
     password: ${POSTGRES_PASSWORD}
   sql:
     init:
@@ -44,8 +44,8 @@ spring:
           naver:
             client-id: ${AUTH_NAVER_ID}
             client-secret: ${AUTH_NAVER_SECRET}
-            client-authentication-method: ${AUTH_NAVER_AUTHENTICATION_METHOD}
-            authorization-grant-type: ${AUTH_NAVER_GRANT_TYPE}
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
             redirect-uri: "http://localhost:8080/login/oauth2/code/{registrationId}"
             scope:
               - nickname
@@ -54,8 +54,8 @@ spring:
           kakao:
             client-id: ${AUTH_KAKAO_ID}
             client-secret: ${AUTH_KAKAO_SECRET}
-            client-authentication-method: ${AUTH_KAKAO_AUTHENTICATION_METHOD}
-            authorization-grant-type: ${AUTH_KAKAO_GRANT_TYPE}
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
             scope:
               - profile_nickname
               - account_email

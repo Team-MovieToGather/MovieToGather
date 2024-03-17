@@ -1,12 +1,12 @@
 api:
   key: ${API_KEY}
-  popularUrl: ${API_POPULAR_URL}
-  genreUrl: ${API_GENRE_URL}
-  searchUrl: ${API_SEARCH_URL}
+  popularUrl: https://api.themoviedb.org/3/movie/popular
+  genreUrl: https://api.themoviedb.org/3/genre/movie/list
+  searchUrl: https://api.themoviedb.org/3/search/movie
 
 auth:
   jwt:
-    issuer: ${AUTH_JWT_ISSUER}
+    issuer: team.sparta.com
     secret: ${AUTH_JWT_SECRET}
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 
@@ -15,9 +15,9 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
   datasource:
-    driver-class-name: ${H2_DRIVER_CLASS_NAME}
-    url: ${H2_URL}
-    username: ${H2_USERNAME}
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/test
+    username: sa
     password:
   sql:
     init:
@@ -28,7 +28,7 @@ spring:
   data:
     redis:
       host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      port: 6379
   security:
     oauth2:
       client:
@@ -42,8 +42,8 @@ spring:
           naver:
             client-id: ${AUTH_NAVER_ID}
             client-secret: ${AUTH_NAVER_SECRET}
-            client-authentication-method: ${AUTH_NAVER_AUTHENTICATION_METHOD}
-            authorization-grant-type: ${AUTH_NAVER_GRANT_TYPE}
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
             redirect-uri: "http://localhost:8080/login/oauth2/code/{registrationId}"
             scope:
               - nickname
@@ -52,8 +52,8 @@ spring:
           kakao:
             client-id: ${AUTH_KAKAO_ID}
             client-secret: ${AUTH_KAKAO_SECRET}
-            client-authentication-method: ${AUTH_KAKAO_AUTHENTICATION_METHOD}
-            authorization-grant-type: ${AUTH_KAKAO_GRANT_TYPE}
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
             scope:
               - profile_nickname
               - account_email
@@ -80,7 +80,7 @@ spring:
       hibernate:
         #  show_sql: true
         format_sql: true
-        use_sql_comments: true # sql 과 함께 jpql 주석처리되어  콘솔창에 출력
+        use_sql_comments: true
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 logging:
