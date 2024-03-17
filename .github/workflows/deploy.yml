@@ -5,7 +5,7 @@ on:
 #  pull_request:
 #    branches: [ main, dev ]
   push:
-    branches: [ main, dev, feat/cicd ]
+    branches: [ main, dev, feat/cd ]
 
 
 
@@ -23,12 +23,6 @@ jobs:
           jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > ./src/main/resources/.env
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
-
-      - name: .env 파일 생성 확인
-        run: |
-          echo ".env file location: "
-          ls -l ./src/main/resources/.env
-          cat ./src/main/resources/.env
 
       - name: JDK 17 설치
         uses: actions/setup-java@v3
