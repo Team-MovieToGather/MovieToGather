@@ -3,8 +3,7 @@ api:
   popularUrl: https://api.themoviedb.org/3/movie/popular
   genreUrl: https://api.themoviedb.org/3/genre/movie/list
   searchUrl: https://api.themoviedb.org/3/search/movie
-  kakaoMapAk: ${KAKAO_MAP_AK}
-  tMapAk: ${TMAP_AK}
+
 
 auth:
   jwt:
