@@ -2,15 +2,15 @@ package org.spartaa3.movietogather.infra.map.service
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import io.github.cdimascio.dotenv.Dotenv
-import io.github.cdimascio.dotenv.dotenv
+import org.spartaa3.movietogather.infra.api.ApiProperties
 import org.spartaa3.movietogather.infra.map.dto.KakaoMapResponse
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 
 @Service
-class KakaoMapService {
+class KakaoMapService(
+    private val apiProperties: ApiProperties) {
     private val restClient: RestClient = RestClient.create()
     val objectMapper =
         jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -24,13 +24,9 @@ class KakaoMapService {
         return coordinate
     }
 
-    val env = dotenv {
-        ignoreIfMalformed = true
-        ignoreIfMissing = true
-    }
 
     fun searchAddress(keyword: String): List<KakaoMapResponse.Documents> {
-        val dotenv = env["KAKAO_MAP_AK"]
+        val dotenv = apiProperties.kakaoMapAk
         val result = restClient.get()
             .uri("https://dapi.kakao.com/v2/local/search/address.json?query=${keyword}")
             .accept(MediaType.APPLICATION_JSON)

@@ -8,4 +8,6 @@ class ApiProperties {
     lateinit var popularUrl: String
     lateinit var genreUrl: String
     lateinit var searchUrl: String
+    lateinit var kakaoMapAk: String
+    lateinit var tMapAk: String
 }

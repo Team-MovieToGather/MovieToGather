@@ -2,15 +2,16 @@ package org.spartaa3.movietogather.infra.map.service
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import io.github.cdimascio.dotenv.Dotenv
-import io.github.cdimascio.dotenv.dotenv
+import org.spartaa3.movietogather.infra.api.ApiProperties
 import org.spartaa3.movietogather.infra.map.dto.TMapResponse
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 
 @Service
-class TMapService {
+class TMapService(
+    private val apiProperties: ApiProperties
+) {
     private val restClient: RestClient = RestClient.create()
     val objectMapper =
         jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -23,13 +24,9 @@ class TMapService {
         val coordinate = mapOf("x" to x, "y" to y)
         return coordinate
     }
-    val env = dotenv {
-        ignoreIfMalformed = true
-        ignoreIfMissing = true
-    }
 
     fun searchAddress(keyword: String): List<TMapResponse.SearchPoiInfo.Pois.Poi> {
-        val dotenv = env["TMAP_AK"]
+        val dotenv = apiProperties.tMapAk
         val result = restClient.get()
             .uri("https://apis.openapi.sk.com/tmap/pois?version=1&searchKeyword=${keyword}&format=json&callback=result")
             .accept(MediaType.APPLICATION_JSON)
