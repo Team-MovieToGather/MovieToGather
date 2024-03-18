@@ -4,6 +4,8 @@ services:
   movietogather-postgres:
     image: postgres
     container_name: movietogather-postgres
+    env_file:
+      - .env
     restart: always
     environment:
       POSTGRES_DB: movietogatherdb
@@ -19,6 +21,8 @@ services:
   movietogather-backend:
     image: ${DOCKER_USERNAME}/${DOCKER_REPONAME}:latest
     container_name: movietogather-backend
+    env_file:
+      - .env
     environment:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: ${POSTGRES_URL}
