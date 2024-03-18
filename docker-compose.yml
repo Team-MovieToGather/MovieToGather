@@ -5,15 +5,13 @@ services:
     image: postgres
     container_name: movietogather-postgres
     restart: always
-    env_file:
-      - .env
     environment:
-      POSTGRES_DB: mymovie
-      POSTGRES_USERNAME: postgres
+      POSTGRES_DB: movietogatherdb
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       TZ: "Asia/Seoul"
     volumes:
-      - mymovie:/var/lib/postgresql/data
+      - movietogather:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
@@ -37,4 +35,4 @@ services:
 
 
 volumes:
-  mymovie:
+  movietogatherdb:

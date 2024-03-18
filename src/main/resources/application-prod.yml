@@ -1,8 +1,9 @@
 api:
-  key: ${API_KEY}
+  key: f106768fcba3c847311ff5db0b427d72
   popularUrl: https://api.themoviedb.org/3/movie/popular
   genreUrl: https://api.themoviedb.org/3/genre/movie/list
   searchUrl: https://api.themoviedb.org/3/search/movie
+
 
 auth:
   jwt:
@@ -11,22 +12,23 @@ auth:
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
   data:
-    data:
-      redis:
-        host: ${REDIS_HOST}
-        port: 6379
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
     jdbc:
       repositories:
         enabled: false
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${POSTGRES_URL}
-    username: postgres
+    url: {POSTGRES_URL}
+    username: movietogather
     password: ${POSTGRES_PASSWORD}
   sql:
     init:
