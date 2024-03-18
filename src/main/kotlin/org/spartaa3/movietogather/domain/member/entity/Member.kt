@@ -20,11 +20,4 @@ class Member(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-
-
-    //Enum Class가 소문자가 섞여있어 대문자로 변경
-    enum class MemberRole {
-        MEMBER, ADMIN
-    }
->>>>>>>>> Temporary merge branch 2
 }
