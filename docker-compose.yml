@@ -17,8 +17,6 @@ services:
 
 
   movietogather-backend:
-    env_file:
-      - .env
     image: ${DOCKER_USERNAME}/${DOCKER_REPONAME}:latest
     container_name: movietogather-backend
     environment:
