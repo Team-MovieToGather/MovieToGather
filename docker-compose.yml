@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       TZ: "Asia/Seoul"
     volumes:
-      - movietogather:/var/lib/postgresql/data
+      - movietogatherdb:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
