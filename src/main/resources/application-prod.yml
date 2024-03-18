@@ -1,5 +1,5 @@
 api:
-  key: f106768fcba3c847311ff5db0b427d72
+  key: ${API_KEY}
   popularUrl: https://api.themoviedb.org/3/movie/popular
   genreUrl: https://api.themoviedb.org/3/genre/movie/list
   searchUrl: https://api.themoviedb.org/3/search/movie
