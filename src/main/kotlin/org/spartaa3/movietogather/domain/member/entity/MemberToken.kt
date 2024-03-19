@@ -3,21 +3,18 @@ package org.spartaa3.movietogather.domain.member.entity
 import jakarta.persistence.*
 import lombok.AccessLevel
 import lombok.NoArgsConstructor
-import org.spartaa3.movietogather.domain.member.dto.TokenResponse
 
 @Entity
 @Table(name = "member_token")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 class MemberToken(
 
-    @Column(name = "email")
-    var email: String? = null,
 
     @Column(name = "refresh_token", columnDefinition = "TEXT", nullable = false)
     var refreshToken: String? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_email")
     var member: Member? = null
 ){
     @Id

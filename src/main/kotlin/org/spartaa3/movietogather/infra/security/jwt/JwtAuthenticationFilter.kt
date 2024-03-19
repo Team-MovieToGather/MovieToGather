@@ -1,11 +1,13 @@
 package org.spartaa3.movietogather.infra.security.jwt
 
+import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.spartaa3.movietogather.global.cookie.CookieUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -23,44 +25,64 @@ class JwtAuthenticationFilter(
         filterChain: FilterChain
     ) {
         val jwt = request.getBearerToken()
-        CookieUtils.getCookie(request, "refreshToken")
 
-        //home?access_teken=asdflkl;dfkjdfsa;lkjfdsa;kjdfsa;lk
-        //프론트에서 access_token 받아서  -> vue에 local저장소에 저장
-        //api호출시에 저장된 access_token을 header에 넣어서 api호출--이게 뭔지 알겠지?
-
-        //어느순간에 access-token이 만료일이 다되거나, 로그아웃해서 access_token이 지워졌어(아마 로그인하면, local저장소에서 access_token지워야겠지?)
-//        if(access-token의 만료일이 다되었는가? || access_token이 있는가? )
-//            if(리프레시 토큰이 있는가?){
-//                DB에서 리프레시 토큰에서 이메일 가와져서 유저테이블에 조회 = 리프레시 토큰과 같다면 에세스 토큰 다시 만들어서
-//                //home?access_teken=asdflkl;dfkjdfsa;lkjfdsa;kjdfsa;lk
-//                //프론트에서 access_token 받아서  -> vue에 local저장소에 저장
-//            }
-//            else{
-//                로그인으로 이동(redirect로???모르겠다.)
-//        }
-
-
-        //
 
         if (jwt != null) {
-            jwtPlugin.validateToken(jwt)
-                .onSuccess {
-                    val email = it.payload.get("email", String::class.java)
-                    val role = it.payload.get("role", String::class.java)
-                    val oauthType = it.payload.get("oauthType", String::class.java)
-                    val principal = UserPrincipal(
-                        email = email,
-                        roles = setOf(role),
-                        oauthType = oauthType
-                    )
+            try {
+                jwtPlugin.validateToken(jwt).onSuccess { jwtClaims ->
+                    val email = jwtClaims.body["email"] as String
+                    val role = jwtClaims.body["role"] as String
+                    val oauthType = jwtClaims.body["oauthType"] as String
 
+                    val principal = UserPrincipal(email, setOf(role), oauthType)
                     val authentication = JwtAuthenticationToken(
-                        principal = principal,
-                        details = WebAuthenticationDetailsSource().buildDetails(request)
+                        principal,
+                        WebAuthenticationDetailsSource().buildDetails(request)
                     )
                     SecurityContextHolder.getContext().authentication = authentication
+                }.onFailure { throwable ->
+                    if (throwable is ExpiredJwtException) {
+                        val refreshTokenCookie = CookieUtils.getCookie(request, "refreshToken")
+
+                        if (refreshTokenCookie.isPresent) {
+                            val refreshToken = refreshTokenCookie.get().value
+                            try {
+                                val auth = SecurityContextHolder.getContext().authentication
+                                val oAuth2User = if (auth is OAuth2AuthenticationToken) {
+                                    auth.principal
+                                } else {
+                                    null
+                                }
+                                if (oAuth2User != null) {
+                                    val newAccessToken = jwtPlugin.refreshAccessToken(oAuth2User, refreshToken)
+                                    val email = newAccessToken.body["email"] as String
+                                    val role = newAccessToken.body["role"] as String
+                                    val oauthType = newAccessToken.body["oauthType"] as String
+
+                                    val principal = UserPrincipal(email, setOf(role), oauthType)
+                                    val authentication = JwtAuthenticationToken(
+                                        principal,
+                                        WebAuthenticationDetailsSource().buildDetails(request)
+                                    )
+                                    SecurityContextHolder.getContext().authentication = authentication
+                                } else {
+                                    response.sendRedirect("/login")
+                                    return
+                                }
+                            } catch (e: RefreshTokenExpiredException) {
+                                response.sendRedirect("/login")
+                                return
+                            }
+                        } else {
+                            response.sendRedirect("/login")
+                            return
+                        }
+                    }
                 }
+            } catch (e: Exception) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+                return
+            }
         }
         filterChain.doFilter(request, response)
     }

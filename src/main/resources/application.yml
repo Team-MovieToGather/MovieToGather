@@ -11,12 +11,15 @@ auth:
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
     refreshTokenExpirationHour: ${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}
 
-
+spring:
   datasource:
-    driver-class-name: ${H2_DRIVER_CLASS_NAME}
-    url: ${H2_URL}
-    username: ${H2_USERNAME}
-    password:
+#    driver-class-name: ${H2_DRIVER_CLASS_NAME}
+#    url: ${H2_URL}
+#   username: ${H2_USERNAME}
+#   password:
+    url: jdbc:postgresql://localhost:5432/
+    username: postgres
+    password: koon2921
   sql:
     init:
       mode: embedded
@@ -109,4 +112,3 @@ server:
   tomcat:
     mbeanregistry:
       enabled: true
-

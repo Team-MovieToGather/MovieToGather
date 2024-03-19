@@ -32,9 +32,9 @@ class CustomOAuth2MemberService(
         log.info("ATTR INFO : {}", attributes.toString())
 
         var email: String? = null
-        val oauthType = userRequest.clientRegistration.registrationId.lowercase(Locale.getDefault())
+        val oAuthType = userRequest.clientRegistration.registrationId.lowercase(Locale.getDefault())
 
-        email = when (oauthType) {
+        email = when (oAuthType) {
             "kakao" -> (attributes["kakao_account"] as Map<*, *>)["email"].toString()
             "google" -> attributes["email"].toString()
             "naver" -> (attributes["response"] as Map<*, *>)["email"].toString()
@@ -42,16 +42,17 @@ class CustomOAuth2MemberService(
         }
 
         // Member 존재여부 확인 및 없으면 생성
-        if (getMemberByEmailAndOAuthType(email, oauthType) == null) {
-            log.info("{}({}) NOT EXISTS. REGISTER", email, oauthType)
+        if (getMemberByEmailAndOAuthType(email, oAuthType) == null) {
+            log.info("{}({}) NOT EXISTS. REGISTER", email, oAuthType)
             val random = Random.nextInt(100000)
             val member = Member(
                 email = email.toString(),
                 role = MemberRole.MEMBER,
                 nickname = "nickname${random}",//중복 없이 랜덤부여 할 수 있도록 수정 필요
-                OAuthType = oauthType
+                OAuthType = oAuthType
             )
             save(member)
+            member.toResponse()
         }
 
         return try {

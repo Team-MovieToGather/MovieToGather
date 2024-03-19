@@ -1,6 +1,7 @@
 package org.spartaa3.movietogather.domain.member.entity
 
 import jakarta.persistence.*
+import org.spartaa3.movietogather.domain.member.dto.MemberInfoResponse
 import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
 
 @Entity
@@ -21,9 +22,14 @@ class Member(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
+    @OneToOne(mappedBy = "member", cascade = [CascadeType.ALL])
+    var memberToken: MemberToken? = null
 
-    //Enum Class가 소문자가 섞여있어 대문자로 변경
-    enum class MemberRole {
-        MEMBER, ADMIN
+    fun toResponse(): MemberInfoResponse{
+        return MemberInfoResponse(
+            email = email,
+            nickname = nickname,
+            oAuthType = OAuthType.toString()
+        )
     }
 }

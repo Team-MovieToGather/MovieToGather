@@ -35,15 +35,10 @@ class SecurityConfig(
                 it.sessionCreationPolicy(SessionCreationPolicy.NEVER)
             }
             .oauth2Login {  oauth2Login -> oauth2Login
-//                it.userInfoEndpoint { u -> u.userService(memberService) }
-//                it.successHandler(oAuthLoginSuccessHandler)
-//                it.defaultSuccessUrl("/home")
-//                it.failureUrl("/fail")
                 .userInfoEndpoint { it.userService(customOAuth2MemberService) }
                 .authorizationEndpoint { it.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository) }
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler)
-//                .defaultSuccessUrl("/home")
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()

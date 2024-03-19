@@ -73,4 +73,18 @@ class JwtPlugin(
             accessTokenExpires = expirationTime.time
         )
     }
+    fun refreshAccessToken(oAuth2User: OAuth2User, refreshToken: String): Jws<Claims> {
+        return kotlin.runCatching {
+            validateToken(refreshToken).onSuccess { refreshTokenClaims ->
+                val email = refreshTokenClaims.body["email"] as String
+                val role = refreshTokenClaims.body["role"] as String
+                val oAuthType = refreshTokenClaims.body["oAuthType"] as String
+
+                createToken(oAuth2User, email, role, OAuth2Provider.valueOf(oAuthType))
+            }.getOrThrow()
+        }.getOrElse {
+            throw RefreshTokenExpiredException("Refresh token has expired.")
+        }
+    }
+
 }
