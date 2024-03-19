@@ -4,9 +4,9 @@ services:
   movietogather-postgres:
     image: postgres
     container_name: movietogather-postgres
+    restart: always
     env_file:
       - .env
-    restart: always
     environment:
       POSTGRES_DB: movietogatherdb
       POSTGRES_USER: postgres
@@ -19,10 +19,10 @@ services:
 
 
   movietogather-backend:
-    image: ${DOCKER_USERNAME}/${DOCKER_REPONAME}:latest
-    container_name: movietogather-backend
     env_file:
       - .env
+    image: ${DOCKER_USERNAME}/${DOCKER_REPONAME}:latest
+    container_name: movietogather-backend
     environment:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: ${POSTGRES_URL}
@@ -32,6 +32,11 @@ services:
       AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
       SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT-ID: ${AUTH_GOOGLE_ID}
       SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT-SECRET: ${AUTH_GOOGLE_SECRET}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_NAVER_CLIENT-ID: ${AUTH_NAVER_ID}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_NAVER_CLIENT-SECRET: ${AUTH_NAVER_SECRET}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENT-ID: ${AUTH_KAKAO_ID}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENT-SECRET: ${AUTH_KAKAO_SECRET}
+
 
       TZ: "Asia/Seoul"
     depends_on:
@@ -39,6 +44,7 @@ services:
     ports:
       - 8080:8080
     restart: on-failure
+
 
 volumes:
   movietogatherdb:
