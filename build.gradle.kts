@@ -59,10 +59,11 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-data-redis")
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("io.github.cdimascio:dotenv-java:3.0.0") // env
-    implementation("me.paulschwarz:spring-dotenv:4.0.0")
     implementation("org.springframework.boot:spring-boot-starter-websocket") // websocket
     implementation("io.github.microutils:kotlin-logging:3.0.5") // log
-
+    implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
+    implementation("me.paulschwarz:spring-dotenv:4.0.0") // env
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
     kapt("jakarta.annotation:jakarta.annotation-api")

@@ -26,7 +26,6 @@ class JwtAuthenticationFilter(
     ) {
         val jwt = request.getBearerToken()
 
-
         if (jwt != null) {
             try {
                 jwtPlugin.validateToken(jwt).onSuccess { jwtClaims ->

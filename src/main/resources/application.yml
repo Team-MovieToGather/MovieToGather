@@ -87,6 +87,15 @@ spring:
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:~/test
+#    username: sa
+#    password:
+    password: koon2921
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+
 logging:
   level:
     org:
