@@ -9,6 +9,8 @@ auth:
     issuer: team.sparta.com
     secret: ${AUTH_JWT_SECRET}
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
+    refreshTokenExpirationHour: ${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}
+
 
 spring:
   config:
@@ -19,8 +21,8 @@ spring:
     suffix: .html
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: 6379
+      host: ${REDIS_LOCAL_HOST}
+      port: ${REDIS_PORT}
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:~/test

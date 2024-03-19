@@ -9,6 +9,8 @@ auth:
     issuer: team.sparta.com
     secret: ${AUTH_JWT_SECRET}
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
+    refreshTokenExpirationHour: ${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}
+
 
 spring:
   config:
@@ -18,16 +20,15 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
   data:
-    data:
     redis:
       host: ${REDIS_HOST}
-      port: 6379
+      port: ${REDIS_PORT}
     jdbc:
       repositories:
         enabled: false
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: {POSTGRES_URL}
+    url: ${POSTGRES_URL}
     username: postgres
     password: ${POSTGRES_PASSWORD}
   sql:

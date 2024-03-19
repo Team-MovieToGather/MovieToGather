@@ -15,10 +15,10 @@ import java.util.*
 
 @Component
 class JwtPlugin(
-    @Value("\${AUTH_JWT_ISSUER}") private val issuer: String,
-    @Value("\${AUTH_JWT_SECRET}") private val secret: String,
-    @Value("\${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}") private val accessTokenExpirationHour: Long,
-    @Value("\${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}") private val refreshTokenExpirationHour: Long
+    @Value("\${auth.jwt.issuer}") private val issuer: String,
+    @Value("\${auth.jwt.secret}") private val secret: String,
+    @Value("\${auth.jwt.accesstokenexpirationhour}") private val accessTokenExpirationHour: Long,
+    @Value("\${auth.jwt.refreshtokenexpirationhour}") private val refreshTokenExpirationHour: Long
 ) {
 
     companion object {
