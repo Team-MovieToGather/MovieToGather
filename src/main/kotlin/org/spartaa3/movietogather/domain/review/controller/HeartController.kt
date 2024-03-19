@@ -23,7 +23,7 @@ class HeartController(
     ): ResponseEntity<HeartResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(heartService.reviewHeart(reviewId, userPrincipal.id))
+            .body(heartService.reviewHeart(reviewId, userPrincipal))
     }
 
     @PostMapping("/comments/{commentsId}")
@@ -34,6 +34,6 @@ class HeartController(
     ): ResponseEntity<HeartResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(heartService.commentHeart(reviewId, userPrincipal.id, commentsId))
+            .body(heartService.commentHeart(reviewId, userPrincipal, commentsId))
     }
 }

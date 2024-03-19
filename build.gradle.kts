@@ -59,7 +59,6 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-data-redis")
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")
-//    implementation("io.github.cdimascio:java-dotenv:5.2.2") // env
     implementation("me.paulschwarz:spring-dotenv:4.0.0")
     implementation("org.springframework.boot:spring-boot-starter-websocket") // websocket
     implementation("io.github.microutils:kotlin-logging:3.0.5") // log

@@ -42,4 +42,5 @@ class SwaggerConfig {
     fun forwardedHeaderFilter(): ForwardedHeaderFilter {
         return ForwardedHeaderFilter()
     }
+
 }

@@ -12,7 +12,6 @@ import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 
 @Service

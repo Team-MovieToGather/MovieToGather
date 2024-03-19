@@ -1,6 +1,9 @@
 package org.spartaa3.movietogather.infra.security
 
-import org.spartaa3.movietogather.domain.member.service.CustomMemberDetailService
+import org.spartaa3.movietogather.domain.member.oauth2.handler.OAuth2AuthenticationFailureHandler
+import org.spartaa3.movietogather.domain.member.oauth2.handler.OAuth2AuthenticationSuccessHandler
+import org.spartaa3.movietogather.domain.member.service.CustomOAuth2MemberService
+import org.spartaa3.movietogather.global.cookie.HttpCookieOAuth2AuthorizationRequestRepository
 import org.spartaa3.movietogather.infra.security.jwt.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,42 +17,29 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
-    private val customMemberDetailService: CustomMemberDetailService
+    private val customOAuth2MemberService: CustomOAuth2MemberService,
+    private val oAuth2AuthenticationSuccessHandler: OAuth2AuthenticationSuccessHandler,
+    private val oAuth2AuthenticationFailureHandler: OAuth2AuthenticationFailureHandler,
+    private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
 ) {
-    private val allowedUrls = arrayOf(
-        "/", "/swagger-ui/**", "/v3/**",
-        "/api/**", "/ws/**", "/h2-console/**", "/actuator/**"
-    )
-
-    private val anonymousUrls = arrayOf(
-        "/members/socialLogin"
-    )
-
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .csrf {
-                it.disable()
-            }
-            .httpBasic {
-                it.disable()
-            }
-            .headers { it.frameOptions { frameOptionsConfig -> frameOptionsConfig.sameOrigin() } } // H2 사용 위해서 필요
-            .authorizeHttpRequests {
-                it.requestMatchers(*allowedUrls).permitAll()
-                    .requestMatchers(*anonymousUrls).anonymous()
-                    .anyRequest().authenticated()
-            }
+
+            .httpBasic { it.disable() }
+            .formLogin { it.disable() }
+            .csrf { it.disable() }
+
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.NEVER)
             }
-            .oauth2Login {
-                it.userInfoEndpoint { u -> u.userService(customMemberDetailService) }
-                it.defaultSuccessUrl("/auth/login")
-                it.failureUrl("/fail")
+            .oauth2Login {  oauth2Login -> oauth2Login
+                .userInfoEndpoint { it.userService(customOAuth2MemberService) }
+                .authorizationEndpoint { it.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository) }
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler)
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
-
     }
 }
