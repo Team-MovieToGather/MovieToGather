@@ -13,8 +13,8 @@ import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.CreateMeet
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.entity.Meetings
-import org.spartaa3.movietogather.domain.meetings.globl.exception.MeetingsNotFoundException
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
+import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDateTime
@@ -43,7 +43,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
         `when`("해당 모임의 id가 존재하지 않는다면") {
             every { meetingsRepository.findByIdOrNull(any()) } returns null
             then("MeetingsNotFoundException이 발생한다.") {
-                shouldThrow<MeetingsNotFoundException> {
+                shouldThrow<ModelNotFoundException> {
                     meetingsService.getMeetingsById(id)
                 }
             }
@@ -85,7 +85,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
         `when`("요청한 모임이 존재하지 않는다면") {
             every { meetingsRepository.findByIdOrNull(any()) } returns null
             then("MeetingsNotFoundException이 발생한다.") {
-                shouldThrow<MeetingsNotFoundException> {
+                shouldThrow<ModelNotFoundException> {
                     meetingsService.updateMeetings(1L, updateMockRequest())
                 }
             }
@@ -102,7 +102,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
         `when`("요청한 모임이 존재하지 않는다면") {
             every { meetingsRepository.findByIdOrNull(any()) } returns null
             then("MeetingsNotFoundException이 발생한다.") {
-                shouldThrow<MeetingsNotFoundException> {
+                shouldThrow<ModelNotFoundException> {
                     meetingsService.deleteMeetings(1L)
                 }
             }

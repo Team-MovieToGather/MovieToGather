@@ -1,10 +1,8 @@
 package org.spartaa3.movietogather.domain.comments.entity
 
 import jakarta.persistence.*
-import org.spartaa3.movietogather.domain.comments.dto.commentsResponse.CommentsResponse
 import org.spartaa3.movietogather.domain.review.entity.Review
 import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "comments")
@@ -28,12 +26,4 @@ class Comments(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-}
-
-fun Comments.toResponse(): CommentsResponse {
-    return CommentsResponse(
-        id = id!!,
-        contents = contents,
-        createdAt = LocalDateTime.now()
-    )
 }
