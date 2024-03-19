@@ -9,12 +9,14 @@ import lombok.NoArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 class MemberToken(
 
+    @Column(name = "email")
+    var email: String,
 
     @Column(name = "refresh_token", columnDefinition = "TEXT", nullable = false)
     var refreshToken: String? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_email")
+    @JoinColumn(name = "member_id")
     var member: Member? = null
 ){
     @Id

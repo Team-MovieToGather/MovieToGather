@@ -17,7 +17,7 @@ class TokenServiceImpl(
         val member = memberRepository.findByEmail(email)
         val refreshToken = MemberToken(
             member = member,
-//            email = email,
+            email = email,
             refreshToken = refreshTokenValue
         )
         tokenRepository.save(refreshToken)
