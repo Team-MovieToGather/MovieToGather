@@ -4,6 +4,7 @@ api:
   genreUrl: https://api.themoviedb.org/3/genre/movie/list
   searchUrl: https://api.themoviedb.org/3/search/movie
 
+
 auth:
   jwt:
     issuer: team.sparta.com
@@ -78,10 +79,8 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        #  show_sql: true
         format_sql: true
         use_sql_comments: true
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 logging:
   level:

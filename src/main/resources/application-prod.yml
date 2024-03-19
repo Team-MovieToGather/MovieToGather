@@ -11,6 +11,9 @@ auth:
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 
 spring:
+  config:
+    activate:
+      on-profile: prod
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -24,7 +27,7 @@ spring:
         enabled: false
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${POSTGRES_URL}
+    url: {POSTGRES_URL}
     username: postgres
     password: ${POSTGRES_PASSWORD}
   sql:

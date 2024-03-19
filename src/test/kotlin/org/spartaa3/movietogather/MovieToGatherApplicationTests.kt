@@ -1,4 +1,4 @@
-package org.spartaa3.movietogather
+package org.spartaa3.movietogather.domain.review
 
 import org.springframework.boot.test.context.SpringBootTest
 

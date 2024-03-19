@@ -11,9 +11,16 @@ auth:
     accessTokenExpirationHour: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
 
 spring:
+  config:
+    activate:
+      on-profile: test
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:~/test
@@ -25,10 +32,7 @@ spring:
   h2:
     console:
       enabled: true
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: 6379
+
   security:
     oauth2:
       client:
@@ -78,10 +82,9 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        #  show_sql: true
         format_sql: true
         use_sql_comments: true
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
+
 
 logging:
   level:

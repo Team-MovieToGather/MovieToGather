@@ -1,12 +1,9 @@
 name: MovieToGather-Deploy
 
 on:
-# test 배포
-#  pull_request:
-#    branches: [ main, dev ]
-  push:
-    branches: [ main, dev ]
 
+  push:
+    branches: [ main, dev, feat/cd ]
 
 
 jobs:
@@ -14,21 +11,28 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+      KAKAO_MAP_AK: ${{ secrets.KAKAO_MAP_AK }}
+      TMAP_AK: ${{ secrets.TMAP_AK }}
+      AUTH_JWT_SECRET: ${{ secrets.AUTH_JWT_SECRET }}
+      AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR: ${{ secrets.AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR }}
+      AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
+      AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
+      AUTH_NAVER_ID: ${{ secrets.AUTH_NAVER_ID }}
+      AUTH_NAVER_SECRET: ${{ secrets.AUTH_NAVER_SECRET }}
+      AUTH_KAKAO_ID: ${{ secrets.AUTH_KAKAO_ID }}
+      AUTH_KAKAO_SECRET: ${{ secrets.AUTH_KAKAO_SECRET }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      REDIS_HOST: ${{ secrets.REDIS_HOST }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_REPONAME: ${{ secrets.DOCKER_REPONAME }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: .env 파일 생성
-        run: |
-          jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > ./src/main/resources/.env
-        env:
-          SECRETS_CONTEXT: ${{ toJson(secrets) }}
-
-      - name: .env 파일 생성 확인
-        run: |
-          echo ".env file location: "
-          ls -l ./src/main/resources/.env
-          cat ./src/main/resources/.env
 
       - name: JDK 17 설치
         uses: actions/setup-java@v3
@@ -50,7 +54,8 @@ jobs:
         run: chmod +x gradlew
 
       - name: Gradle 빌드
-        run: ./gradlew clean build -x test
+        run: ./gradlew build
+
 
       - name: Docker install
         uses: docker/setup-buildx-action@v1
