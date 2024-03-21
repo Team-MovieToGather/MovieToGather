@@ -45,6 +45,7 @@ class Meetings(
 
 fun Meetings.toResponse(): MeetingsResponse {
     return MeetingsResponse(
+        id = id!!,
         meetingName = meetingName,
         movieName = movieName,
         startTime = startTime,

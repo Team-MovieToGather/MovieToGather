@@ -1,5 +1,6 @@
 package org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.spartaa3.movietogather.domain.meetings.service.Type
 import java.time.LocalDateTime
 
@@ -18,9 +19,9 @@ class CreateMeetingsRequest(
     val locationUrl: String,
 
     val isClosed: Boolean,
-
+    @JsonIgnore
     val numApplicants: Long = 1,
 
-    val maxApplicants: Long = 30
+    val maxApplicants: Long,
 
-)
+    )

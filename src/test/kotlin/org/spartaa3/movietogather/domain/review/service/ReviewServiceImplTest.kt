@@ -1,4 +1,3 @@
-
 package org.spartaa3.movietogather.domain.review.service
 
 import io.kotest.assertions.throwables.shouldThrow

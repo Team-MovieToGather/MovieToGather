@@ -7,8 +7,8 @@ import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsR
 import org.spartaa3.movietogather.domain.meetings.entity.MeetingSearchCondition
 import org.spartaa3.movietogather.domain.meetings.entity.Meetings
 import org.spartaa3.movietogather.domain.meetings.entity.toResponse
-import org.spartaa3.movietogather.domain.meetings.globl.exception.MeetingsNotFoundException
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
+import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.repository.findByIdOrNull
@@ -36,7 +36,7 @@ class MeetingsServiceImpl(
 
     override fun getMeetingsById(meetingId: Long): MeetingsResponse {
         val meetings =
-            meetingsRepository.findByIdOrNull(meetingId) ?: throw MeetingsNotFoundException("meeting", meetingId)
+            meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("meeting", meetingId)
         return meetings.toResponse()
     }
 
@@ -58,7 +58,7 @@ class MeetingsServiceImpl(
 
     override fun updateMeetings(meetingId: Long, request: UpdateMeetingsRequest): MeetingsResponse {
         val meetings =
-            meetingsRepository.findByIdOrNull(meetingId) ?: throw MeetingsNotFoundException("Meetings", meetingId)
+            meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
         val (meetingName, movieName, startTime, endTime) = request
 
         meetings.meetingName = meetingName
@@ -72,7 +72,7 @@ class MeetingsServiceImpl(
 
     override fun deleteMeetings(meetingId: Long) {
         val meetings =
-            meetingsRepository.findByIdOrNull(meetingId) ?: throw MeetingsNotFoundException("Meetings", meetingId)
+            meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
         meetingsRepository.delete(meetings)
     }
 }

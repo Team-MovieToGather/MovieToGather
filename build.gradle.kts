@@ -77,6 +77,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
     runtimeOnly("org.postgresql:postgresql")
+    implementation("me.paulschwarz:spring-dotenv:4.0.0")
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
     // spring actuator
     implementation("org.springframework.boot:spring-boot-starter-actuator")

@@ -24,7 +24,7 @@ class TmdbApiServiceImpl(
 
     // 영화 호출 api
     override fun getMovies(title: String?, pageNumber: Int): SliceImpl<MovieResponse> {
-        var type = if(!title.isNullOrEmpty()) "search" else "popular"
+        var type = if (!title.isNullOrEmpty()) "search" else "popular"
         var url = getBaseUrl(type, pageNumber).let { if (!title.isNullOrEmpty()) "$it&query=$title" else it }
 
         return getUrlResult(url)
@@ -79,20 +79,20 @@ class TmdbApiServiceImpl(
     // 장르 목록 호출 -> caching 필요
     private fun getGenres(): GenreResponse {
         val url = getBaseUrl("genre", 1)
-       return getUrlResult(url).let { objectMapper.readValue(it, GenreResponse::class.java) }
+        return getUrlResult(url).let { objectMapper.readValue(it, GenreResponse::class.java) }
     }
 }
 
 
-    // Slice 페이징
-    private fun slicePaging(movieListResponse: MovieListResponse): SliceImpl<MovieResponse> {
-        val currentPage = movieListResponse.page
-        val pageSize = 20
-        val hasNext = currentPage < movieListResponse.total_pages
+// Slice 페이징
+private fun slicePaging(movieListResponse: MovieListResponse): SliceImpl<MovieResponse> {
+    val currentPage = movieListResponse.page
+    val pageSize = 20
+    val hasNext = currentPage < movieListResponse.total_pages
 
-        return SliceImpl(
-            movieListResponse.results,
-            PageRequest.of(currentPage , pageSize), // 페이지 요청 정보
-            hasNext
-        )
-    }
+    return SliceImpl(
+        movieListResponse.results,
+        PageRequest.of(currentPage, pageSize), // 페이지 요청 정보
+        hasNext
+    )
+}
