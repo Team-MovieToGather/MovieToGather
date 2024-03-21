@@ -7,11 +7,11 @@ import org.spartaa3.movietogather.domain.comments.entity.Comments
 import org.spartaa3.movietogather.domain.comments.repository.CommentsRepository
 import org.spartaa3.movietogather.domain.review.repository.HeartRepository
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
+import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 
 @Service
@@ -35,9 +35,7 @@ class CommentsServiceImpl(
             Comments(
                 contents = request.contents,
                 likeCount = 0,
-                createdAt = LocalDateTime.now(),
                 createdBy = "작성자",
-                modifiedAt = LocalDateTime.now(),
                 isDeleted = false,
                 review = review
             )
@@ -58,7 +56,8 @@ class CommentsServiceImpl(
     override fun deleteComments(reviewId: Long, commentsId: Long) {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val comments =
-            commentsRepository.findByIdOrNull(commentsId) ?: throw ReviewNotFoundException("Comments", commentsId)
+            commentsRepository.findByIdAndReviewId(commentsId, reviewId) ?: throw ModelNotFoundException("Comments", commentsId)
         commentsRepository.delete(comments)
+        review.comments.remove(comments)
     }
 }

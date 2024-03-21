@@ -1,45 +1,48 @@
 package org.spartaa3.movietogather.domain.api.service
 
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.spartaa3.movietogather.domain.api.service.dto.response.GenreResponse
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieListResponse
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieResponse
-import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
+import org.spartaa3.movietogather.global.exception.BaseException
+import org.spartaa3.movietogather.global.exception.ModelNotFoundException
+import org.spartaa3.movietogather.global.exception.dto.BaseResponseCode
 import org.spartaa3.movietogather.infra.api.ApiProperties
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.SliceImpl
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 
+
 @Service
-class TmdbApiServiceImpl(
-    private val apiProperties: ApiProperties,
-    private val reviewRepository: ReviewRepository
-) : ApiService {
+class TmdbApiService(
+    private val apiProperties: ApiProperties
+) {
     val restClient: RestClient = RestClient.create()
-    val objectMapper =
+    val objectMapper: ObjectMapper =
         jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) // 정의되지 않은 필드 무시
 
 
     // 영화 호출 api
-    override fun getMovies(title: String?, pageNumber: Int): SliceImpl<MovieResponse> {
-        var type = if (!title.isNullOrEmpty()) "search" else "popular"
-        var url = getBaseUrl(type, pageNumber).let { if (!title.isNullOrEmpty()) "$it&query=$title" else it }
+    fun getMovies(title: String?, pageNumber: Int): SliceImpl<MovieResponse> {
+        val type = if (!title.isNullOrEmpty()) "search" else "popular"
+        val url = getBaseUrl(type, pageNumber).let { if (!title.isNullOrEmpty()) "$it&query=$title" else it }
+        val movieListResponse = getMovieResponse(getResult(url))
+        if (movieListResponse.results.isEmpty()) throw BaseException(BaseResponseCode.INVALID_TITLE)
 
-        return getUrlResult(url)
-            .let { getMovieResponse(it) }
-            .let { matchGenreNames(it) }
+        return matchGenreNames(movieListResponse)
     }
 
 
     // 호출 url 작성
     private fun getBaseUrl(type: String, pageNumber: Int) =
         when (type) {
-            "popular" -> "${apiProperties.popularUrl}"
-            "search" -> "${apiProperties.searchUrl}"
-            "genre" -> "${apiProperties.genreUrl}"
-            else -> "${apiProperties.popularUrl}"
+            "popular" -> apiProperties.popularUrl
+            "search" -> apiProperties.searchUrl
+            "genre" -> apiProperties.genreUrl
+            else -> apiProperties.popularUrl
         } + "?${getDefaultUrlParameter(pageNumber)}"
 
 
@@ -53,12 +56,13 @@ class TmdbApiServiceImpl(
                 "&api_key=${apiProperties.key}"
     }
 
-    // 호출 반환값
-    private fun getUrlResult(url: String) = restClient.get()
+    // 호출 결과값
+    private fun getResult(url: String) = restClient.get()
         .uri(url)
         .retrieve()
         .body(String::class.java)!!
 
+    // DTO 변환
     private fun getMovieResponse(result: String): MovieListResponse {
         return result.let { objectMapper.readValue(it, MovieListResponse::class.java) }
     }
@@ -79,7 +83,7 @@ class TmdbApiServiceImpl(
     // 장르 목록 호출 -> caching 필요
     private fun getGenres(): GenreResponse {
         val url = getBaseUrl("genre", 1)
-        return getUrlResult(url).let { objectMapper.readValue(it, GenreResponse::class.java) }
+        return getResult(url).let { objectMapper.readValue(it, GenreResponse::class.java) }
     }
 }
 

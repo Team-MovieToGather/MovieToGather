@@ -1,10 +1,11 @@
 package org.spartaa3.movietogather.domain.review.controller
 
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.spartaa3.movietogather.domain.api.service.ApiService
+import org.spartaa3.movietogather.domain.api.service.TmdbApiService
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieResponse
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
+import org.spartaa3.movietogather.domain.review.dto.ReviewsResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.service.ReviewService
@@ -20,10 +21,10 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class ReviewController(
     private val reviewService: ReviewService,
-    private val apiService: ApiService
+    private val tmdbApiService: TmdbApiService
 ) {
     @GetMapping("/bastTop3")
-    fun bestTopReview(): ResponseEntity<List<ReviewResponse>> {
+    fun bestTopReview(): ResponseEntity<List<ReviewsResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(reviewService.bestTopReview())
@@ -34,7 +35,7 @@ class ReviewController(
         @RequestParam(name = "searchCondition") condition: ReviewSearchCondition,
         @RequestParam(name = "keyword") keyword: String?,
         pageable: Pageable
-    ): ResponseEntity<Slice<ReviewResponse>> {
+    ): ResponseEntity<Slice<ReviewsResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(reviewService.searchReview(condition, keyword, pageable))
@@ -85,6 +86,6 @@ class ReviewController(
         @RequestParam title: String? = null,
         @RequestParam pageNumber: Int
     ): SliceImpl<MovieResponse> {
-        return apiService.getMovies(title, pageNumber)
+        return tmdbApiService.getMovies(title, pageNumber)
     }
 }

@@ -1,11 +1,12 @@
 package org.spartaa3.movietogather.domain.review.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.*
+import org.spartaa3.movietogather.domain.comments.dto.commentsResponse.GetCommentsResponse
 import org.spartaa3.movietogather.domain.comments.entity.Comments
-import org.spartaa3.movietogather.domain.comments.entity.toResponse
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
-import java.time.LocalDateTime
+import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
 
 @Entity
 @Table(name = "review")
@@ -29,12 +30,6 @@ class Review(
     @Column(name = "star")
     var star: Double,
 
-    @Column(name = "created_at")
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "modified_at")
-    val modifiedAt: LocalDateTime = LocalDateTime.now(),
-
     @Column(name = "is_deleted")
     val isDeleted: Boolean = false,
     @OneToMany(
@@ -43,9 +38,10 @@ class Review(
         cascade = [CascadeType.ALL],
         orphanRemoval = true
     )  //추후 Fetch Join 을 이용하여 구현?
+    @JsonIgnore
     var comments: MutableList<Comments> = mutableListOf()
 
-) {
+) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -64,6 +60,6 @@ fun Review.toResponse(): ReviewResponse {
         contents = contents,
         createdAt = createdAt,
         heart = heart,
-        comments = comments.map { it.toResponse() }
+        comments = comments.map { GetCommentsResponse.from(it) }
     )
 }

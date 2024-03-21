@@ -2,6 +2,7 @@ package org.spartaa3.movietogather.global.objectmapper
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.util.StdDateFormat
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.springframework.context.annotation.Bean
@@ -15,6 +16,8 @@ class MapperConfig {
         objectMapper.registerModule(JavaTimeModule())
         objectMapper.registerKotlinModule()
         objectMapper.disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
+        objectMapper.registerKotlinModule()
+        objectMapper.setDateFormat(StdDateFormat().withColonInTimeZone(true))
         return objectMapper
     }
 }

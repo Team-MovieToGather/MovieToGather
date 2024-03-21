@@ -15,7 +15,7 @@ class ReviewTest : BehaviorSpec({
             genre = "genre",
             contents = "contents",
             star = 5.0,
-            createdAt = LocalDateTime.now()
+//            createdAt = LocalDateTime.now()
         )
 
         `when`("Entity를 Response로 변환하면") {

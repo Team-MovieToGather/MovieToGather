@@ -1,19 +1,19 @@
-version: '3'
+version: '3.8'
 services:
 
   movietogather-postgres:
-    image: postgres
+    image: postgres:alpine
     container_name: movietogather-postgres
     restart: always
     env_file:
       - .env
     environment:
-      POSTGRES_DB: mymovie
-      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_DB: movietogatherdb
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       TZ: "Asia/Seoul"
     volumes:
-      - mymovie:/var/lib/postgresql/data
+      - movietogatherdb:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
@@ -26,8 +26,21 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: ${POSTGRES_URL}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USERNAME}
+      SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      AUTH_JWT_SECRET: ${AUTH_JWT_SECRET}
+      AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR: ${AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR}
+      AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR: ${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT-ID: ${AUTH_GOOGLE_ID}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT-SECRET: ${AUTH_GOOGLE_SECRET}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_NAVER_CLIENT-ID: ${AUTH_NAVER_ID}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_NAVER_CLIENT-SECRET: ${AUTH_NAVER_SECRET}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENT-ID: ${AUTH_KAKAO_ID}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENT-SECRET: ${AUTH_KAKAO_SECRET}
+      SPRING_DATA_REDIS_HOST: ${REDIS_HOST}
+      SPRING_DATA_REDIS_POST: ${REDIS_PORT}
+
+
       TZ: "Asia/Seoul"
     depends_on:
       - movietogather-postgres
@@ -37,4 +50,4 @@ services:
 
 
 volumes:
-  mymovie:
+  movietogatherdb:
