@@ -59,10 +59,10 @@ class ReviewServiceImpl(
             Review(
                 postingTitle = request.postingTitle,
                 star = request.star,
-                movieTitle = "", // 선택된 영화 처리 작업 후 수정 예정
-                movieImg = "",
+                movieTitle = request.movieTitle,
+                movieImg = request.movieImg,
                 contents = request.contents,
-                genre = ""
+                genre = request.genre
             )
         ).toResponse()
     }
