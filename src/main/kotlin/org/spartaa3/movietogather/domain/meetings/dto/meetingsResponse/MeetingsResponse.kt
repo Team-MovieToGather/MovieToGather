@@ -12,7 +12,6 @@ class MeetingsResponse(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd' 'HH:mm:ss", timezone = "Asia/Seoul")
     var startTime: LocalDateTime,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd' 'HH:mm:ss", timezone = "Asia/Seoul")
-
     var endTime: LocalDateTime,
 
     val type: Type,

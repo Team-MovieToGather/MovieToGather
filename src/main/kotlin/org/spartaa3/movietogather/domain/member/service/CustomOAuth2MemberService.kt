@@ -1,11 +1,11 @@
 package org.spartaa3.movietogather.domain.member.service
 
 import mu.KotlinLogging
-import org.spartaa3.movietogather.global.exception.OAuth2AuthenticationProcessingException
 import org.spartaa3.movietogather.domain.member.entity.Member
 import org.spartaa3.movietogather.domain.member.entity.MemberRole
 import org.spartaa3.movietogather.domain.member.oauth2.OAuth2MemberInfoFactory
 import org.spartaa3.movietogather.domain.member.repository.MemberRepository
+import org.spartaa3.movietogather.global.exception.OAuth2AuthenticationProcessingException
 import org.spartaa3.movietogather.infra.security.jwt.OAuth2UserPrincipal
 import org.springframework.security.authentication.InternalAuthenticationServiceException
 import org.springframework.security.core.AuthenticationException

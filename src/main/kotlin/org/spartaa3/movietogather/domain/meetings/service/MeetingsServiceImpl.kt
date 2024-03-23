@@ -9,8 +9,8 @@ import org.spartaa3.movietogather.domain.meetings.entity.Meetings
 import org.spartaa3.movietogather.domain.meetings.entity.toResponse
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
 import org.spartaa3.movietogather.global.exception.ModelNotFoundException
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Slice
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -29,7 +29,7 @@ class MeetingsServiceImpl(
         condition: MeetingSearchCondition,
         keyword: String?,
         pageable: Pageable
-    ): Slice<MeetingsResponse> {
+    ): Page<MeetingsResponse> {
         val meetings = meetingsRepository.searchMeeting(type, condition, keyword, pageable)
         return meetings.map { it.toResponse() }
     }
@@ -59,10 +59,9 @@ class MeetingsServiceImpl(
     override fun updateMeetings(meetingId: Long, request: UpdateMeetingsRequest): MeetingsResponse {
         val meetings =
             meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
-        val (meetingName, movieName, startTime, endTime) = request
+        val (meetingName, startTime, endTime) = request
 
         meetings.meetingName = meetingName
-        meetings.movieName = movieName
         meetings.startTime = startTime
         meetings.endTime = endTime
 

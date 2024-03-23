@@ -17,8 +17,8 @@ import java.util.*
 class JwtPlugin(
     @Value("\${auth.jwt.issuer}") private val issuer: String,
     @Value("\${auth.jwt.secret}") private val secret: String,
-    @Value("\${auth.jwt.accesstokenexpirationhour}") private val accessTokenExpirationHour: Long,
-    @Value("\${auth.jwt.refreshtokenexpirationhour}") private val refreshTokenExpirationHour: Long
+    @Value("\${auth.jwt.accessTokenExpirationHour}") private val accessTokenExpirationHour: Long,
+    @Value("\${auth.jwt.refreshTokenExpirationHour}") private val refreshTokenExpirationHour: Long
 ) {
 
     companion object {
@@ -39,7 +39,7 @@ class JwtPlugin(
     fun createToken(oAuth2User: OAuth2User, id: String, email: String, oAuthType: OAuth2Provider): JwtDto {
         val now = Instant.now()
         val key = Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
-        val expirationTime  = Date(Date().time + accessTokenExpirationHour)
+        val expirationTime = Date(Date().time + accessTokenExpirationHour)
         val expirationPeriod = Duration.ofHours(1)
         val email: String? = when (oAuthType.name) {
             "GOOGLE" -> oAuth2User.getAttribute<String>("email")
@@ -62,7 +62,7 @@ class JwtPlugin(
             .compact()
 
         val refreshToken = Jwts.builder()
-            .expiration(Date(Date().time+refreshTokenExpirationHour))
+            .expiration(Date(Date().time + refreshTokenExpirationHour))
             .signWith(key)
             .compact()
 
@@ -73,6 +73,7 @@ class JwtPlugin(
             accessTokenExpires = expirationTime.time
         )
     }
+
     fun refreshAccessToken(oAuth2User: OAuth2User, refreshToken: String): Jws<Claims> {
         return kotlin.runCatching {
             validateToken(refreshToken).onSuccess { refreshTokenClaims ->
