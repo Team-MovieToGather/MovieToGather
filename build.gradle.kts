@@ -58,11 +58,15 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation ("org.springframework.boot:spring-boot-starter-data-redis")
     implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("io.jsonwebtoken:jjwt-api:0.12.3")
-    implementation("me.paulschwarz:spring-dotenv:4.0.0")
+    implementation ("org.springframework.boot:spring-boot-starter-data-redis") // redis
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1") // env
+    implementation("me.paulschwarz:spring-dotenv:4.0.0") // env
     implementation("org.springframework.boot:spring-boot-starter-websocket") // websocket
     implementation("io.github.microutils:kotlin-logging:3.0.5") // log
-    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+    // spring actuator
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    // prometheus
+    implementation("io.micrometer:micrometer-registry-prometheus")
 
     kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
     kapt("jakarta.annotation:jakarta.annotation-api")
@@ -71,18 +75,12 @@ dependencies {
     annotationProcessor ("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    runtimeOnly("com.h2database:h2")
-    implementation ("org.springframework.boot:spring-boot-starter-data-redis")
 
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
-    runtimeOnly("org.postgresql:postgresql")
-    implementation("me.paulschwarz:spring-dotenv:4.0.0")
-    implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
-    // spring actuator
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    // prometheus
-    implementation("io.micrometer:micrometer-registry-prometheus")
+//    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("com.h2database:h2")
+
 
 
     // 테스트 코드
