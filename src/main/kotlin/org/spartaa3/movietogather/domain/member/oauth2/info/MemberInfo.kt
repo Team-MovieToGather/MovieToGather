@@ -8,7 +8,8 @@ interface MemberInfo {
     fun getAttributes(): Map<String, Any>
     fun getId(): String?
     fun getEmail(): String?
-  //  fun getName(): String?
+
+    //  fun getName(): String?
 //    fun getFirstName(): String?
 //    fun getLastName(): String?
     fun getNickname(): String?

@@ -18,7 +18,7 @@ class MemberToken(
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     var member: Member? = null
-){
+) {
     @Id
     @Column(name = "member_token_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

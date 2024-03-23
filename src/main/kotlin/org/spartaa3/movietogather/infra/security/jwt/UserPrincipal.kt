@@ -8,7 +8,7 @@ data class UserPrincipal(
     val oauthType: String,
     val authorities: Collection<GrantedAuthority>
 ) {
-    constructor(email: String, roles: Set<String>, oauthType: String): this(
+    constructor(email: String, roles: Set<String>, oauthType: String) : this(
         email,
         oauthType,
         roles.map { SimpleGrantedAuthority("ROLE_$it") }

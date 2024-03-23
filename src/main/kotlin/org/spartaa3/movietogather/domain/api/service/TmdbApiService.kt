@@ -7,7 +7,6 @@ import org.spartaa3.movietogather.domain.api.service.dto.response.GenreResponse
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieListResponse
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieResponse
 import org.spartaa3.movietogather.global.exception.BaseException
-import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.spartaa3.movietogather.global.exception.dto.BaseResponseCode
 import org.spartaa3.movietogather.infra.api.ApiProperties
 import org.springframework.data.domain.PageRequest
