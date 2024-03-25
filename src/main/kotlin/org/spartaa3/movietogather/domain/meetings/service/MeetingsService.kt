@@ -23,4 +23,6 @@ interface MeetingsService {
     fun updateMeetings(meetingId: Long, request: UpdateMeetingsRequest): MeetingsResponse
 
     fun deleteMeetings(meetingId: Long)
+    fun joinMeetings(memberEmail: String, meetingId: Long)
+    fun getMyMeetings(memberEmail: String, meetingId : Long) : List<MeetingsResponse>
 }

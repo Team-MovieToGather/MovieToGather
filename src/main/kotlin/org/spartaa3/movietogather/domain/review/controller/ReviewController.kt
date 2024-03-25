@@ -78,8 +78,6 @@ class ReviewController(
             .status(HttpStatus.NO_CONTENT)
             .build()
     }
-
-
     // 영화 호출
     @GetMapping("/movies")
     fun getMovies(

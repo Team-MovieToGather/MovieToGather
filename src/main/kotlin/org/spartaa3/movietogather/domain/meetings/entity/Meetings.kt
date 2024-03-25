@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.service.Type
 import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
+import org.spartaa3.movietogather.infra.audit.BaseUserEntity
 import java.time.LocalDateTime
 
 @Entity
@@ -33,12 +34,12 @@ class Meetings(
     val isClosed: Boolean,
 
     @Column(name = "num_applicants")
-    val numApplicants: Long,
+    var numApplicants: Long,
 
     @Column(name = "max_applicants")
     val maxApplicants: Long,
 
-    ) : BaseTimeEntity() {
+    ) : BaseUserEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

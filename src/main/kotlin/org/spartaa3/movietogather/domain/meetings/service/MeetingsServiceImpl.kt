@@ -1,13 +1,16 @@
 package org.spartaa3.movietogather.domain.meetings.service
 
 
+import jakarta.transaction.Transactional
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.CreateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.entity.MeetingSearchCondition
 import org.spartaa3.movietogather.domain.meetings.entity.Meetings
 import org.spartaa3.movietogather.domain.meetings.entity.toResponse
+import org.spartaa3.movietogather.domain.meetings.repository.MeetingMemberRepository
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
+import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -22,7 +25,9 @@ enum class Type {
 
 @Service
 class MeetingsServiceImpl(
-    private val meetingsRepository: MeetingsRepository
+    private val meetingsRepository: MeetingsRepository,
+    private val memberRepository: MemberRepository,
+    private val meetingMemberRepository: MeetingMemberRepository
 ) : MeetingsService {
     override fun searchMeeting(
         type: Type,
@@ -40,6 +45,7 @@ class MeetingsServiceImpl(
         return meetings.toResponse()
     }
 
+    @Transactional
     override fun createMeetings(request: CreateMeetingsRequest): MeetingsResponse {
         return meetingsRepository.save(
             Meetings(
@@ -56,6 +62,7 @@ class MeetingsServiceImpl(
         ).toResponse()
     }
 
+    @Transactional
     override fun updateMeetings(meetingId: Long, request: UpdateMeetingsRequest): MeetingsResponse {
         val meetings =
             meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
@@ -69,9 +76,29 @@ class MeetingsServiceImpl(
 
     }
 
+    @Transactional
     override fun deleteMeetings(meetingId: Long) {
         val meetings =
             meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
         meetingsRepository.delete(meetings)
+    }
+
+    @Transactional
+    override fun joinMeetings(memberEmail: String, meetingId: Long) {
+        val meetings =
+            meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
+        val member = memberRepository.findByEmail(memberEmail)
+        if (meetings.numApplicants >= meetings.maxApplicants) {
+            throw IllegalStateException("모임 인원이 꽉 찼습니다.")
+        }
+        else {
+            meetings.numApplicants += 1
+        }
+
+
+    }
+
+    override fun getMyMeetings(memberEmail: String, meetingId: Long): List<MeetingsResponse> {
+        TODO("Not yet implemented")
     }
 }

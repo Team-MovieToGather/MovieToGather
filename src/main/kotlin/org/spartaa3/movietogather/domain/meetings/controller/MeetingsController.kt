@@ -6,10 +6,12 @@ import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsR
 import org.spartaa3.movietogather.domain.meetings.entity.MeetingSearchCondition
 import org.spartaa3.movietogather.domain.meetings.service.MeetingsService
 import org.spartaa3.movietogather.domain.meetings.service.Type
+import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/api/meetings")
@@ -68,4 +70,24 @@ class MeetingsController(
             .status(HttpStatus.NO_CONTENT)
             .body("등록하신 모임을 삭제하였습니다.")
     }
+    @PostMapping("/{meetingId}/join")
+    fun joinMeetings(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @PathVariable meetingId: Long,
+    ): ResponseEntity<String> {
+        meetingsService.joinMeetings(userPrincipal.email,meetingId)
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body("모임에 참가하였습니다.")
+    }
+    /*
+    @GetMapping("myMeetings")
+    fun getMyMeetings(
+    ): ResponseEntity<List<MeetingsResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(meetingsService.getMyMeetings())
+    }
+
+     */
 }
