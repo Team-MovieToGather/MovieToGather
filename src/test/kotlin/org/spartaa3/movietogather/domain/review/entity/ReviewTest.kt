@@ -3,7 +3,6 @@ package org.spartaa3.movietogather.domain.review.entity
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import org.springframework.test.context.ActiveProfiles
-import java.time.LocalDateTime
 
 @ActiveProfiles("test")
 class ReviewTest : BehaviorSpec({

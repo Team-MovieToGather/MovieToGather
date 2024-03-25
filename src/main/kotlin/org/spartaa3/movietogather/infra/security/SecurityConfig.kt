@@ -36,11 +36,16 @@ class SecurityConfig(
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.NEVER)
             }
-            .oauth2Login {  oauth2Login -> oauth2Login
-                .userInfoEndpoint { it.userService(customOAuth2MemberService) }
-                .authorizationEndpoint { it.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository) }
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .failureHandler(oAuth2AuthenticationFailureHandler)
+            .oauth2Login { oauth2Login ->
+                oauth2Login
+                    .userInfoEndpoint { it.userService(customOAuth2MemberService) }
+                    .authorizationEndpoint {
+                        it.authorizationRequestRepository(
+                            httpCookieOAuth2AuthorizationRequestRepository
+                        )
+                    }
+                    .successHandler(oAuth2AuthenticationSuccessHandler)
+                    .failureHandler(oAuth2AuthenticationFailureHandler)
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()

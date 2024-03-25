@@ -6,8 +6,6 @@ data class UpdateMeetingsRequest(
 
     var meetingName: String,
 
-    var movieName: String,
-
     var startTime: LocalDateTime = LocalDateTime.now(),
 
     var endTime: LocalDateTime = LocalDateTime.now(),

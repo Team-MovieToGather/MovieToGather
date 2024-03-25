@@ -25,7 +25,7 @@ class Member(
     @OneToOne(mappedBy = "member", cascade = [CascadeType.ALL])
     var memberToken: MemberToken? = null
 
-    fun toResponse(): MemberInfoResponse{
+    fun toResponse(): MemberInfoResponse {
         return MemberInfoResponse(
             email = email,
             nickname = nickname,

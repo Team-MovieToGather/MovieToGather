@@ -11,12 +11,13 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class MemberServiceImpl(
     private val memberRepository: MemberRepository,
-): MemberService {
+) : MemberService {
 
     override fun getMemberInfo(userPrincipal: UserPrincipal): MemberInfoResponse {
         val member = memberRepository.findByEmail(userPrincipal.email)
         return member.let { MemberInfoResponse.info(it) }
     }
+
     @Transactional
     override fun updateMemberInfo(userPrincipal: UserPrincipal, request: UpdateMemberInfoRequest): MemberInfoResponse {
         val member = memberRepository.findByEmail(userPrincipal.email)

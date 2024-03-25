@@ -14,6 +14,7 @@ class MapperConfig {
     fun objectMapper(): ObjectMapper {
         val objectMapper = ObjectMapper()
         objectMapper.registerModule(JavaTimeModule())
+        objectMapper.registerKotlinModule()
         objectMapper.disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
         objectMapper.registerKotlinModule()
         objectMapper.setDateFormat(StdDateFormat().withColonInTimeZone(true))

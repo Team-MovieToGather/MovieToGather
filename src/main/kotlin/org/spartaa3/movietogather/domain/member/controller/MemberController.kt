@@ -22,7 +22,7 @@ class MemberController(
     @GetMapping
     fun getMemberInfo(
         @AuthenticationPrincipal userPrincipal: UserPrincipal
-    ): ResponseEntity<MemberInfoResponse>{
+    ): ResponseEntity<MemberInfoResponse> {
         return status(HttpStatus.OK)
             .body(memberService.getMemberInfo(userPrincipal))
     }
@@ -31,7 +31,7 @@ class MemberController(
     fun update(
         @RequestBody request: UpdateMemberInfoRequest,
         @AuthenticationPrincipal userPrincipal: UserPrincipal
-    ): ResponseEntity<MemberInfoResponse>{
+    ): ResponseEntity<MemberInfoResponse> {
         return status(HttpStatus.OK)
             .body(memberService.updateMemberInfo(userPrincipal, request))
     }

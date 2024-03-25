@@ -33,7 +33,7 @@ class ReviewServiceImplTest : BehaviorSpec({
     val pageableMock = mockk<Pageable>()
     val heartRepository = mockk<HeartRepository>()
     val redisRepository = mockk<RedisRepository>()
-    val reviewService = spyk(ReviewServiceImpl(reviewRepository, heartRepository,redisRepository))
+    val reviewService = spyk(ReviewServiceImpl(reviewRepository, heartRepository, redisRepository))
 
 
     //getReviewById 테스트 : 값이 있을 때

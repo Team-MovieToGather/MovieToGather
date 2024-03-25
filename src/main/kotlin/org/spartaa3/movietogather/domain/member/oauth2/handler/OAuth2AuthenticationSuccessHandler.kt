@@ -4,8 +4,6 @@ import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import mu.KotlinLogging
-import org.spartaa3.movietogather.domain.member.repository.MemberRepository
-import org.spartaa3.movietogather.domain.member.repository.TokenRepository
 import org.spartaa3.movietogather.domain.member.service.TokenServiceImpl
 import org.spartaa3.movietogather.global.cookie.CookieUtils
 import org.spartaa3.movietogather.global.cookie.HttpCookieOAuth2AuthorizationRequestRepository
