@@ -34,23 +34,4 @@ class RedisConfig(
         return template
     }
 
-
-    @Bean
-    fun cacheManager(): CacheManager {
-        val cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-            .serializeKeysWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(
-                    StringRedisSerializer()
-                )
-            )
-            .serializeValuesWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(
-                    JdkSerializationRedisSerializer()
-                )
-            )
-        return RedisCacheManager.RedisCacheManagerBuilder
-            .fromConnectionFactory(redisConnectionFactory())
-            .cacheDefaults(cacheConfig)
-            .build()
-    }
 }

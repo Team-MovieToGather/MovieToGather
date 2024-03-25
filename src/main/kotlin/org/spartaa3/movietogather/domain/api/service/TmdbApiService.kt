@@ -3,6 +3,7 @@ package org.spartaa3.movietogather.domain.api.service
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.spartaa3.movietogather.domain.api.service.dto.response.CustomPageResponse
 import org.spartaa3.movietogather.domain.api.service.dto.response.GenreResponse
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieListResponse
@@ -10,12 +11,15 @@ import org.spartaa3.movietogather.global.exception.BaseException
 import org.spartaa3.movietogather.global.exception.dto.BaseResponseCode
 import org.spartaa3.movietogather.infra.api.ApiProperties
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
+import java.util.concurrent.TimeUnit
 
 @Service
 class TmdbApiService(
-    private val apiProperties: ApiProperties
+    private val apiProperties: ApiProperties,
+    private val redisTemplate: RedisTemplate<String, String>
 ) {
     val restClient: RestClient = RestClient.create()
     val objectMapper: ObjectMapper =
@@ -23,14 +27,24 @@ class TmdbApiService(
 
 
     // 영화 호출 api
-    @Cacheable(value = ["movies"], key = "#title")
     fun getMovies(title: String?): CustomPageResponse {
+        val cacheKey = "movies::$title"
+        val movieJson = redisTemplate.opsForValue().get(cacheKey)
+        if (movieJson != null) {
+            return objectMapper.readValue(movieJson)
+        }
+
         val type = if (!title.isNullOrEmpty()) "search" else "popular"
         val url = getBaseUrl(type).let { if (!title.isNullOrEmpty()) "$it&query=$title" else it }
         val movieListResponse = getMovieResponse(getResult(url))
         if (movieListResponse.results.isEmpty()) throw BaseException(BaseResponseCode.INVALID_TITLE)
+        val response = matchGenreNames(movieListResponse)
+        val responseJson = objectMapper.writeValueAsString(response)
 
-        return matchGenreNames(movieListResponse)
+        val ttl = if (title.isNullOrEmpty()) 7L else 1L // 인기 목록은 7일 그 외는 1일
+        redisTemplate.opsForValue().set(cacheKey, responseJson, ttl, TimeUnit.DAYS)
+
+        return response
     }
 
 
