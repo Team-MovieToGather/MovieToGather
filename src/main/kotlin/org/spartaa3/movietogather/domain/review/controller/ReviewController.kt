@@ -23,7 +23,7 @@ class ReviewController(
     private val reviewService: ReviewService,
     private val tmdbApiService: TmdbApiService
 ) {
-    @GetMapping("/bastTop3")
+    @GetMapping("/bestTop3")
     fun bestTopReview(): ResponseEntity<List<ReviewsResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
