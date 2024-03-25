@@ -45,7 +45,7 @@ class MeetingsController(
         meetingsService.createMeetings(request)
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body("댓글이 등록되었습니다..")
+            .body("모임이 등록되었습니다..")
     }
 
     @PutMapping("/{meetingId}")
@@ -56,7 +56,7 @@ class MeetingsController(
         meetingsService.updateMeetings(meetingId, request)
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body("수정이 완료되었습니다.")
+            .body("모임 수정이 완료되었습니다.")
     }
 
     @DeleteMapping("/{meetingId}")
