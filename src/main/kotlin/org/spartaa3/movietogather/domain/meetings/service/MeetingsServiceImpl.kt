@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.CreateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
+import org.spartaa3.movietogather.domain.meetings.entity.MeetingMember
 import org.spartaa3.movietogather.domain.meetings.entity.MeetingSearchCondition
 import org.spartaa3.movietogather.domain.meetings.entity.Meetings
 import org.spartaa3.movietogather.domain.meetings.entity.toResponse
@@ -12,6 +13,7 @@ import org.spartaa3.movietogather.domain.meetings.repository.MeetingMemberReposi
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
 import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.global.exception.ModelNotFoundException
+import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -27,7 +29,7 @@ enum class Type {
 class MeetingsServiceImpl(
     private val meetingsRepository: MeetingsRepository,
     private val memberRepository: MemberRepository,
-    private val meetingMemberRepository: MeetingMemberRepository
+    private val meetingMemberRepository: MeetingMemberRepository,
 ) : MeetingsService {
     override fun searchMeeting(
         type: Type,
@@ -46,8 +48,8 @@ class MeetingsServiceImpl(
     }
 
     @Transactional
-    override fun createMeetings(request: CreateMeetingsRequest): MeetingsResponse {
-        return meetingsRepository.save(
+    override fun createMeetings(email:String, request: CreateMeetingsRequest): MeetingsResponse {
+        val meeting = meetingsRepository.save(
             Meetings(
                 meetingName = request.meetingName,
                 movieName = request.movieName,
@@ -59,7 +61,15 @@ class MeetingsServiceImpl(
                 numApplicants = request.numApplicants,
                 maxApplicants = request.maxApplicants,
             )
-        ).toResponse()
+        )
+        // 모임과 회원의 관계를 저장
+        meetingMemberRepository.save(
+            MeetingMember(
+                meeting,
+                member = memberRepository.findByEmail(email)
+            )
+        )
+        return meeting.toResponse()
     }
 
     @Transactional
@@ -84,16 +94,24 @@ class MeetingsServiceImpl(
     }
 
     @Transactional
-    override fun joinMeetings(memberEmail: String, meetingId: Long) {
+    override fun joinMeetings(email: String, meetingId: Long) {
         val meetings =
             meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
-        val member = memberRepository.findByEmail(memberEmail)
-        if (meetings.numApplicants >= meetings.maxApplicants) {
-            throw IllegalStateException("모임 인원이 꽉 찼습니다.")
+        val member = memberRepository.findByEmail(email)
+        val meetingMember = meetingMemberRepository.findByMeetingsId(meetingId)
+        if (member.id ==meetingMember.member.id) {
+            throw IllegalStateException("이미 참가한 모임입니다.")
         }
         else {
-            meetings.numApplicants += 1
+            if (meetings.numApplicants >= meetings.maxApplicants) {
+                throw IllegalStateException("모임 인원이 꽉 찼습니다.")
+            }
+            else {
+                meetings.numApplicants += 1
+            }
+
         }
+
 
 
     }

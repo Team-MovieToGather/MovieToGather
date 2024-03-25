@@ -6,5 +6,5 @@ import org.spartaa3.movietogather.domain.member.entity.Member
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface MeetingMemberRepository : JpaRepository<MeetingMember, Long> {
-    fun findByMeetingsId(meetingId: Long): List<MeetingMember>
+    fun findByMeetingsId(meetingId: Long): MeetingMember
 }
