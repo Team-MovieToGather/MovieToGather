@@ -3,18 +3,14 @@ package org.spartaa3.movietogather.domain.api.service
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.spartaa3.movietogather.domain.api.service.dto.response.CustomPageResponse
 import org.spartaa3.movietogather.domain.api.service.dto.response.GenreResponse
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieListResponse
-import org.spartaa3.movietogather.domain.api.service.dto.response.MovieResponse
 import org.spartaa3.movietogather.global.exception.BaseException
-import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.spartaa3.movietogather.global.exception.dto.BaseResponseCode
 import org.spartaa3.movietogather.infra.api.ApiProperties
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.SliceImpl
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
-import java.lang.RuntimeException
 
 @Service
 class TmdbApiService(
@@ -26,9 +22,9 @@ class TmdbApiService(
 
 
     // 영화 호출 api
-    fun getMovies(title: String?, pageNumber: Int): SliceImpl<MovieResponse> {
+    fun getMovies(title: String?): CustomPageResponse {
         val type = if (!title.isNullOrEmpty()) "search" else "popular"
-        val url = getBaseUrl(type, pageNumber).let { if (!title.isNullOrEmpty()) "$it&query=$title" else it }
+        val url = getBaseUrl(type).let { if (!title.isNullOrEmpty()) "$it&query=$title" else it }
         val movieListResponse = getMovieResponse(getResult(url))
         if (movieListResponse.results.isEmpty()) throw BaseException(BaseResponseCode.INVALID_TITLE)
 
@@ -37,22 +33,22 @@ class TmdbApiService(
 
 
     // 호출 url 작성
-    private fun getBaseUrl(type: String, pageNumber: Int) =
+    private fun getBaseUrl(type: String) =
         when (type) {
             "popular" -> apiProperties.popularUrl
             "search" -> apiProperties.searchUrl
             "genre" -> apiProperties.genreUrl
             else -> apiProperties.popularUrl
-        } + "?${getDefaultUrlParameter(pageNumber)}"
+        } + "?${getDefaultUrlParameter()}"
 
 
     // Default 요청 인자
-    private fun getDefaultUrlParameter(pageNumber: Int): String {
+    private fun getDefaultUrlParameter(): String {
         return "?include_adult=false" +
                 "&language=ko-KO" +
                 "&include_video=false" +
                 "&region=140" +
-                "&page=${pageNumber}" +
+                "&page=1" +
                 "&api_key=${apiProperties.key}"
     }
 
@@ -68,7 +64,7 @@ class TmdbApiService(
     }
 
     // 장르명 반환
-    private fun matchGenreNames(movieListResponse: MovieListResponse): SliceImpl<MovieResponse> {
+    private fun matchGenreNames(movieListResponse: MovieListResponse): CustomPageResponse {
         val genreResponse = getGenres()
 
         movieListResponse.results.forEach { movie ->
@@ -76,27 +72,21 @@ class TmdbApiService(
                 genreResponse.genres.find { genre -> genre.id == id }?.name
             }.joinToString(", ")
         }
-        return slicePaging(movieListResponse)
+        return CustomPageResponse(
+            movieListResponse.results,
+            3,
+            20,
+            9
+        )
     }
 
 
     // 장르 목록 호출 -> caching 필요
     private fun getGenres(): GenreResponse {
-        val url = getBaseUrl("genre", 1)
+        val url = getBaseUrl("genre")
         return getResult(url).let { objectMapper.readValue(it, GenreResponse::class.java) }
     }
 }
 
 
-// Slice 페이징
-private fun slicePaging(movieListResponse: MovieListResponse): SliceImpl<MovieResponse> {
-    val currentPage = movieListResponse.page
-    val pageSize = 20
-    val hasNext = currentPage < movieListResponse.total_pages
 
-    return SliceImpl(
-        movieListResponse.results,
-        PageRequest.of(currentPage, pageSize), // 페이지 요청 정보
-        hasNext
-    )
-}

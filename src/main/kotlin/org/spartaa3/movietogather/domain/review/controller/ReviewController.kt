@@ -2,6 +2,7 @@ package org.spartaa3.movietogather.domain.review.controller
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.spartaa3.movietogather.domain.api.service.TmdbApiService
+import org.spartaa3.movietogather.domain.api.service.dto.response.CustomPageResponse
 import org.spartaa3.movietogather.domain.api.service.dto.response.MovieResponse
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
@@ -11,7 +12,6 @@ import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.service.ReviewService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
-import org.springframework.data.domain.SliceImpl
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -78,14 +78,13 @@ class ReviewController(
             .status(HttpStatus.NO_CONTENT)
             .build()
     }
-
-
     // 영화 호출
     @GetMapping("/movies")
     fun getMovies(
-        @RequestParam title: String? = null,
-        @RequestParam pageNumber: Int
-    ): SliceImpl<MovieResponse> {
-        return tmdbApiService.getMovies(title, pageNumber)
+        @RequestParam title: String? = null
+    ): ResponseEntity<CustomPageResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(tmdbApiService.getMovies(title))
     }
 }

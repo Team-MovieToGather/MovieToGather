@@ -56,7 +56,7 @@ class CommentsServiceImpl(
     override fun deleteComments(reviewId: Long, commentsId: Long) {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val comments =
-            commentsRepository.findByIdAndReviewId(commentsId, reviewId) ?: throw ModelNotFoundException("Comments", commentsId)
+            commentsRepository.findByIdAndReviewId(commentsId, reviewId)
         commentsRepository.delete(comments)
         review.comments.remove(comments)
     }

@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +28,7 @@ class SecurityConfig(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-
+            .cors { it.configurationSource(corsConfigurationSource()) }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .csrf { it.disable() }
@@ -33,13 +36,36 @@ class SecurityConfig(
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.NEVER)
             }
-            .oauth2Login {  oauth2Login -> oauth2Login
-                .userInfoEndpoint { it.userService(customOAuth2MemberService) }
-                .authorizationEndpoint { it.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository) }
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .failureHandler(oAuth2AuthenticationFailureHandler)
+            .oauth2Login { oauth2Login ->
+                oauth2Login
+                    .userInfoEndpoint { it.userService(customOAuth2MemberService) }
+                    .authorizationEndpoint {
+                        it.authorizationRequestRepository(
+                            httpCookieOAuth2AuthorizationRequestRepository
+                        )
+                    }
+                    .successHandler(oAuth2AuthenticationSuccessHandler)
+                    .failureHandler(oAuth2AuthenticationFailureHandler)
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
+    }
+
+
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration().apply {
+            addAllowedOrigin("http://localhost:3000")
+            addAllowedMethod("GET")
+            addAllowedMethod("POST")
+            addAllowedMethod("PUT")
+            addAllowedMethod("DELETE")
+            addAllowedHeader("*")
+            allowCredentials = true
+        }
+        return UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration("/**", configuration)
+        }
     }
 }

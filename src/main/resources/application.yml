@@ -13,9 +13,6 @@ auth:
     refreshTokenExpirationHour: ${AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR}
 
 spring:
-  config:
-    activate:
-      on-profile: local
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html

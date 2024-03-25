@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 class TokenServiceImpl(
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository
-){
+) {
 
     @Transactional
     fun saveRefreshToken(email: String, refreshTokenValue: String) {

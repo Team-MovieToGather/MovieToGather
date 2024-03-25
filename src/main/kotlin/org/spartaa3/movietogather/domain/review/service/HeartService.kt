@@ -20,7 +20,7 @@ class HeartService(
 ) {
     @Transactional
     fun reviewHeart(reviewId: Long, userPrincipal: UserPrincipal): HeartResponse {
-        val member = memberRepository.findByEmail(userPrincipal.email) ?: throw IllegalArgumentException()
+        val member = memberRepository.findByEmail(userPrincipal.email)
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalArgumentException()
 
         val existingHeart = heartRepository.findByMemberAndReviewAndCommentsIsNull(member, review)
@@ -38,7 +38,7 @@ class HeartService(
 
     @Transactional
     fun commentHeart(reviewId: Long, userPrincipal: UserPrincipal, commentsId: Long): HeartResponse {
-        val member = memberRepository.findByEmail(userPrincipal.email) ?: throw IllegalArgumentException()
+        val member = memberRepository.findByEmail(userPrincipal.email)
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw IllegalArgumentException()
         val comments = commentRepository.findByIdOrNull(commentsId) ?: throw IllegalArgumentException()
 

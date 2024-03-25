@@ -14,7 +14,7 @@ class CommentsController(
     private val commentsService: CommentsService
 ) {
 
-    @GetMapping("/review/{reviewId}/comments/{commentsId}")
+    @GetMapping("/{reviewId}/comments/{commentsId}")
     fun getCommentsById(
         @PathVariable reviewId: Long,
         @PathVariable commentsId: Long
@@ -24,7 +24,7 @@ class CommentsController(
             .body(commentsService.getCommentsById(reviewId, commentsId))
     }
 
-    @PostMapping("/review/{reviewId}/comments")
+    @PostMapping("/{reviewId}/comments")
     fun createComments(
         @PathVariable reviewId: Long,
         @RequestBody request: CreateCommentsRequest
@@ -35,7 +35,7 @@ class CommentsController(
             .body("댓글이 등록되었습니다..")
     }
 
-    @PutMapping("/review/{reviewId}/comments/{commentsId}")
+    @PutMapping("/{reviewId}/comments/{commentsId}")
     fun updateComments(
         @RequestBody request: UpdateCommentsRequest,
         @PathVariable commentsId: Long,
@@ -47,7 +47,7 @@ class CommentsController(
             .body("댓글이 수정되었습니다..")
     }
 
-    @DeleteMapping("/review/{reviewId}/comments/{commentsId}")
+    @DeleteMapping("/{reviewId}/comments/{commentsId}")
     fun deleteComments(
         @PathVariable commentsId: Long,
         @PathVariable reviewId: Long
