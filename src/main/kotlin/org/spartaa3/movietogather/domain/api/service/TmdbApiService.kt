@@ -9,6 +9,7 @@ import org.spartaa3.movietogather.domain.api.service.dto.response.MovieListRespo
 import org.spartaa3.movietogather.global.exception.BaseException
 import org.spartaa3.movietogather.global.exception.dto.BaseResponseCode
 import org.spartaa3.movietogather.infra.api.ApiProperties
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
 
@@ -22,6 +23,7 @@ class TmdbApiService(
 
 
     // 영화 호출 api
+    @Cacheable(value = ["movies"], key = "#title")
     fun getMovies(title: String?): CustomPageResponse {
         val type = if (!title.isNullOrEmpty()) "search" else "popular"
         val url = getBaseUrl(type).let { if (!title.isNullOrEmpty()) "$it&query=$title" else it }
