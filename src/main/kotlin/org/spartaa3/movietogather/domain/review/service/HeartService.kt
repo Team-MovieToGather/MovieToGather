@@ -28,11 +28,11 @@ class HeartService(
         return if (existingHeart != null) {
             heartRepository.deleteByMemberAndReviewAndCommentsIsNull(member, review)
             reviewRepository.save(review)
-            HeartResponse(message = "좋아요 취소")
+            HeartResponse(heart = review.heart)
         } else {
             heartRepository.save(Heart(member = member, review = review, comments = null))
             reviewRepository.save(review)
-            HeartResponse(message = "좋아요 성공")
+            HeartResponse(heart = review.heart)
         }
     }
 
@@ -47,11 +47,11 @@ class HeartService(
         return if (existingHeart != null) {
             heartRepository.deleteByMemberAndReviewAndComments(member, review, comments)
             commentRepository.save(comments)
-            HeartResponse(message = "좋아요 취소")
+            HeartResponse(heart = comments.likeCount)
         } else {
             heartRepository.save(Heart(member = member, review = review, comments = comments))
             commentRepository.save(comments)
-            HeartResponse(message = "좋아요 성공")
+            HeartResponse(heart = comments.likeCount)
         }
     }
 }
