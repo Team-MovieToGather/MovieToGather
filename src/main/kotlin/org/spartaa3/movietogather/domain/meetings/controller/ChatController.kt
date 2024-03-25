@@ -1,6 +1,7 @@
 package org.spartaa3.movietogather.domain.meetings.controller
 
 import org.spartaa3.movietogather.domain.meetings.dto.ChatRoomResponse
+import org.spartaa3.movietogather.domain.meetings.entity.ChatMessage
 import org.spartaa3.movietogather.domain.meetings.service.ChatService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,5 +26,12 @@ class ChatController(private val chatService: ChatService) {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(chatService.findRoom(meetingId))
+    }
+
+    @GetMapping("/messages")
+    fun findMessage(@PathVariable meetingId: Long): ResponseEntity<List<ChatMessage>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(chatService.findMessage(meetingId))
     }
 }

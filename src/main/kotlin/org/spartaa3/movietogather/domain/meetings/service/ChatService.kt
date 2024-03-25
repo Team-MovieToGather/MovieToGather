@@ -4,7 +4,9 @@ import jakarta.annotation.PostConstruct
 import mu.KotlinLogging
 import org.spartaa3.movietogather.domain.meetings.dto.ChatRoomResponse
 import org.spartaa3.movietogather.domain.meetings.entity.ChatMessage
+import org.spartaa3.movietogather.domain.meetings.entity.ChatMessage.Companion.toResponse
 import org.spartaa3.movietogather.domain.meetings.entity.ChatRoom
+import org.spartaa3.movietogather.domain.meetings.entity.MessageType
 import org.spartaa3.movietogather.domain.meetings.repository.ChatMessageRepository
 import org.spartaa3.movietogather.domain.meetings.repository.ChatRoomRepository
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
@@ -29,8 +31,14 @@ class ChatService(
         chatRooms.clear()
     }
 
+    fun findMessage(meetingId: Long): List<ChatMessage> {
+        val chatRoom = chatRoomRepository.findByMeetingsId(meetingId) ?: throw BaseException(BaseResponseCode.INVALID_MEETING)
+        val chatMessage = chatMessageRepository.findByRoomId(chatRoom.roomId) ?: throw BaseException(BaseResponseCode.INVALID_MEETING)
+        return chatMessage.map { it.toResponse() }
+    }
+
     fun findRoom(meetingId: Long): ChatRoomResponse? {
-        val chatRoom = chatRoomRepository.findByMeetingsId(meetingId) ?: throw RuntimeException("채팅방이 없습니다.")
+        val chatRoom = chatRoomRepository.findByMeetingsId(meetingId) ?: throw return null
         return ChatRoomResponse.to(chatRoom)
     }
 
@@ -51,8 +59,12 @@ class ChatService(
                     meetings = meetings!!
                 )
             )
-            chatRooms[randomId] = ChatRoomResponse.to(chatRoom)
-            return ChatRoomResponse.to(chatRoom)
+            val roomResponse = ChatRoomResponse(
+                roomId = chatRoom.roomId,
+                name = chatRoom.name
+            )
+            chatRooms[randomId] = roomResponse
+            return roomResponse
         } else {
             throw BaseException(BaseResponseCode.BAD_REQUEST)
         }

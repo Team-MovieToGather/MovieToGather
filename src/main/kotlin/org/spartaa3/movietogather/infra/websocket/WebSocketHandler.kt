@@ -35,22 +35,27 @@ class WebSocketHandler(
             // 입장 메시지
             MessageType.ENTER -> {
                 sessions.add(session)
-                chatMessage.message = "${chatMessage.sender}님이 입장했습니다."
-                sendToEachSocket(sessions, TextMessage(objectMapper.writeValueAsString(chatMessage)))
+                if (chatMessage.message?.trim().isNullOrEmpty().not()) {
+                    chatMessage.message = "${chatMessage.sender}님이 입장했습니다."
+                    sendToEachSocket(sessions, TextMessage(objectMapper.writeValueAsString(chatMessage)))
+                }
             }
 
             // 퇴장 메시지
             MessageType.QUIT -> {
                 sessions.remove(session)
-                chatMessage.message = "${chatMessage.sender}님이 퇴장했습니다."
-                sendToEachSocket(sessions, TextMessage(objectMapper.writeValueAsString(chatMessage)))
+                if (chatMessage.message?.trim().isNullOrEmpty().not()) {
+                    chatMessage.message = "${chatMessage.sender}님이 퇴장했습니다."
+                    sendToEachSocket(sessions, TextMessage(objectMapper.writeValueAsString(chatMessage)))
+                }
             }
-
-            else -> sendToEachSocket(sessions, message) // 입장, 퇴장 아닐 때는 클라이언트로부터 온 메시지 그대로 전달.
+            MessageType.TALK -> {
+                if (chatMessage.message?.trim().isNullOrEmpty().not()) {
+                    chatService.saveMessage(chatMessage)
+                }
+                sendToEachSocket(sessions, message)
+            }
         }
-        // TALK 메시지 저장
-        if (chatMessage.type == MessageType.TALK)
-            chatService.saveMessage(chatMessage)
     }
 
     // websocket 연결 종료 후
