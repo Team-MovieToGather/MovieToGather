@@ -157,10 +157,10 @@ fun createMockRequest(): CreateReviewRequest {
     return CreateReviewRequest(
         postingTitle = "Example Posting Title",
         star = 5.0,
-        //movieTitle = "Example Movie Title",
-        //movieImg = "Example Movie Img",
+        movieTitle = "Example Movie Title",
+        movieImg = "Example Movie Img",
         contents = "Example Contents",
-        //genre = "Action"
+        genre = "Action"
     )
 }
 

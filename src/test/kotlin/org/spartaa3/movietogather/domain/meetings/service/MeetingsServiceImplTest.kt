@@ -9,11 +9,14 @@ import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
 import io.mockk.spyk
 import org.junit.jupiter.api.extension.ExtendWith
+import org.redisson.api.RedissonClient
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.CreateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsRequest.UpdateMeetingsRequest
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.entity.Meetings
+import org.spartaa3.movietogather.domain.meetings.repository.MeetingMemberRepository
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
+import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.ActiveProfiles
@@ -26,7 +29,12 @@ class MeetingsServiceImplTest : BehaviorSpec({
         clearAllMocks()
     }
     val meetingsRepository = mockk<MeetingsRepository>()
-    val meetingsService = spyk(MeetingsServiceImpl(meetingsRepository))
+    val memberRepository = mockk<MemberRepository>()
+    val meetingMemberRepository = mockk<MeetingMemberRepository>()
+    val redissonClient = mockk<RedissonClient>()
+    val meetingsService =
+        spyk(MeetingsServiceImpl(meetingsRepository, memberRepository, meetingMemberRepository, redissonClient))
+
 
 
     given("모임 하나를 조회할 때") {
@@ -65,6 +73,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
     given("모임 하나를 수정할 때") {
         `when`("요청한 모임이 존재한다면") {
             every { meetingsService.updateMeetings(any(), any()) } returns MeetingsResponse(
+                id = 1L,
                 meetingName = "Example Meeting Title1",
                 movieName = "Example Movie Title",
                 startTime = LocalDateTime.now(),
@@ -109,6 +118,14 @@ class MeetingsServiceImplTest : BehaviorSpec({
         }
     }
 
+    given("모임에 신청했을 때") {
+        `when`("모임에 신청하면") {
+
+            then("모임에 신청된다.") {
+
+            }
+        }
+    }
 })
 
 fun mockMeetings(id: Long): Meetings {
@@ -144,7 +161,6 @@ fun createMockRequest(): CreateMeetingsRequest {
 fun updateMockRequest(): UpdateMeetingsRequest {
     return UpdateMeetingsRequest(
         meetingName = "Example Meeting Title1",
-        movieName = "Example Movie Title",
         startTime = LocalDateTime.now(),
         endTime = LocalDateTime.now(),
 

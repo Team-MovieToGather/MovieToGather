@@ -19,7 +19,7 @@ interface MeetingsService {
 
     fun getMeetingsById(meetingId: Long): MeetingsResponse
 
-    fun createMeetings(email: String, request: CreateMeetingsRequest): MeetingsResponse
+    fun createMeetings(/*email: String,*/ request: CreateMeetingsRequest): MeetingsResponse
 
     fun updateMeetings(meetingId: Long, request: UpdateMeetingsRequest): MeetingsResponse
 

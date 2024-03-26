@@ -42,10 +42,10 @@ class MeetingsController(
 
     @PostMapping
     fun createMeetings(
-        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        /*@AuthenticationPrincipal userPrincipal: UserPrincipal,*/
         @RequestBody request: CreateMeetingsRequest,
     ): ResponseEntity<String> {
-        meetingsService.createMeetings(userPrincipal.email,request)
+        meetingsService.createMeetings(/*userPrincipal.email,*/request)
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body("댓글이 등록되었습니다..")
