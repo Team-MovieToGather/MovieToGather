@@ -52,7 +52,8 @@ class MeetingsServiceImpl(
     }
 
     @Transactional
-    override fun createMeetings(/*email:String,*/ request: CreateMeetingsRequest): MeetingsResponse {
+    override fun createMeetings(email:String, request: CreateMeetingsRequest): MeetingsResponse {
+        val member = memberRepository.findByEmail(email)
         val meeting = meetingsRepository.save(
             Meetings(
                 meetingName = request.meetingName,
@@ -67,15 +68,13 @@ class MeetingsServiceImpl(
             )
         )
         // 모임과 회원의 관계를 저장
-        /*
         meetingMemberRepository.save(
             MeetingMember(
                 meeting,
-                member = memberRepository.findByEmail(email)
+                member
             )
         )
 
-         */
         return meeting.toResponse()
     }
 
@@ -105,20 +104,18 @@ class MeetingsServiceImpl(
         val meetings =
             meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
         val member = memberRepository.findByEmail(email)
-        val meetingMember = meetingMemberRepository.findByMeetingsId(meetingId)
         val lock = redissonClient.getLock("meeting:$meetingId")
-        if (member.id ==meetingMember.member.id) {
+        if (meetingMemberRepository.existsByMeetingsAndMember(meetings, member)) {
             throw IllegalStateException("이미 참가한 모임입니다.")
-        }
-        else {
+        } else {
             if (meetings.numApplicants >= meetings.maxApplicants) {
                 throw IllegalStateException("모임 인원이 꽉 찼습니다.")
-            }
-            else {
+            } else {
                 // 락 획득시간 & 락 만료시간
-                if (lock.tryLock(2,3,TimeUnit.SECONDS)){
-                    try{
+                if (lock.tryLock(2, 3, TimeUnit.SECONDS)) {
+                    try {
                         meetings.numApplicants += 1
+                        meetingMemberRepository.save(MeetingMember(meetings, member))
                     } finally {
                         lock.unlock()
                     }
@@ -127,7 +124,6 @@ class MeetingsServiceImpl(
             }
 
         }
-
 
 
     }
