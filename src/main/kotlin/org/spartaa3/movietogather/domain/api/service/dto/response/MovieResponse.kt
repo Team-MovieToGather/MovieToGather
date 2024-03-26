@@ -1,5 +1,7 @@
 package org.spartaa3.movietogather.domain.api.service.dto.response
 
+import java.io.Serializable
+
 data class MovieResponse(
     val id: Int,
     val title: String,
@@ -7,7 +9,7 @@ data class MovieResponse(
     val genre_ids: List<Int>,
     val poster_path: String?,
     var genreNames: String = ""
-) {
+): Serializable {
     val posterUrl = if (poster_path != null) {
         "https://image.tmdb.org/t/p/w500$poster_path"
     } else {
@@ -24,12 +26,12 @@ data class MovieResponse(
 
 data class MovieListResponse(
     val results: List<MovieResponse>,
-)
+): Serializable
 
 data class CustomPageResponse(
     val content: List<MovieResponse>,
     val totalPages: Int,
     val totalElements: Int,
     val pageSize: Int,
-)
+): Serializable
 
