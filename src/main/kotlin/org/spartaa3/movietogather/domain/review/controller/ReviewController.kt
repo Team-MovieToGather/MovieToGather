@@ -10,6 +10,7 @@ import org.spartaa3.movietogather.domain.review.dto.ReviewsResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.service.ReviewService
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.http.HttpStatus
@@ -35,7 +36,7 @@ class ReviewController(
         @RequestParam(name = "searchCondition") condition: ReviewSearchCondition,
         @RequestParam(name = "keyword") keyword: String?,
         pageable: Pageable
-    ): ResponseEntity<Slice<ReviewsResponse>> {
+    ): ResponseEntity<Page<ReviewsResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(reviewService.searchReview(condition, keyword, pageable))
