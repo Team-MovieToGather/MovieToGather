@@ -5,7 +5,9 @@ import org.spartaa3.movietogather.domain.review.entity.QReview
 import org.spartaa3.movietogather.domain.review.entity.Review
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.infra.QueryDslSupport
-import org.springframework.data.domain.*
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -26,7 +28,10 @@ class ReviewQueryRepositoryImpl : ReviewQueryRepository, QueryDslSupport() {
             .orderBy(review.createdAt.desc())
             .fetch()
 
+        if (contents.size > pageSize) {
+            contents.removeAt(pageSize)
 
+        }
         val total = queryFactory
             .selectFrom(review)
             .where(allCond(condition, keyword))

@@ -14,7 +14,6 @@ import org.spartaa3.movietogather.domain.meetings.repository.MeetingMemberReposi
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
 import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.global.exception.ModelNotFoundException
-import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -52,7 +51,7 @@ class MeetingsServiceImpl(
     }
 
     @Transactional
-    override fun createMeetings(email:String, request: CreateMeetingsRequest): MeetingsResponse {
+    override fun createMeetings(email: String, request: CreateMeetingsRequest): MeetingsResponse {
         val member = memberRepository.findByEmail(email)
         val meeting = meetingsRepository.save(
             Meetings(
@@ -116,6 +115,8 @@ class MeetingsServiceImpl(
                     try {
                         meetings.numApplicants += 1
                         meetingMemberRepository.save(MeetingMember(meetings, member))
+                        // 모임이 꽉 찼을 경우 isClosed를 true로 변경
+                        meetings.isClosed()
                     } finally {
                         lock.unlock()
                     }
@@ -128,7 +129,7 @@ class MeetingsServiceImpl(
 
     }
 
-    override fun getMyMeetings(memberEmail: String, meetingId: Long): List<MeetingsResponse> {
+    override fun getMyMeetings(email: String, meetingId: Long): List<MeetingsResponse> {
         TODO("Not yet implemented")
     }
 }

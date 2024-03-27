@@ -18,8 +18,9 @@ data class ChatMessage(
     val id: Long? = null
 
     val creatAt: LocalDateTime = LocalDateTime.now()
-    companion object{
-        fun ChatMessage.toResponse(): ChatMessage{
+
+    companion object {
+        fun ChatMessage.toResponse(): ChatMessage {
             return ChatMessage(
                 type = this.type,
                 roomId = this.roomId,

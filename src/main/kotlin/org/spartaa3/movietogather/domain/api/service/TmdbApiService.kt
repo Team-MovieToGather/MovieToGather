@@ -10,7 +10,6 @@ import org.spartaa3.movietogather.domain.api.service.dto.response.MovieListRespo
 import org.spartaa3.movietogather.global.exception.BaseException
 import org.spartaa3.movietogather.global.exception.dto.BaseResponseCode
 import org.spartaa3.movietogather.infra.api.ApiProperties
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
