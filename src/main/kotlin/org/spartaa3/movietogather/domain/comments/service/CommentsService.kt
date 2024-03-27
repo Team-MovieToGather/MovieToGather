@@ -8,13 +8,14 @@ interface CommentsService {
 
     fun getCommentsById(reviewId: Long, commentsId: Long): GetCommentsResponse
 
-    fun createComments(reviewId: Long, request: CreateCommentsRequest): GetCommentsResponse    //나중에 userprincipal 추가
+    fun createComments(email: String, reviewId: Long, request: CreateCommentsRequest): GetCommentsResponse
 
     fun updateComments(
+        email: String,
         reviewId: Long,
         commentsId: Long,
         request: UpdateCommentsRequest
-    ): GetCommentsResponse  //나중에 userprincipal 추가
+    ): GetCommentsResponse
 
-    fun deleteComments(reviewId: Long, commentsId: Long)    //나중에 userprincipal 추가
+    fun deleteComments(email: String, reviewId: Long, commentsId: Long)
 }

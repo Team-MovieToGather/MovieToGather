@@ -1,5 +1,6 @@
 package org.spartaa3.movietogather.domain.review.service
 
+import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.ReviewsResponse
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional
 class ReviewServiceImpl(
     private val reviewRepository: ReviewRepository,
     private val heartRepository: HeartRepository,
-    private val redisRepository: RedisRepository
+    private val redisRepository: RedisRepository,
 ) : ReviewService {
     override fun bestTopReview(): List<ReviewsResponse> {
         val bestReviews = redisRepository.getBestReviews()
@@ -55,11 +56,10 @@ class ReviewServiceImpl(
     }
 
     @Transactional
-    override fun createReview(request: CreateReviewRequest): ReviewResponse {
+    override fun createReview(email: String, request: CreateReviewRequest): ReviewResponse {
         return reviewRepository.save<Review>(
             Review(
                 postingTitle = request.postingTitle,
-//                star = request.star,
                 movieTitle = request.movieTitle,
                 movieImg = request.movieImg,
                 contents = request.contents,
@@ -69,20 +69,16 @@ class ReviewServiceImpl(
     }
 
     @Transactional
-    override fun updateReview(reviewId: Long, request: UpdateReviewRequest): ReviewResponse {
+    override fun updateReview(email: String, reviewId: Long, request: UpdateReviewRequest): ReviewResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val (postingTitle, contents) = request
 
         review.postingTitle = postingTitle
-//        review.star = star
-//        review.movieTitle = movieTitle
-//        review.movieImg = movieImg
         review.contents = contents
-//        review.genre = genre
         return reviewRepository.save(review).toResponse()
     }
 
-    override fun deleteReview(reviewId: Long) {
+    override fun deleteReview(email: String, reviewId: Long) {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         reviewRepository.delete(review)
     }

@@ -10,11 +10,13 @@ import org.spartaa3.movietogather.domain.review.dto.ReviewsResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
 import org.spartaa3.movietogather.domain.review.entity.ReviewSearchCondition
 import org.spartaa3.movietogather.domain.review.service.ReviewService
+import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @Tag(name = "review", description = "Review API")
@@ -53,28 +55,31 @@ class ReviewController(
 
     @PostMapping
     fun createReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: CreateReviewRequest
     ): ResponseEntity<ReviewResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(reviewService.createReview(request))
+            .body(reviewService.createReview(userPrincipal.email, request))
     }
 
     @PutMapping("/{reviewId}")
     fun updateReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: UpdateReviewRequest,
         @PathVariable reviewId: Long
     ): ResponseEntity<ReviewResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(reviewService.updateReview(reviewId, request))
+            .body(reviewService.updateReview(userPrincipal.email, reviewId, request))
     }
 
     @DeleteMapping("/{reviewId}")
     fun deleteReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable reviewId: Long
     ): ResponseEntity<Unit> {
-        reviewService.deleteReview(reviewId)
+        reviewService.deleteReview(userPrincipal.email, reviewId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()

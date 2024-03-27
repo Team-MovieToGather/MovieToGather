@@ -7,6 +7,7 @@ import org.spartaa3.movietogather.domain.comments.dto.commentsResponse.GetCommen
 import org.spartaa3.movietogather.domain.comments.entity.Comments
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
+import org.spartaa3.movietogather.infra.audit.BaseUserEntity
 
 @Entity
 @Table(name = "review")
@@ -26,9 +27,6 @@ class Review(
 
     @Column(name = "contents")
     var contents: String,
-//
-//    @Column(name = "star")
-//    var star: Double,
 
     @Column(name = "is_deleted")
     val isDeleted: Boolean = false,
@@ -41,7 +39,7 @@ class Review(
     @JsonIgnore
     var comments: MutableList<Comments> = mutableListOf()
 
-) : BaseTimeEntity() {
+) : BaseUserEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -54,7 +52,6 @@ fun Review.toResponse(): ReviewResponse {
         id = id ?: 0L,
         postingTitle = postingTitle,
         genre = genre,
-//        star = star,
         movieTitle = movieTitle,
         movieImg = movieImg,
         contents = contents,
