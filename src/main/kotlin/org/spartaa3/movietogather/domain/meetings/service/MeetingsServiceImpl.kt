@@ -115,10 +115,11 @@ class MeetingsServiceImpl(
                     try {
                         meetings.numApplicants += 1
                         meetingMemberRepository.save(MeetingMember(meetings, member))
-                        // 모임이 꽉 찼을 경우 isClosed를 true로 변경
-                        meetings.isClosed()
+
                     } finally {
                         lock.unlock()
+                        // 모임이 꽉 찼을 경우 isClosed를 true로 변경
+                        meetings.isClosed()
                     }
                 }
 
