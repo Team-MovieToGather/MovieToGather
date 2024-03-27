@@ -80,8 +80,8 @@ dependencies {
 
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
-    //runtimeOnly("org.postgresql:postgresql")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql")
+//    runtimeOnly("com.h2database:h2")
 
 
 

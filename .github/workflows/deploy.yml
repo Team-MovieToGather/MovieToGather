@@ -17,6 +17,7 @@ jobs:
       TMAP_AK: ${{ secrets.TMAP_AK }}
       AUTH_JWT_SECRET: ${{ secrets.AUTH_JWT_SECRET }}
       AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR: ${{ secrets.AUTH_JWT_ACCESSTOKENEXPIRATIONHOUR }}
+      AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR: ${{ secrets.AUTH_JWT_REFRESHTOKENEXPIRATIONHOUR }}
       AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
       AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
       AUTH_NAVER_ID: ${{ secrets.AUTH_NAVER_ID }}
@@ -71,16 +72,6 @@ jobs:
       - name: Docker image push
         run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPONAME }}:latest
 
-     # EC2 배포
-#      - name: Copy docker-compose.yml
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.EC2_HOST }}
-#          username: ${{ secrets.EC2_SSH_USER }}
-#          key: ${{ secrets.EC2_PRIVATE_KEY }}
-#          source: "./docker-compose.yml"
-#          target: "./"
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -92,13 +83,3 @@ jobs:
             sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPONAME }}:latest || true
             sudo docker-compose up -d
             
-
-#      - name: Deploy to EC2
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.EC2_HOST }}
-#          username: ${{ secrets.EC2_SSH_USER }}
-#          key: ${{ secrets.EC2_PRIVATE_KEY }}
-#          script: |
-#            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#            sudo docker-compose up -d
