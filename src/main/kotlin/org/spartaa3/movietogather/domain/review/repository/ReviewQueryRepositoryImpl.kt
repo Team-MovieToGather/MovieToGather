@@ -28,7 +28,10 @@ class ReviewQueryRepositoryImpl : ReviewQueryRepository, QueryDslSupport() {
             .orderBy(review.createdAt.desc())
             .fetch()
 
+        if (contents.size > pageSize) {
+            contents.removeAt(pageSize)
 
+        }
         val total = queryFactory
             .selectFrom(review)
             .where(allCond(condition, keyword))

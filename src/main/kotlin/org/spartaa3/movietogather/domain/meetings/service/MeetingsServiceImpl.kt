@@ -121,8 +121,12 @@ class MeetingsServiceImpl(
                         lock.unlock()
                     }
                 }
+
             }
+
         }
+
+
     }
 
     override fun getMyMeetings(email: String, meetingId: Long): List<MeetingsResponse> {

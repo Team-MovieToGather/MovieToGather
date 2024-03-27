@@ -69,7 +69,8 @@ class MeetingsServiceImplTest : BehaviorSpec({
         val member = Member(
             email = "abb@gmail.com",
             nickname = "abb",
-            role = MemberRole.MEMBER
+            role = MemberRole.MEMBER,
+            providerId= "asddgsd"
         )
         val email = "abb@gmail.com"
         val token = MemberToken(
@@ -160,7 +161,8 @@ class MeetingsServiceImplTest : BehaviorSpec({
                 val member = Member(
                     email = "abb${i}@gmail.com",
                     nickname = "abb${i}",
-                    role = MemberRole.MEMBER
+                    role = MemberRole.MEMBER,
+                    providerId = "sadafa"
                 )
                 val meetingMember = MeetingMember(
                     meetings,

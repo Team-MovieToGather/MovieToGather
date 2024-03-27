@@ -7,17 +7,18 @@ import lombok.NoArgsConstructor
 @Entity
 @Table(name = "member_token")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class MemberToken(
+data class MemberToken(
 
-    @Column(name = "email")
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    val member: Member,
+
+    @Column(name = "email", nullable = false)
     var email: String,
 
-    @Column(name = "refresh_token", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "refresh_token", columnDefinition = "TEXT", nullable = true)
     var refreshToken: String? = null,
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    var member: Member? = null
 ) {
     @Id
     @Column(name = "member_token_id", nullable = false)

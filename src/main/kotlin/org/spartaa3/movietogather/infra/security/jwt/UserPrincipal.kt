@@ -5,12 +5,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 data class UserPrincipal(
     override val email: String,
-    override val oauthType: String,
+    override val provider: String,
     override val authorities: Collection<GrantedAuthority>
-) : CustomUserPrincipal(email, oauthType, authorities) {
-    constructor(email: String, roles: Set<String>, oauthType: String) : this(
+) : CustomUserPrincipal(email, provider, authorities){
+    constructor(email: String, roles: Set<String>, provider: String) : this(
         email,
-        oauthType,
+        provider,
         roles.map { SimpleGrantedAuthority("ROLE_$it") }
     )
 }
