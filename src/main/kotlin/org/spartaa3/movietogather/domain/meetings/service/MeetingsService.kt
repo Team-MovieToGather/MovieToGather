@@ -25,5 +25,5 @@ interface MeetingsService {
 
     fun deleteMeetings(meetingId: Long)
     fun joinMeetings(email: String, meetingId: Long)
-    fun getMyMeetings(memberEmail: String, meetingId : Long) : List<MeetingsResponse>
+    fun getMyMeetings(email: String, meetingId : Long) : List<MeetingsResponse>
 }

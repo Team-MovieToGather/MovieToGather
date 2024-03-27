@@ -7,6 +7,7 @@ import org.spartaa3.movietogather.domain.meetings.entity.MeetingSearchCondition
 import org.spartaa3.movietogather.domain.meetings.service.MeetingsService
 import org.spartaa3.movietogather.domain.meetings.service.Type
 import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.http.HttpStatus
@@ -25,7 +26,7 @@ class MeetingsController(
         @RequestParam(name = "searchCondition") condition: MeetingSearchCondition,
         @RequestParam(name = "keyword") keyword: String?,
         pageable: Pageable
-    ): ResponseEntity<Slice<MeetingsResponse>> {
+    ): ResponseEntity<Page<MeetingsResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(meetingsService.searchMeeting(type, condition, keyword, pageable))

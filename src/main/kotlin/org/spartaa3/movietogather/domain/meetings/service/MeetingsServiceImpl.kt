@@ -127,7 +127,7 @@ class MeetingsServiceImpl(
         }
     }
 
-    override fun getMyMeetings(memberEmail: String, meetingId: Long): List<MeetingsResponse> {
+    override fun getMyMeetings(email: String, meetingId: Long): List<MeetingsResponse> {
         TODO("Not yet implemented")
     }
 }
