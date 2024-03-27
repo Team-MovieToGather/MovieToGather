@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
 import org.junit.jupiter.api.extension.ExtendWith
+import org.spartaa3.movietogather.MovieToGatherApplicationTests
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
@@ -21,7 +22,7 @@ import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.time.LocalDateTime
 
-@SpringBootTest
+@SpringBootTest(classes = [MovieToGatherApplicationTests::class])
 @AutoConfigureMockMvc
 @ExtendWith(MockKExtension::class)
 @ActiveProfiles("test")
