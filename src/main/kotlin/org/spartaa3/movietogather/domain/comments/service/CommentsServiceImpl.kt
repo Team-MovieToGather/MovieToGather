@@ -7,7 +7,6 @@ import org.spartaa3.movietogather.domain.comments.entity.Comments
 import org.spartaa3.movietogather.domain.comments.repository.CommentsRepository
 import org.spartaa3.movietogather.domain.review.repository.HeartRepository
 import org.spartaa3.movietogather.domain.review.repository.ReviewRepository
-import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.spartaa3.movietogather.global.exception.ReviewNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

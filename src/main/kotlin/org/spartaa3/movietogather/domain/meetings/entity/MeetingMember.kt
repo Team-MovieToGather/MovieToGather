@@ -2,6 +2,7 @@ package org.spartaa3.movietogather.domain.meetings.entity
 
 import jakarta.persistence.*
 import org.spartaa3.movietogather.domain.member.entity.Member
+
 @Entity
 data class MeetingMember(
     @ManyToOne

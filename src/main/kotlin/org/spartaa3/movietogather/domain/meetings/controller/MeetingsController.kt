@@ -9,7 +9,6 @@ import org.spartaa3.movietogather.domain.meetings.service.Type
 import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Slice
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -46,7 +45,7 @@ class MeetingsController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: CreateMeetingsRequest,
     ): ResponseEntity<String> {
-        meetingsService.createMeetings(userPrincipal.email,request)
+        meetingsService.createMeetings(userPrincipal.email, request)
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body("모임이 등록되었습니다..")
@@ -72,12 +71,13 @@ class MeetingsController(
             .status(HttpStatus.NO_CONTENT)
             .body("등록하신 모임을 삭제하였습니다.")
     }
+
     @PostMapping("/{meetingId}/join")
     fun joinMeetings(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable meetingId: Long,
     ): ResponseEntity<String> {
-        meetingsService.joinMeetings(userPrincipal.email,meetingId)
+        meetingsService.joinMeetings(userPrincipal.email, meetingId)
         return ResponseEntity
             .status(HttpStatus.OK)
             .body("모임에 참가하였습니다.")

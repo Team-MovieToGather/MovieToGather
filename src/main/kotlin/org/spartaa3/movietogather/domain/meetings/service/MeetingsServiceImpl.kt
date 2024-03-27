@@ -12,10 +12,8 @@ import org.spartaa3.movietogather.domain.meetings.entity.Meetings
 import org.spartaa3.movietogather.domain.meetings.entity.toResponse
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingMemberRepository
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
-import org.spartaa3.movietogather.domain.member.entity.Member
 import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.global.exception.ModelNotFoundException
-import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

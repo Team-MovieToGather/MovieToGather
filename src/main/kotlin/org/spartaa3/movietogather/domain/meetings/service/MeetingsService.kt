@@ -6,7 +6,6 @@ import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsR
 import org.spartaa3.movietogather.domain.meetings.entity.MeetingSearchCondition
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Slice
 
 interface MeetingsService {
 
@@ -25,5 +24,5 @@ interface MeetingsService {
 
     fun deleteMeetings(meetingId: Long)
     fun joinMeetings(email: String, meetingId: Long)
-    fun getMyMeetings(email: String, meetingId : Long) : List<MeetingsResponse>
+    fun getMyMeetings(email: String, meetingId: Long): List<MeetingsResponse>
 }
