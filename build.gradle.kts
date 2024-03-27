@@ -67,6 +67,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     // prometheus
     implementation("io.micrometer:micrometer-registry-prometheus")
+    // redisson
+    implementation("org.redisson:redisson-spring-boot-starter:3.16.0")
 
     kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
     kapt("jakarta.annotation:jakarta.annotation-api")
@@ -78,7 +80,7 @@ dependencies {
 
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
-//    runtimeOnly("org.postgresql:postgresql")
+    //runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("com.h2database:h2")
 
 

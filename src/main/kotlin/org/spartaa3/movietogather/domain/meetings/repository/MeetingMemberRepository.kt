@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface MeetingMemberRepository : JpaRepository<MeetingMember, Long> {
     fun findByMeetingsId(meetingId: Long): MeetingMember
+    fun existsByMeetingsAndMember(meetings: Meetings, member: Member): Boolean
 }
