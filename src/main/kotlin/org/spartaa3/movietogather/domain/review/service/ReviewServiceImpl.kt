@@ -59,7 +59,7 @@ class ReviewServiceImpl(
         return reviewRepository.save<Review>(
             Review(
                 postingTitle = request.postingTitle,
-                star = request.star,
+//                star = request.star,
                 movieTitle = request.movieTitle,
                 movieImg = request.movieImg,
                 contents = request.contents,
@@ -71,10 +71,10 @@ class ReviewServiceImpl(
     @Transactional
     override fun updateReview(reviewId: Long, request: UpdateReviewRequest): ReviewResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
-        val (postingTitle, star, contents) = request
+        val (postingTitle, contents) = request
 
         review.postingTitle = postingTitle
-        review.star = star
+//        review.star = star
 //        review.movieTitle = movieTitle
 //        review.movieImg = movieImg
         review.contents = contents

@@ -7,7 +7,7 @@ data class ReviewResponse(
     val id: Long,
     val postingTitle: String,
     val genre: String,
-    val star: Double,
+//    val star: Double,
     val movieTitle: String,
     val movieImg: String,
     val contents: String,
