@@ -9,7 +9,7 @@ data class MovieResponse(
     val genre_ids: List<Int>,
     val poster_path: String?,
     var genreNames: String = ""
-): Serializable {
+) : Serializable {
     val posterUrl = if (poster_path != null) {
         "https://image.tmdb.org/t/p/w500$poster_path"
     } else {
@@ -19,19 +19,19 @@ data class MovieResponse(
     val shortOverview: String =
         when {
             overview.isEmpty() -> " ".repeat(60)
-            overview.length > 30 -> "Overview: " + overview.substring(0,29) + "..."
+            overview.length > 30 -> "Overview: " + overview.substring(0, 29) + "..."
             else -> "Overview: $overview"
         }
 }
 
 data class MovieListResponse(
     val results: List<MovieResponse>,
-): Serializable
+) : Serializable
 
 data class CustomPageResponse(
     val content: List<MovieResponse>,
     val totalPages: Int,
     val totalElements: Int,
     val pageSize: Int,
-): Serializable
+) : Serializable
 

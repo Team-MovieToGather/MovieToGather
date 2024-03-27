@@ -49,6 +49,7 @@ class WebSocketHandler(
                     sendToEachSocket(sessions, TextMessage(objectMapper.writeValueAsString(chatMessage)))
                 }
             }
+
             MessageType.TALK -> {
                 if (chatMessage.message?.trim().isNullOrEmpty().not()) {
                     chatService.saveMessage(chatMessage)
