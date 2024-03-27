@@ -3,7 +3,6 @@ package org.spartaa3.movietogather.domain.meetings.entity
 import jakarta.persistence.*
 import org.spartaa3.movietogather.domain.meetings.dto.meetingsResponse.MeetingsResponse
 import org.spartaa3.movietogather.domain.meetings.service.Type
-import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
 import org.spartaa3.movietogather.infra.audit.BaseUserEntity
 import java.time.LocalDateTime
 
@@ -31,7 +30,7 @@ class Meetings(
     val locationUrl: String,
 
     @Column(name = "is_closed")
-    val isClosed: Boolean,
+    var isClosed: Boolean = false,
 
     @Column(name = "num_applicants")
     var numApplicants: Long,
@@ -43,7 +42,13 @@ class Meetings(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    fun isClosed() {
+        if (numApplicants >= maxApplicants || LocalDateTime.now() >= endTime)
+            isClosed = true
+    }
 }
+
 
 fun Meetings.toResponse(): MeetingsResponse {
     return MeetingsResponse(

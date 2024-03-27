@@ -52,7 +52,6 @@ class SecurityConfig(
     }
 
 
-
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {

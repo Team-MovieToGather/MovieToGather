@@ -4,7 +4,6 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.*
-import io.mockk.impl.instantiation.AbstractMockFactory.Companion.idCounter
 import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.extension.ExtendWith
 import org.redisson.api.RLock
@@ -21,8 +20,6 @@ import org.spartaa3.movietogather.domain.member.entity.MemberRole
 import org.spartaa3.movietogather.domain.member.entity.MemberToken
 import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.global.exception.ModelNotFoundException
-import org.spartaa3.movietogather.infra.security.jwt.JwtPlugin
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.util.ReflectionTestUtils

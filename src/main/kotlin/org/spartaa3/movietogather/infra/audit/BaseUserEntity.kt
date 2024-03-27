@@ -13,6 +13,7 @@ abstract class BaseUserEntity : BaseTimeEntity() {
     @CreatedBy
     @Column(updatable = false)
     var createdBy: String = "system"
+
     @LastModifiedBy
     var updatedBy: String = "system"
 }

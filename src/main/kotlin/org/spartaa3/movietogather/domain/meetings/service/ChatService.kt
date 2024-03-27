@@ -6,7 +6,6 @@ import org.spartaa3.movietogather.domain.meetings.dto.ChatRoomResponse
 import org.spartaa3.movietogather.domain.meetings.entity.ChatMessage
 import org.spartaa3.movietogather.domain.meetings.entity.ChatMessage.Companion.toResponse
 import org.spartaa3.movietogather.domain.meetings.entity.ChatRoom
-import org.spartaa3.movietogather.domain.meetings.entity.MessageType
 import org.spartaa3.movietogather.domain.meetings.repository.ChatMessageRepository
 import org.spartaa3.movietogather.domain.meetings.repository.ChatRoomRepository
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
@@ -32,8 +31,10 @@ class ChatService(
     }
 
     fun findMessage(meetingId: Long): List<ChatMessage> {
-        val chatRoom = chatRoomRepository.findByMeetingsId(meetingId) ?: throw BaseException(BaseResponseCode.INVALID_MEETING)
-        val chatMessage = chatMessageRepository.findByRoomId(chatRoom.roomId) ?: throw BaseException(BaseResponseCode.INVALID_MEETING)
+        val chatRoom =
+            chatRoomRepository.findByMeetingsId(meetingId) ?: throw BaseException(BaseResponseCode.INVALID_MEETING)
+        val chatMessage =
+            chatMessageRepository.findByRoomId(chatRoom.roomId) ?: throw BaseException(BaseResponseCode.INVALID_MEETING)
         return chatMessage.map { it.toResponse() }
     }
 
