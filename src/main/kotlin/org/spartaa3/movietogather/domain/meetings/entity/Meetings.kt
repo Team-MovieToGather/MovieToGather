@@ -31,7 +31,7 @@ class Meetings(
     val locationUrl: String,
 
     @Column(name = "is_closed")
-    val isClosed: Boolean,
+    var isClosed: Boolean = false,
 
     @Column(name = "num_applicants")
     var numApplicants: Long,
@@ -43,6 +43,14 @@ class Meetings(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    fun isClosed() {
+        if (numApplicants >= maxApplicants) {
+            isClosed = true
+        }
+    }
+
+
 }
 
 fun Meetings.toResponse(): MeetingsResponse {
