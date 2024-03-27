@@ -4,6 +4,6 @@ import org.springframework.security.core.GrantedAuthority
 
 abstract class CustomUserPrincipal(
     open val email: String,
-    open val oauthType: String,
+    open val provider: String,
     open val authorities: Collection<GrantedAuthority>
 )

@@ -1,16 +1,14 @@
 package org.spartaa3.movietogather.infra.security
 
-import org.spartaa3.movietogather.domain.member.oauth2.handler.OAuth2AuthenticationFailureHandler
-import org.spartaa3.movietogather.domain.member.oauth2.handler.OAuth2AuthenticationSuccessHandler
-import org.spartaa3.movietogather.domain.member.service.CustomOAuth2MemberService
 import org.spartaa3.movietogather.global.cookie.HttpCookieOAuth2AuthorizationRequestRepository
 import org.spartaa3.movietogather.infra.security.jwt.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
@@ -19,38 +17,39 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
-    private val customOAuth2MemberService: CustomOAuth2MemberService,
-    private val oAuth2AuthenticationSuccessHandler: OAuth2AuthenticationSuccessHandler,
-    private val oAuth2AuthenticationFailureHandler: OAuth2AuthenticationFailureHandler,
-    private val httpCookieOAuth2AuthorizationRequestRepository: HttpCookieOAuth2AuthorizationRequestRepository,
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter
 ) {
+
+    private val allowedUrls = arrayOf(
+        "/swagger-ui/**",
+        "/v3/**",
+        "/h2-console/**",
+        "/oauth2/**",
+        "/**"
+    )
+
+    //익명의 사용자만 접근 허용
+    private val anonymousUrls = arrayOf(
+        "/signup",
+        "/login",
+    )
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .cors { it.configurationSource(corsConfigurationSource()) }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .csrf { it.disable() }
-
-            .sessionManagement {
-                it.sessionCreationPolicy(SessionCreationPolicy.NEVER)
-            }
-            .oauth2Login { oauth2Login ->
-                oauth2Login
-                    .userInfoEndpoint { it.userService(customOAuth2MemberService) }
-                    .authorizationEndpoint {
-                        it.authorizationRequestRepository(
-                            httpCookieOAuth2AuthorizationRequestRepository
-                        )
-                    }
-                    .successHandler(oAuth2AuthenticationSuccessHandler)
-                    .failureHandler(oAuth2AuthenticationFailureHandler)
+            .cors { it.disable() }
+            .headers { it.frameOptions { foc -> foc.disable() } }
+            .authorizeHttpRequests {
+                it.requestMatchers(*allowedUrls).permitAll()
+                    .requestMatchers(*anonymousUrls).anonymous()
+                    .anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
     }
-
 
 
     @Bean

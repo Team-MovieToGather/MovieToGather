@@ -29,11 +29,11 @@ class JwtAuthenticationFilter(
                 .onSuccess {
                     val email = it.payload.get("email", String::class.java)
                     val role = it.payload.get("role", String::class.java)
-                    val oauthType = it.payload.get("oauthType", String::class.java)
+                    val provider = it.payload.get("provider", String::class.java)
                     val principal = UserPrincipal(
                         email = email,
                         roles = setOf(role),
-                        oauthType = oauthType
+                        provider = provider
                     )
 
                     val authentication = JwtAuthenticationToken(
