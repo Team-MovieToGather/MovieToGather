@@ -1,14 +1,11 @@
 package org.spartaa3.movietogather.infra.security
 
-import org.spartaa3.movietogather.global.cookie.HttpCookieOAuth2AuthorizationRequestRepository
 import org.spartaa3.movietogather.infra.security.jwt.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource

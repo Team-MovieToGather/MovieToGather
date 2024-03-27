@@ -8,7 +8,6 @@ import org.spartaa3.movietogather.domain.member.entity.Member
 import org.spartaa3.movietogather.domain.member.entity.MemberToken
 import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.domain.member.repository.TokenRepository
-import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.spartaa3.movietogather.global.exception.TokenNotFoundException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
