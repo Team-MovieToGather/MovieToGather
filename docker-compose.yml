@@ -1,22 +1,6 @@
 version: '3.8'
 services:
 
-  movietogather-postgres:
-    image: postgres:alpine
-    container_name: movietogather-postgres
-    restart: always
-    env_file:
-      - .env
-    environment:
-      POSTGRES_DB: movietogatherdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      TZ: "Asia/Seoul"
-    volumes:
-      - movietogatherdb:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
-
 
   movietogather-backend:
     env_file:
@@ -42,12 +26,6 @@ services:
 
 
       TZ: "Asia/Seoul"
-    depends_on:
-      - movietogather-postgres
     ports:
       - 8080:8080
-    restart: on-failure
 
-
-volumes:
-  movietogatherdb:

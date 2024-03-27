@@ -26,9 +26,9 @@ class Review(
 
     @Column(name = "contents")
     var contents: String,
-
-    @Column(name = "star")
-    var star: Double,
+//
+//    @Column(name = "star")
+//    var star: Double,
 
     @Column(name = "is_deleted")
     val isDeleted: Boolean = false,
@@ -54,7 +54,7 @@ fun Review.toResponse(): ReviewResponse {
         id = id ?: 0L,
         postingTitle = postingTitle,
         genre = genre,
-        star = star,
+//        star = star,
         movieTitle = movieTitle,
         movieImg = movieImg,
         contents = contents,

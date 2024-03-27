@@ -1,13 +1,12 @@
 package org.spartaa3.movietogather.infra.audit
 
 import org.spartaa3.movietogather.infra.security.jwt.CustomUserPrincipal
-import org.spartaa3.movietogather.infra.security.jwt.UserPrincipal
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.AuditorAware
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.stereotype.Component
 import java.util.*
+
 @Configuration
 class AuditConfig {
     @Bean
