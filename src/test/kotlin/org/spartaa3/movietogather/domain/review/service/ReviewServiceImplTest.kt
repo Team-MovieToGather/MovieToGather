@@ -6,6 +6,9 @@ import io.kotest.matchers.shouldBe
 import io.mockk.*
 import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.extension.ExtendWith
+import org.spartaa3.movietogather.domain.member.entity.Member
+import org.spartaa3.movietogather.domain.member.entity.MemberRole
+import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
@@ -34,7 +37,15 @@ class ReviewServiceImplTest : BehaviorSpec({
     val heartRepository = mockk<HeartRepository>()
     val redisRepository = mockk<RedisRepository>()
     val reviewService = spyk(ReviewServiceImpl(reviewRepository, heartRepository, redisRepository))
+    val memberRepository = spyk<MemberRepository>()
 
+    val reviewId = 1L
+    val member = Member(
+        email = "abb@gmail.com",
+        nickname = "abb",
+        role = MemberRole.MEMBER
+    )
+    val email = "abb@gmail.com"
 
     //getReviewById 테스트 : 값이 있을 때
 //    given("id가 1인 리뷰가 존재한다면") {
@@ -65,7 +76,7 @@ class ReviewServiceImplTest : BehaviorSpec({
         val mockRequest = createMockRequest()
         every { reviewRepository.save(any<Review>()) } answers { firstArg() }
         `when`("리뷰 생성을 요청하면") {
-            val result = reviewService.createReview(mockRequest)
+            val result = reviewService.createReview(email, mockRequest)
             then("리뷰가 생성된다.") {
                 verify { reviewRepository.save(any<Review>()) }
                 result.postingTitle shouldBe mockRequest.postingTitle
@@ -75,7 +86,7 @@ class ReviewServiceImplTest : BehaviorSpec({
 
     given("id가 1인 리뷰가 존재할 때 ") {
         `when`("등록된 리뷰의 postingTitle을 수정하면") {
-            every { reviewService.updateReview(any(), any()) } returns ReviewResponse(
+            every { reviewService.updateReview(any(), any(), any()) } returns ReviewResponse(
                 id = 1L,
                 postingTitle = "New Posting Title",
                 genre = "Action",
@@ -86,16 +97,16 @@ class ReviewServiceImplTest : BehaviorSpec({
                 comments = listOf(),
                 heart = 0
             )
-            val result = reviewService.updateReview(1L, updateMockRequest())
+            val result = reviewService.updateReview(email, 1L, updateMockRequest())
             then("등록된 리뷰의 postingTitle의 값은 Request에 입력된 값으로 변경된다.") {
                 result.postingTitle shouldBe "New Posting Title"
             }
         }
         `when`("검색한 리뷰가 존재하지 않는다면") {
-            every { reviewService.updateReview(any(), any()) } throws ReviewNotFoundException("Review", 1L)
+            every { reviewService.updateReview(any(), any(), any()) } throws ReviewNotFoundException("Review", 1L)
             then("ReviewNotFoundException이 발생한다.") {
                 shouldThrow<ReviewNotFoundException> {
-                    reviewService.updateReview(1L, updateMockRequest())
+                    reviewService.updateReview(email, 1L, updateMockRequest())
                 }
             }
         }
@@ -103,17 +114,17 @@ class ReviewServiceImplTest : BehaviorSpec({
     }
     given("id가 1인 리뷰가 존재하고, 이를 삭제하려 할 때 ") {
         `when`("등록된 리뷰를 삭제하면") {
-            every { reviewService.deleteReview(any()) } returns Unit
-            val result = reviewService.deleteReview(1L)
+            every { reviewService.deleteReview(any(), any()) } returns Unit
+            val result = reviewService.deleteReview(email, 1L)
             then("리뷰가 삭제된다.") {
                 result shouldBe Unit
             }
         }
         `when`("검색한 리뷰가 존재하지 않는다면") {
-            every { reviewService.deleteReview(any()) } throws ReviewNotFoundException("Review", 1L)
+            every { reviewService.deleteReview(any(), any()) } throws ReviewNotFoundException("Review", 1L)
             then("ReviewNotFoundException이 발생한다.") {
                 shouldThrow<ReviewNotFoundException> {
-                    reviewService.deleteReview(1L)
+                    reviewService.deleteReview(email, 1L)
                 }
             }
         }

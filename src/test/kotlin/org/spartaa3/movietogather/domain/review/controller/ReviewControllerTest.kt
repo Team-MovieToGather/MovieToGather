@@ -5,8 +5,12 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
+import io.mockk.spyk
 import org.junit.jupiter.api.extension.ExtendWith
 import org.spartaa3.movietogather.MovieToGatherApplicationTests
+import org.spartaa3.movietogather.domain.member.entity.Member
+import org.spartaa3.movietogather.domain.member.entity.MemberRole
+import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.domain.review.dto.CreateReviewRequest
 import org.spartaa3.movietogather.domain.review.dto.ReviewResponse
 import org.spartaa3.movietogather.domain.review.dto.UpdateReviewRequest
@@ -34,9 +38,20 @@ class ReviewControllerTest @Autowired constructor(
         clearAllMocks()
     }
     val reviewService = mockk<ReviewService>()
+    val memberRepository = spyk<MemberRepository>()
+
+    val reviewId = 1L
+    val member = Member(
+        email = "abb@gmail.com",
+        nickname = "abb",
+        role = MemberRole.MEMBER
+    )
+    val email = "abb@gmail.com"
+
     // getReviewById 테스트
     describe("GET /api/reviews/{reviewId} 는") {
-        val reviewId = 1L
+
+
         context("존재하는 Id에 대한 요청을 보낼 때") {
             every { reviewService.getReviewById(any()) } returns ReviewResponse(
                 id = reviewId,
@@ -61,7 +76,8 @@ class ReviewControllerTest @Autowired constructor(
             }
         }
         context("존재하지 않는 Id에 대한 요청을 보낼 때") {
-            every { reviewService.deleteReview(reviewId) } throws ReviewNotFoundException("Review", reviewId)
+
+            every { reviewService.deleteReview(email, reviewId) } throws ReviewNotFoundException("Review", reviewId)
             it("404 status code를 응답해야 한다.") {
                 mockMvc.get("/api/reviews/$reviewId") {
                     contentType = MediaType.APPLICATION_JSON
@@ -85,7 +101,7 @@ class ReviewControllerTest @Autowired constructor(
             genre = "contents",
             )
         context("존재하는 Id에 대한 요청을 보낼 때") {
-            every { reviewService.createReview(request) } returns ReviewResponse(
+            every { reviewService.createReview(email, request) } returns ReviewResponse(
                 id = reviewId,
                 postingTitle = request.postingTitle,
                 movieTitle = "movieTitle",
@@ -108,7 +124,7 @@ class ReviewControllerTest @Autowired constructor(
             }
         }
         context("존재하지 않는 Id에 대한 요청을 보낼 때") {
-            every { reviewService.deleteReview(reviewId) } throws ReviewNotFoundException("Review", reviewId)
+            every { reviewService.deleteReview(email, reviewId) } throws ReviewNotFoundException("Review", reviewId)
             it("404 status code를 응답해야 한다.") {
                 mockMvc.post("/api/reviews") {
                     contentType = MediaType.APPLICATION_JSON
@@ -132,7 +148,7 @@ class ReviewControllerTest @Autowired constructor(
             //genre = "newGenre"
         )
         context("존재하는 Id에 대한 요청을 보낼 때") {
-            every { reviewService.updateReview(reviewId, request) } returns ReviewResponse(
+            every { reviewService.updateReview(email, reviewId, request) } returns ReviewResponse(
                 id = reviewId,
                 postingTitle = request.postingTitle,
                 movieTitle = "movieTitle",
@@ -155,7 +171,7 @@ class ReviewControllerTest @Autowired constructor(
             }
         }
         context("존재하지 않는 Id에 대한 요청을 보낼 때") {
-            every { reviewService.deleteReview(reviewId) } throws ReviewNotFoundException("Review", reviewId)
+            every { reviewService.deleteReview(email, reviewId) } throws ReviewNotFoundException("Review", reviewId)
             it("404 Status Code를 응답해야 한다..") {
                 mockMvc.put("/api/reviews$reviewId") {
                     contentType = MediaType.APPLICATION_JSON
@@ -174,7 +190,7 @@ class ReviewControllerTest @Autowired constructor(
     describe("Delete /api/reviews 는") {
         val reviewId = 1L
         context("존재하는 Id에 대한 요청을 보낼 때") {
-            every { reviewService.deleteReview(reviewId) } returns Unit
+            every { reviewService.deleteReview(email, reviewId) } returns Unit
             it("204 status code를 응답해야 한다.") {
                 mockMvc.delete("/api/reviews/$reviewId") {
                     contentType = MediaType.APPLICATION_JSON
@@ -187,7 +203,7 @@ class ReviewControllerTest @Autowired constructor(
             }
         }
         context("존재하지 않는 Id에 대한 요청을 보낼 때") {
-            every { reviewService.deleteReview(reviewId) } throws ReviewNotFoundException("Review", reviewId)
+            every { reviewService.deleteReview(email, reviewId) } throws ReviewNotFoundException("Review", reviewId)
             it("404 status code를 응답해야 한다.") {
                 mockMvc.delete("/api/reviews/$reviewId") {
                     contentType = MediaType.APPLICATION_JSON
