@@ -56,6 +56,7 @@ class SecurityConfig(
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
             addAllowedOrigin("http://localhost:3000")
+            addAllowedOrigin("http://movie2gather.net/")
             addAllowedMethod("GET")
             addAllowedMethod("POST")
             addAllowedMethod("PUT")

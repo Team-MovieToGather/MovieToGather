@@ -79,7 +79,6 @@ class ReviewServiceImplTest : BehaviorSpec({
                 id = 1L,
                 postingTitle = "New Posting Title",
                 genre = "Action",
-                star = 5.0,
                 movieTitle = "Example Movie Title",
                 movieImg = "Example Movie Img",
                 contents = "Example Contents",
@@ -145,7 +144,6 @@ fun mockReview(id: Long): Review {
     every { mockReview.id } returns id
     every { mockReview.postingTitle } returns "Example Posting Title"
     every { mockReview.genre } returns "Action"
-    every { mockReview.star } returns 5.0
     every { mockReview.movieTitle } returns "Example Movie Title"
     every { mockReview.movieImg } returns "Example Movie Img"
     every { mockReview.contents } returns "Example Contents"
@@ -156,7 +154,6 @@ fun mockReview(id: Long): Review {
 fun createMockRequest(): CreateReviewRequest {
     return CreateReviewRequest(
         postingTitle = "Example Posting Title",
-        star = 5.0,
         movieTitle = "Example Movie Title",
         movieImg = "Example Movie Img",
         contents = "Example Contents",
@@ -167,10 +164,6 @@ fun createMockRequest(): CreateReviewRequest {
 fun updateMockRequest(): UpdateReviewRequest {
     return UpdateReviewRequest(
         postingTitle = "New Posting Title",
-        star = 5.0,
-        //movieTitle = "Example Movie Title",
-        //movieImg = "Example Movie Img",
         contents = "Example Contents",
-        //genre = "Action"
     )
 }

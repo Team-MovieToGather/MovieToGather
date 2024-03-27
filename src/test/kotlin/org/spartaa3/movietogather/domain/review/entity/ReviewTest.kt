@@ -13,8 +13,6 @@ class ReviewTest : BehaviorSpec({
             movieImg = "movieImg",
             genre = "genre",
             contents = "contents",
-            star = 5.0,
-//            createdAt = LocalDateTime.now()
         )
 
         `when`("Entity를 Response로 변환하면") {
@@ -22,7 +20,7 @@ class ReviewTest : BehaviorSpec({
             then("Entity에 정의된 값과 반환된 Response의 값은 같아야 한다.") {
                 response.postingTitle shouldBe review.postingTitle
                 response.genre shouldBe review.genre
-                response.star shouldBe review.star
+//                response.star shouldBe review.star
                 response.movieTitle shouldBe review.movieTitle
                 response.movieImg shouldBe review.movieImg
                 response.contents shouldBe review.contents
