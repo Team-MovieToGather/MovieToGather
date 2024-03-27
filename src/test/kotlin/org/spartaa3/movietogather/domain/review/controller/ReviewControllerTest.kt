@@ -44,7 +44,8 @@ class ReviewControllerTest @Autowired constructor(
     val member = Member(
         email = "abb@gmail.com",
         nickname = "abb",
-        role = MemberRole.MEMBER
+        role = MemberRole.MEMBER,
+        providerId = ""
     )
     val email = "abb@gmail.com"
 
