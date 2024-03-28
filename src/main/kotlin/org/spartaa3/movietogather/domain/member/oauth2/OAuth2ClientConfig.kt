@@ -18,7 +18,7 @@ class OAuth2ClientConfig {
             .authorizationUri("https://kauth.kakao.com/oauth/authorize")
             .tokenUri("https://kauth.kakao.com/oauth/token")
             .userInfoUri("https://kapi.kakao.com/v2/user/me")
-            .redirectUri("http://movie2gather.net/oauth-redirect-kakao")
+            .redirectUri("\${oauth2.kakao.redirect_uri}")
             .clientName("Kakao")
             .build()
 
