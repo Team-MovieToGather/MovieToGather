@@ -37,7 +37,6 @@ class SecurityConfig(
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .csrf { it.disable() }
-//            .cors { it.disable() }
             .headers { it.frameOptions { foc -> foc.disable() } }
             .authorizeHttpRequests {
                 it.requestMatchers(*allowedUrls).permitAll()
@@ -48,21 +47,5 @@ class SecurityConfig(
             .build()
     }
 
+ }
 
-//    @Bean
-//    fun corsConfigurationSource(): CorsConfigurationSource {
-//        val configuration = CorsConfiguration().apply {
-//            addAllowedOriginPattern("http://localhost:3000")
-//            addAllowedOriginPattern("http://movie2gather.net")
-//            addAllowedMethod("GET")
-//            addAllowedMethod("POST")
-//            addAllowedMethod("PUT")
-//            addAllowedMethod("DELETE")
-//            addAllowedHeader("*")
-//            allowCredentials = true
-//        }
-//        return UrlBasedCorsConfigurationSource().apply {
-//            registerCorsConfiguration("/**", configuration)
-//        }
-//    }
-}
