@@ -168,8 +168,6 @@ class MeetingsServiceImplTest : BehaviorSpec({
                 every { memberRepository.findByEmail("abb${i}@gmail.com") } returns member
                 every { meetingMemberRepository.existsByMeetingsAndMember(meetings, member) } returns false
                 every { meetingMemberRepository.save(meetingMember) } returns meetingMember
-
-
                 service.execute(Runnable {
                     every { lock.lock() } just Runs
                     every { lock.unlock() } just Runs
