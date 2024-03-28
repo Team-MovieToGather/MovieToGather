@@ -103,6 +103,7 @@ class MeetingsServiceImpl(
         val member = memberRepository.findByEmail(email)
         val lock = redissonClient.getLock("meeting:$meetingId")
 
+
         if (lock.tryLock(2, 3, TimeUnit.SECONDS)) {
             try {
                 val meetings =
@@ -118,6 +119,7 @@ class MeetingsServiceImpl(
                     } else {
                         meetings.numApplicants += 1
                         meetingMemberRepository.save(MeetingMember(meetings, member))
+
                     }
                 }
             } finally {
