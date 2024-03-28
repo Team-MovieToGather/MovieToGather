@@ -15,9 +15,9 @@ interface ReviewService {
 
     fun getReviewById(reviewId: Long): ReviewResponse
 
-    fun createReview(request: CreateReviewRequest): ReviewResponse    //나중에 userprincipal 추가
+    fun createReview(email: String, request: CreateReviewRequest): ReviewResponse
 
-    fun updateReview(reviewId: Long, request: UpdateReviewRequest): ReviewResponse   //나중에 userprincipal 추가
+    fun updateReview(email: String, reviewId: Long, request: UpdateReviewRequest): ReviewResponse
 
-    fun deleteReview(reviewId: Long)    //나중에 userprincipal 추가
+    fun deleteReview(email: String, reviewId: Long)
 }

@@ -34,7 +34,6 @@ class ReviewRepositoryImplTest @Autowired constructor(
             movieImg = "movieImg",
             genre = "genre",
             contents = "contents",
-//            createdAt = LocalDateTime.now()
         ),
         Review(
             postingTitle = "postingTitle",
@@ -42,14 +41,12 @@ class ReviewRepositoryImplTest @Autowired constructor(
             movieImg = "movieImg",
             genre = "genre",
             contents = "contents",
-//            createdAt = LocalDateTime.now()
         ), Review(
             postingTitle = "posting",
             movieTitle = "movieTitle",
             movieImg = "movieImg",
             genre = "genre",
             contents = "contents",
-//            createdAt = LocalDateTime.now()
         )
 
     )

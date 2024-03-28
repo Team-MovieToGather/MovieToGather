@@ -28,13 +28,12 @@ class CommentsServiceImpl(
     }
 
     @Transactional
-    override fun createComments(reviewId: Long, request: CreateCommentsRequest): GetCommentsResponse {
+    override fun createComments(email: String, reviewId: Long, request: CreateCommentsRequest): GetCommentsResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val comments = commentsRepository.save(
             Comments(
                 contents = request.contents,
                 likeCount = 0,
-                createdBy = "작성자",
                 isDeleted = false,
                 review = review
             )
@@ -43,7 +42,7 @@ class CommentsServiceImpl(
     }
 
     @Transactional
-    override fun updateComments(reviewId: Long, commentsId: Long, request: UpdateCommentsRequest): GetCommentsResponse {
+    override fun updateComments(email: String, reviewId: Long, commentsId: Long, request: UpdateCommentsRequest): GetCommentsResponse {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val comments =
             commentsRepository.findByIdOrNull(commentsId) ?: throw ReviewNotFoundException("Comments", commentsId)
@@ -52,7 +51,7 @@ class CommentsServiceImpl(
     }
 
     @Transactional
-    override fun deleteComments(reviewId: Long, commentsId: Long) {
+    override fun deleteComments(email: String, reviewId: Long, commentsId: Long) {
         val review = reviewRepository.findByIdOrNull(reviewId) ?: throw ReviewNotFoundException("Review", reviewId)
         val comments =
             commentsRepository.findByIdAndReviewId(commentsId, reviewId)
