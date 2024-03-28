@@ -7,7 +7,7 @@ import org.spartaa3.movietogather.infra.audit.BaseUserEntity
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "meetings")
+@Table(name = "meetings", indexes = [Index(name = "idx_movie_Name", columnList = "movie_Name")])
 class Meetings(
 
     @Column(name = "meeting_Name")
