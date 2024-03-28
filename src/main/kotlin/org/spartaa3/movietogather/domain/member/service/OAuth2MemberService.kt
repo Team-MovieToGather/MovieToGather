@@ -17,7 +17,7 @@ class OAuth2MemberService(
                 nickname = memberInfo.nickname,
                 email = memberInfo.email,
                 provider = memberInfo.provider,
-//                providerId = memberInfo.id,
+                providerId = memberInfo.id,
             )
             memberRepository.save(member)
         } else {

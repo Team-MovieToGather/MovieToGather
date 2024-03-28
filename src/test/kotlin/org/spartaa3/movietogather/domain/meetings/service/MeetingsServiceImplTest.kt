@@ -70,7 +70,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
             email = "abb@gmail.com",
             nickname = "abb",
             role = MemberRole.MEMBER,
-//            providerId= "asddgsd"
+            providerId= "asddgsd"
         )
         val email = "abb@gmail.com"
         every { memberRepository.findByEmail(any()) } returns member
@@ -158,7 +158,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
                     email = "abb${i}@gmail.com",
                     nickname = "abb${i}",
                     role = MemberRole.MEMBER,
-//                    providerId = "sadafa"
+                    providerId = "sadafa"
                 )
                 val meetingMember = MeetingMember(
                     meetings,

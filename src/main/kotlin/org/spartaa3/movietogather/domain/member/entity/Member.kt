@@ -16,8 +16,8 @@ class Member(
     @Column(name = "provider", columnDefinition = "VARCHAR(50)")
     val provider: OAuth2Provider? = null,
 
-//    @Column(name = "provider_id", nullable = false)
-//    val providerId: String,
+    @Column(name = "provider_id", nullable = false)
+    val providerId: String,
 
     @Column(name = "email",unique = true)
     var email: String,
