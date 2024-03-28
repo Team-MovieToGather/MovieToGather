@@ -17,13 +17,13 @@ import org.spartaa3.movietogather.domain.meetings.repository.MeetingMemberReposi
 import org.spartaa3.movietogather.domain.meetings.repository.MeetingsRepository
 import org.spartaa3.movietogather.domain.member.entity.Member
 import org.spartaa3.movietogather.domain.member.entity.MemberRole
-import org.spartaa3.movietogather.domain.member.entity.MemberToken
 import org.spartaa3.movietogather.domain.member.repository.MemberRepository
 import org.spartaa3.movietogather.global.exception.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.util.ReflectionTestUtils
 import java.time.LocalDateTime
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -33,10 +33,11 @@ class MeetingsServiceImplTest : BehaviorSpec({
     afterContainer {
         clearAllMocks()
     }
-    val meetingsRepository =mockk<MeetingsRepository>()
+    val meetingsRepository = mockk<MeetingsRepository>()
     val memberRepository = spyk<MemberRepository>()
     val meetingMemberRepository = spyk<MeetingMemberRepository>()
-    val redissonClient = spyk<RedissonClient>()
+    val redissonClient = mockk<RedissonClient>()
+    val lock = mockk<RLock>()
     val meetingsService =
         spyk(MeetingsServiceImpl(meetingsRepository, memberRepository, meetingMemberRepository, redissonClient))
 
@@ -69,7 +70,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
             email = "abb@gmail.com",
             nickname = "abb",
             role = MemberRole.MEMBER,
-            providerId= "asddgsd"
+            providerId = "asddgsd"
         )
         val email = "abb@gmail.com"
         every { memberRepository.findByEmail(any()) } returns member
@@ -99,7 +100,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
                 type = Type.ONLINE,
                 locationUrl = "Example Contents",
                 isClosed = false,
-                numApplicants = 0,
+                numApplicants = 1,
                 maxApplicants = 30
 
             )
@@ -145,7 +146,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
             type = Type.ONLINE,
             locationUrl = "Example Contents",
             isClosed = false,
-            numApplicants = 0,
+            numApplicants = 1,
             maxApplicants = 30
         )
         every { meetingsRepository.findByIdOrNull(any()) } returns meetings
@@ -167,17 +168,18 @@ class MeetingsServiceImplTest : BehaviorSpec({
                 every { memberRepository.findByEmail("abb${i}@gmail.com") } returns member
                 every { meetingMemberRepository.existsByMeetingsAndMember(meetings, member) } returns false
                 every { meetingMemberRepository.save(meetingMember) } returns meetingMember
-                val lock = mockk<RLock>()
-                every { lock.lock() } just Runs
-                every { lock.unlock() } just Runs
-                every { redissonClient.getLock("meeting:1") } returns lock
-                every { lock.tryLock(any<Long>(), any<Long>(), any<TimeUnit>()) } returns true
+
+
                 service.execute(Runnable {
+                    every { lock.lock() } just Runs
+                    every { lock.unlock() } just Runs
+                    every { redissonClient.getLock("meeting:1") } returns lock
+                    every { lock.tryLock(any<Long>(), any<Long>(), eq(TimeUnit.SECONDS)) } returns true
                     meetingsService.joinMeetings("abb${i}@gmail.com", 1L)
                 })
             }
-            Thread.sleep(1000)
-
+            service.shutdown()
+            service.awaitTermination(1, TimeUnit.MINUTES)
             then("남은 모임의 자리수는 0이다.") {
                 meetings.numApplicants shouldBe 30
 
@@ -187,7 +189,7 @@ class MeetingsServiceImplTest : BehaviorSpec({
 })
 
 fun mockMeetings(): Meetings {
-    val mockMeetings = Meetings (
+    val mockMeetings = Meetings(
         meetingName = "Example Meeting Title",
         movieName = "Example Movie Title",
         startTime = LocalDateTime.now(),
@@ -195,7 +197,7 @@ fun mockMeetings(): Meetings {
         type = Type.ONLINE,
         locationUrl = "Example Contents",
         isClosed = false,
-        numApplicants = 0,
+        numApplicants = 1,
         maxApplicants = 30
     )
     return mockMeetings
@@ -210,7 +212,7 @@ fun createMockRequest(): CreateMeetingsRequest {
         type = Type.ONLINE,
         locationUrl = "Example Contents",
         isClosed = false,
-        numApplicants = 0,
+        numApplicants = 1,
         maxApplicants = 30
 
     )

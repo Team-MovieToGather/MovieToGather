@@ -100,34 +100,32 @@ class MeetingsServiceImpl(
 
     @Transactional
     override fun joinMeetings(email: String, meetingId: Long) {
-        val meetings =
-            meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
         val member = memberRepository.findByEmail(email)
         val lock = redissonClient.getLock("meeting:$meetingId")
-        if (meetingMemberRepository.existsByMeetingsAndMember(meetings, member)) {
-            throw IllegalStateException("이미 참가한 모임입니다.")
-        } else {
-            if (meetings.numApplicants >= meetings.maxApplicants) {
-                // 모임이 꽉 찼을 경우 isClosed를 true로 변경
-                meetings.isClosed()
-                throw IllegalStateException("모임 인원이 꽉 찼습니다.")
 
-            } else {
-                // 락 획득시간 & 락 만료시간
-                if (lock.tryLock(2, 3, TimeUnit.SECONDS)) {
-                    try {
+        if (lock.tryLock(2, 3, TimeUnit.SECONDS)) {
+            try {
+                val meetings =
+                    meetingsRepository.findByIdOrNull(meetingId) ?: throw ModelNotFoundException("Meetings", meetingId)
+
+                if (meetingMemberRepository.existsByMeetingsAndMember(meetings, member)) {
+                    throw IllegalStateException("이미 참가한 모임입니다.")
+                } else {
+                    if (meetings.numApplicants >= meetings.maxApplicants) {
+                        // 모임이 꽉 찼을 경우 isClosed를 true로 변경
+                        meetings.isClosed()
+                        throw IllegalStateException("모임 인원이 꽉 찼습니다.")
+                    } else {
                         meetings.numApplicants += 1
                         meetingMemberRepository.save(MeetingMember(meetings, member))
-                    } finally {
-                        lock.unlock()
                     }
                 }
-
+            } finally {
+                lock.unlock()
             }
-
+        } else {
+            throw IllegalStateException("Failed to acquire lock.")
         }
-
-
     }
 
     override fun getMyMeetings(email: String, meetingId: Long): List<MeetingsResponse> {
