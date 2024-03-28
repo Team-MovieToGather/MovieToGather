@@ -59,6 +59,8 @@ logging:
             bind: trace
     springframework:
       security: debug
+      web: debug
+
 # Actuator
 management:
   info:
