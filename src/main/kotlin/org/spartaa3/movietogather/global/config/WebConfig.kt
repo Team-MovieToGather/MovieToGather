@@ -19,10 +19,11 @@ class WebConfig : WebMvcConfigurer {
     override fun addFormatters(registry: FormatterRegistry) {
         registry.addConverter(OAuth2ProviderConverter())
     }
-//    override fun addCorsMappings(registry: CorsRegistry) {
-//        registry.addMapping("/**")
-//            .allowedOrigins("http://localhost:3000")
-//            .allowedMethods("*")
-//            .allowCredentials(true)
-//    }
+    override fun addCorsMappings(registry: CorsRegistry) {
+        registry.addMapping("/**")
+            .allowedOriginPatterns("http://localhost:3000", "http://movie2gather.net")
+            .allowedMethods("GET", "POST", "PUT", "DELETE")
+            .allowCredentials(true)
+            .allowedHeaders("*")
+    }
 }
