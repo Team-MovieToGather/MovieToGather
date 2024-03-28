@@ -10,7 +10,7 @@ import org.spartaa3.movietogather.infra.audit.BaseTimeEntity
 import org.spartaa3.movietogather.infra.audit.BaseUserEntity
 
 @Entity
-@Table(name = "review", indexes = [Index(name = "idx_movie_title", columnList = "movie_title")])
+@Table(name = "review"/*, indexes = [Index(name = "idx_movie_title", columnList = "movie_title")]*/)
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Review(
     @Column(name = "postingtitle")
