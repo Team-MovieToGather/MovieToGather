@@ -72,7 +72,7 @@ server:
 oauth2:
   kakao:
     client_id: ${AUTH_KAKAO_ID}
-    redirect_uri: "http://localthost:3000/oauth-redirect-kakao"
+    redirect_uri: "http://localhost:3000/oauth-redirect-kakao"
   google:
     client_id: ${AUTH_GOOGLE_ID}
     redirect_uri: "http://localhost:3000/oauth-redirect-google"
