@@ -59,7 +59,7 @@ class JwtPlugin(
 
     @Transactional
     fun storeToken(member: Member, refreshToken: String) {
-        tokenRepository.save(MemberToken(member, refreshToken))
+        tokenRepository.save(MemberToken(member, member.email, refreshToken))
     }
 
     @Transactional
